@@ -41,6 +41,7 @@ export const nav = {
     { label: "Tracks", href: "/#tracks" },
     { label: "Pricing", href: "/#pricing" },
     { label: "FAQ", href: "/#faq" },
+    { label: "Verify", href: "/verify" },
   ],
   cta: { label: "Apply now", href: "/apply" },
 } as const
@@ -53,6 +54,20 @@ export const hero = {
   primaryCta: { label: `Apply now — ${formatPrice(pricing.price)}`, href: "/apply" },
   secondaryCta: { label: "See how it works", href: "/#how-it-works" },
   trust: ["Real projects", "Code reviews", "Verified certificate"],
+  stats: [
+    { value: 8, suffix: "", label: "Specialised tracks" },
+    { value: 5, suffix: "", label: "Projects per track" },
+    { value: 40, suffix: "+", label: "Real projects to build" },
+  ],
+  seats: { filled: 68, label: "Batch 01 seats filled" },
+  marquee: [
+    "REAL PROJECTS",
+    "PR CODE REVIEWS",
+    "SENIOR MENTORS",
+    "VERIFIED CERTIFICATE",
+    "SHIP LIKE A TEAM",
+    "FULL-STACK · BACKEND · FRONTEND",
+  ],
 } as const
 
 export const howItWorks = {
@@ -82,27 +97,28 @@ export const howItWorks = {
 export const tracks = {
   eyebrow: "tracks",
   title: "Choose what you want to build",
-  description: "Three focused tracks. One real project, start to finish.",
+  description: "8 specialised tracks, ~5 real projects each. Here are three to get a feel for it.",
+  note: "+5 more tracks · ~5 projects per track",
   items: [
     {
       id: "full-stack",
       name: "Full-Stack",
       description: "Own a feature end to end — from the database schema to the UI your users click.",
-      stack: ["React", "Node.js", "PostgreSQL", "Docker"],
+      stack: ["Next.js", "Node.js", "PostgreSQL", "Docker"],
       build: "A full-stack web app with auth, a relational database and a containerised deploy.",
     },
     {
       id: "backend",
       name: "Backend",
       description: "Design APIs that are secure, well-structured and easy for other developers to use.",
-      stack: ["Node.js / Python", "REST APIs", "Databases", "Auth"],
+      stack: ["Node.js", "Python", "PostgreSQL", "REST APIs"],
       build: "A production-style REST API with authentication, validation and a documented schema.",
     },
     {
       id: "frontend",
       name: "Frontend",
       description: "Build interfaces that are fast, accessible and organised to scale with a team.",
-      stack: ["React", "TypeScript", "Tailwind", "UI architecture"],
+      stack: ["React", "Next.js", "TypeScript", "Tailwind"],
       build: "A responsive, component-driven web app built on a typed, reusable UI layer.",
     },
   ],

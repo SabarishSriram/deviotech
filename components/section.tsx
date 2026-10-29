@@ -37,8 +37,21 @@ export function SectionHeading({
         className
       )}
     >
-      {eyebrow && <p className="font-mono text-xs tracking-wide text-brand-text">{`// ${eyebrow}`}</p>}
-      <Heading id={id} className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl md:text-5xl">
+      {eyebrow && (
+        <p
+          className={cn(
+            "label-mono flex items-center gap-2 text-muted-foreground",
+            align === "center" && "justify-center"
+          )}
+        >
+          <span className="signal-dot" aria-hidden="true" />
+          {eyebrow}
+        </p>
+      )}
+      <Heading
+        id={id}
+        className="text-3xl font-semibold tracking-tight text-balance uppercase sm:text-4xl md:text-5xl"
+      >
         {title}
       </Heading>
       {description && <p className="text-base text-pretty text-muted-foreground sm:text-lg">{description}</p>}

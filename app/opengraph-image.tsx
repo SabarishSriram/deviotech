@@ -17,17 +17,17 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 80,
-          background: "#09090b",
+          background: "#0a0a0a",
           backgroundImage:
-            "radial-gradient(circle at 50% 0%, rgba(99,102,241,0.35), transparent 60%), radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
-          backgroundSize: "100% 100%, 28px 28px",
+            "radial-gradient(circle at 50% 0%, rgba(255,42,51,0.28), transparent 55%), radial-gradient(rgba(255,255,255,0.1) 1.1px, transparent 1.1px)",
+          backgroundSize: "100% 100%, 20px 20px",
           color: "#fafafa",
-          fontFamily: "sans-serif",
+          fontFamily: "monospace",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <svg width="64" height="64" viewBox="0 0 32 32">
-            <rect width="32" height="32" rx="8" fill="#6366F1" />
+            <rect width="32" height="32" rx="8" fill="#FF2A33" />
             <path
               d="M10 11l5 5-5 5M17 21h6"
               fill="none"
@@ -37,13 +37,19 @@ export default function OpengraphImage() {
               strokeLinejoin="round"
             />
           </svg>
-          <span style={{ fontSize: 36, fontWeight: 600 }}>{site.name}</span>
+          <span style={{ fontSize: 34, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase" }}>
+            {site.name}
+          </span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ display: "flex", fontSize: 96, fontWeight: 700, letterSpacing: -4 }}>
-            {hero.headline.lead}&nbsp;<span style={{ color: "#818CF8" }}>{hero.headline.accent}</span>
+          <div style={{ display: "flex", fontSize: 96, fontWeight: 700, letterSpacing: -2, textTransform: "uppercase" }}>
+            {hero.headline.lead}&nbsp;
+            <span style={{ color: "#FF6B70" }}>{hero.headline.accent}</span>
+            <span style={{ color: "#FF2A33" }}>.</span>
           </div>
-          <div style={{ fontSize: 30, color: "#a1a1aa" }}>{hero.trust.join("  ·  ")}</div>
+          <div style={{ fontSize: 28, color: "#a1a1aa", letterSpacing: 3, textTransform: "uppercase" }}>
+            {hero.trust.join("  ·  ")}
+          </div>
         </div>
       </div>
     ),

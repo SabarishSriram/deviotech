@@ -25,7 +25,7 @@ export function SiteHeader() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                  className="px-3 py-2 label-mono text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
                 >
                   {link.label}
                 </Link>
@@ -36,7 +36,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1">
           <ThemeToggle />
-          <Button asChild className="hidden h-9 rounded-full px-4 md:inline-flex">
+          <Button asChild className="hidden h-9 rounded-full px-4 label-mono md:inline-flex">
             <Link href={nav.cta.href}>{nav.cta.label}</Link>
           </Button>
 
@@ -67,7 +67,7 @@ export function SiteHeader() {
                 ))}
                 <Separator className="my-4" />
                 <SheetClose asChild>
-                  <Button asChild size="lg" className="h-11 rounded-full">
+                  <Button asChild size="lg" className="h-11 rounded-full label-mono">
                     <Link href={nav.cta.href}>{nav.cta.label}</Link>
                   </Button>
                 </SheetClose>

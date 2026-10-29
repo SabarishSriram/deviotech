@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true" className={cn("size-7", className)}>
-      <rect width="32" height="32" rx="8" fill="#6366F1" />
+      <rect width="32" height="32" rx="8" fill="#FF2A33" />
       <path
         d="M10 11l5 5-5 5M17 21h6"
         fill="none"

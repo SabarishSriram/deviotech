@@ -1,70 +1,116 @@
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, GitPullRequest, ShieldCheck } from "lucide-react"
 import Link from "next/link"
 
-import { FadeIn } from "@/components/fade-in"
-import { Badge } from "@/components/ui/badge"
+import { Counter } from "@/components/widgets/counter"
+import { Terminal } from "@/components/widgets/terminal"
+import { Widget } from "@/components/widgets/widget"
 import { Button } from "@/components/ui/button"
 import { hero } from "@/data/site"
 
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="relative isolate overflow-hidden">
-      {/* Grid pattern, faded out towards the edges */}
+      {/* Panning dot-matrix field + top glow */}
       <div
         aria-hidden="true"
-        className="bg-grid absolute inset-0 -z-10 mask-[radial-gradient(ellipse_70%_60%_at_50%_0%,#000_40%,transparent_100%)]"
+        className="bg-matrix animate-grid-pan absolute inset-0 -z-10 mask-[radial-gradient(ellipse_80%_55%_at_50%_0%,#000_30%,transparent_100%)]"
       />
-      {/* Soft indigo glow behind the headline */}
       <div
         aria-hidden="true"
-        className="absolute top-24 left-1/2 -z-10 h-72 w-[min(42rem,90vw)] -translate-x-1/2 rounded-full bg-brand/25 blur-3xl dark:bg-brand/20"
+        className="absolute top-10 left-1/2 -z-10 h-72 w-[min(48rem,92vw)] -translate-x-1/2 rounded-full bg-brand/15 blur-[90px]"
       />
 
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-4 pt-20 pb-24 text-center sm:px-6 sm:pt-28 sm:pb-32">
-        <FadeIn>
-          <Badge
-            variant="outline"
-            className="h-7 gap-2 rounded-full border-brand/30 bg-background/60 px-3 font-mono text-xs backdrop-blur"
-          >
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-60 motion-reduce:hidden" />
-              <span className="relative inline-flex size-2 rounded-full bg-brand" />
-            </span>
-            {hero.badge}
-          </Badge>
-        </FadeIn>
+      <div className="mx-auto max-w-6xl px-4 pt-14 pb-20 sm:px-6 sm:pt-20 sm:pb-24">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
+          {/* ---- Primary headline widget ---- */}
+          <Widget delay={0} interactive={false} className="flex flex-col justify-between p-7 sm:p-10 lg:w-[57%]">
+            <div className="widget-dots animate-grid-pan pointer-events-none absolute inset-0 opacity-50 mask-[radial-gradient(circle_at_80%_-10%,#000,transparent_60%)]" />
+            <div className="relative">
+              <div className="inline-flex h-8 items-center gap-2.5 rounded-full border border-border bg-background/60 px-3.5 label-mono backdrop-blur">
+                <span className="relative flex size-2.5">
+                  <span className="absolute inline-flex size-full rounded-full bg-brand opacity-70 [animation:pulse-ring_1.8s_ease-out_infinite] motion-reduce:hidden" />
+                  <span className="relative inline-flex size-2.5 rounded-full bg-brand" />
+                </span>
+                {hero.badge}
+              </div>
 
-        <FadeIn delay={0.05}>
-          <h1
-            id="hero-title"
-            className="mt-8 text-5xl font-semibold tracking-tighter text-balance sm:text-6xl md:text-7xl lg:text-8xl"
-          >
-            {hero.headline.lead}{" "}
-            <span className="bg-linear-to-br from-brand to-violet-500 bg-clip-text text-transparent">
-              {hero.headline.accent}
-            </span>
-          </h1>
-        </FadeIn>
+              <h1
+                id="hero-title"
+                className="mt-7 text-5xl font-semibold tracking-tight text-balance uppercase sm:text-6xl lg:text-7xl"
+              >
+                {hero.headline.lead}{" "}
+                <span className="text-brand-text">
+                  {hero.headline.accent}
+                  <span className="text-brand">.</span>
+                </span>
+              </h1>
 
-        <FadeIn delay={0.1}>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-pretty text-muted-foreground sm:text-xl">{hero.subtext}</p>
-        </FadeIn>
+              <p className="mt-5 max-w-xl text-base text-pretty text-muted-foreground sm:text-lg">{hero.subtext}</p>
+            </div>
 
-        <FadeIn delay={0.15} className="mt-10 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-          <Button asChild size="lg" className="group h-12 rounded-full px-6 text-base">
-            <Link href={hero.primaryCta.href}>
-              {hero.primaryCta.label}
-              <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="h-12 rounded-full px-6 text-base">
-            <Link href={hero.secondaryCta.href}>{hero.secondaryCta.label}</Link>
-          </Button>
-        </FadeIn>
+            <div className="relative mt-9">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" className="group h-12 rounded-full px-6 text-base">
+                  <Link href={hero.primaryCta.href}>
+                    {hero.primaryCta.label}
+                    <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="h-12 rounded-full px-6 text-base">
+                  <Link href={hero.secondaryCta.href}>{hero.secondaryCta.label}</Link>
+                </Button>
+              </div>
+              <p className="mt-6 label-mono text-muted-foreground">{hero.trust.join("  ·  ")}</p>
+            </div>
+          </Widget>
 
-        <FadeIn delay={0.2}>
-          <p className="mt-8 font-mono text-xs text-muted-foreground">{hero.trust.join(" · ")}</p>
-        </FadeIn>
+          {/* ---- Right column of stacked widgets ---- */}
+          <div className="flex flex-col gap-4 lg:w-[43%]">
+            {/* PR review terminal */}
+            <Widget delay={0.08} className="flex-1 p-6">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 label-mono text-muted-foreground">
+                  <GitPullRequest className="size-3.5" aria-hidden="true" />
+                  review.log
+                </span>
+                <span className="flex gap-1.5" aria-hidden="true">
+                  <span className="size-2.5 rounded-full bg-muted-foreground/30" />
+                  <span className="size-2.5 rounded-full bg-muted-foreground/30" />
+                  <span className="size-2.5 rounded-full bg-brand" />
+                </span>
+              </div>
+              <Terminal className="mt-4" />
+            </Widget>
+
+            {/* Stat trio */}
+            <Widget delay={0.16} className="grid grid-cols-3 divide-x divide-border p-0">
+              {hero.stats.map((s) => (
+                <div key={s.label} className="flex flex-col gap-1 p-5 text-center">
+                  <Counter
+                    value={s.value}
+                    suffix={s.suffix}
+                    className="font-mono text-2xl font-semibold tracking-tight sm:text-3xl"
+                  />
+                  <span className="text-[11px] leading-tight text-muted-foreground">{s.label}</span>
+                </div>
+              ))}
+            </Widget>
+
+            {/* Certificate chip */}
+            <Widget delay={0.24} className="flex items-center gap-3 p-5">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border bg-muted/50 text-brand-text">
+                <ShieldCheck className="size-5" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-mono text-sm font-medium">DEVIO-2026-0001</p>
+                <p className="label-mono text-muted-foreground">Verifiable certificate</p>
+              </div>
+              <Link href="/verify" className="ml-auto shrink-0 label-mono text-brand-text hover:underline">
+                Verify →
+              </Link>
+            </Widget>
+          </div>
+        </div>
       </div>
     </section>
   )

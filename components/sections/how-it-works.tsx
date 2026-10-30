@@ -14,7 +14,8 @@ export function HowItWorks() {
     target: ref,
     offset: ["start 75%", "end 55%"],
   })
-  const progress = useSpring(reduce ? 1 : scrollYProgress, { stiffness: 120, damping: 24 })
+  const spring = useSpring(scrollYProgress, { stiffness: 120, damping: 24 })
+  const progress = reduce ? 1 : spring
 
   return (
     <Section id="how-it-works" aria-labelledby="how-it-works-title" className="border-t">

@@ -31,6 +31,8 @@ export function formatPrice(amount: number) {
 }
 
 export const nav = {
+  verify: { label: "Verify", href: "/verify" },
+  portal: { label: "Student login", href: "/portal" },
   cta: { label: "Apply free", href: "/apply" },
 } as const
 
@@ -159,7 +161,6 @@ export const features = {
     { id: "architecture", title: "Architecture guidelines", description: "How the system fits together, so you make decisions with context." },
     { id: "docs", title: "Tech-stack documentation", description: "Curated docs and conventions for every tool in your track." },
     { id: "reviews", title: "PR-based code reviews", description: "Line-by-line feedback on every pull request you open." },
-    { id: "community", title: "Community access", description: "A Discord server with your batch and mentors to unblock you fast." },
     { id: "certificate", title: "Verifiable certificate", description: "Each certificate carries a unique ID that anyone can check online." },
     { id: "resume", title: "Resume & profile review", description: "Your mentor reviews your resume, GitHub and LinkedIn before you apply." },
   ],
@@ -241,7 +242,7 @@ export const successPage = {
     { title: "Free 1:1 session", description: "Meet a mentor one-on-one. They'll walk you through your track and how the program works." },
     {
       title: "Decide, then pay",
-      description: `Want to continue? Pay ${formatPrice(pricing.price)} and you get your project brief, Discord access and kickoff date.`,
+      description: `Want to continue? Pay ${formatPrice(pricing.price)} and you get your project brief, docs and kickoff date.`,
     },
   ],
   cta: { label: "Back to home", href: "/" },
@@ -303,8 +304,8 @@ export const legalPages = {
         body: "A certificate is issued only after your final project passes review. Certificates can be revoked if work is found to be plagiarised.",
       },
       {
-        heading: "Community conduct",
-        body: "Be respectful in the community and in code reviews. We may remove anyone who harasses other members.",
+        heading: "Conduct",
+        body: "Be respectful with mentors and in code reviews. We may remove anyone who harasses others.",
       },
     ],
   },

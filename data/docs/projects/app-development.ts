@@ -1,0 +1,136 @@
+import type { TrackDocs } from "@/data/docs/types"
+
+export const appDevelopmentDocs: TrackDocs = {
+  track: "app-development",
+  projects: [
+    {
+      slug: "habit-tracker",
+      pitch: "Build a habit tracker app: create habits, check in daily, keep streaks alive and get reminded — all working offline.",
+      users: [{ who: "Student building routines", need: "A quick daily check-in and a nudge when they forget." }],
+      mustHave: [
+        "Create, edit and delete habits (name, icon, colour, target days per week).",
+        "Today screen: tap to check in; shows done and remaining.",
+        "Streaks and a 7-day history per habit.",
+        "Daily reminder notification at a time the user picks.",
+        "All data stored on the device; works with no internet.",
+        "Habit detail with a monthly calendar.",
+      ],
+      niceToHave: ["Weekly stats chart.", "Archive habits.", "Sync to a REST API with login."],
+      outOfScope: ["Social features.", "Apple Watch / widgets."],
+      flows: [
+        { name: "Daily check-in", steps: ["User opens the app on Today.", "Taps a habit to mark it done.", "Streak updates with a small animation."] },
+        { name: "Set a reminder", steps: ["User opens Settings.", "Picks a time.", "Gets a notification at that time daily."] },
+      ],
+      overview: "Everything is local-first: AsyncStorage holds habits and check-ins; streaks are calculated from check-in dates.",
+      data: [
+        { name: "Habit", fields: ["id", "name", "icon", "colour", "targetPerWeek", "createdAt", "archived"] },
+        { name: "CheckIn", fields: ["habitId", "date (YYYY-MM-DD)"] },
+        { name: "Settings", fields: ["reminderTime", "notificationsEnabled"] },
+      ],
+      interface: [
+        { label: "Today (tab)", detail: "Habits due today with check-in buttons." },
+        { label: "Habits (tab)", detail: "List; add/edit habit form." },
+        { label: "Habit detail", detail: "Streak, calendar, history." },
+        { label: "Settings (tab)", detail: "Reminder time, notifications." },
+      ],
+      weeks: [
+        ["Map the four screens and how users move between them.", "Set up the project with Expo.", "Decide the storage format."],
+        ["Build Today and Habits screens with React Navigation.", "Reusable habit row and form.", "Save habits on the device."],
+        ["Check-ins and streak calculation.", "Reminders with Expo Notifications.", "App-wide state; offline behaviour."],
+        ["Icon, splash screen, empty states.", "Release APK with EAS Build; README and screen recording.", "Final review."],
+      ],
+      doneWhen: [
+        "Habits and streaks survive closing the app.",
+        "The reminder fires at the chosen time.",
+        "Works in airplane mode.",
+        "An installable APK is linked in the README.",
+      ],
+    },
+    {
+      slug: "expense-manager",
+      pitch: "Build an expense manager app: log spending in seconds, see monthly charts by category and get alerted before overspending.",
+      users: [{ who: "Student on a budget", need: "Log expenses fast and know how much is left this month." }],
+      mustHave: [
+        "Add an expense in under 10 seconds: amount, category, note, date.",
+        "Monthly list grouped by day with a running total.",
+        "Category breakdown chart for the month.",
+        "Monthly budget with an alert notification at 80% and 100%.",
+        "Edit and delete expenses; all data stored on the device.",
+        "Currency formatted in rupees.",
+      ],
+      niceToHave: ["Recurring expenses.", "Export to CSV and share.", "Custom categories."],
+      outOfScope: ["Bank SMS parsing.", "Multi-currency."],
+      flows: [
+        { name: "Log an expense", steps: ["User taps +.", "Enters amount, picks a category.", "Saves; the month total updates."] },
+        { name: "Budget alert", steps: ["An expense pushes spending past 80%.", "The app sends a notification.", "Budget screen shows the warning."] },
+      ],
+      overview: "Expenses are stored locally; totals and chart data are derived from them, never stored separately.",
+      data: [
+        { name: "Expense", fields: ["id", "amount", "category", "note", "date", "createdAt"] },
+        { name: "Budget", fields: ["month (YYYY-MM)", "limit"] },
+      ],
+      interface: [
+        { label: "Home", detail: "Month total, budget bar, recent expenses." },
+        { label: "Add expense (modal)", detail: "Amount keypad, category chips." },
+        { label: "Reports", detail: "Category chart for the selected month." },
+        { label: "Budget", detail: "Set the monthly limit." },
+      ],
+      weeks: [
+        ["Map screens and flows.", "Expo project setup.", "Data format for expenses and budgets."],
+        ["Home and Add expense screens.", "Reusable amount input and category chips.", "Local storage."],
+        ["Reports chart.", "Budget alerts with Expo Notifications.", "Edit/delete and error handling."],
+        ["Polish and empty states.", "Release APK with EAS Build; README and recording.", "Final review."],
+      ],
+      doneWhen: [
+        "Logging an expense takes three taps plus typing the amount.",
+        "Totals and the chart always agree.",
+        "Budget alerts fire once per threshold per month.",
+        "APK linked in the README.",
+      ],
+    },
+    {
+      slug: "food-ordering",
+      pitch: "Build a food ordering app for one restaurant: browse the menu, build a cart, place an order and track its status.",
+      users: [{ who: "Hungry customer", need: "Order quickly and know when food is on the way." }],
+      mustHave: [
+        "Menu from a REST API (you'll get a mock API) with categories and search.",
+        "Item detail with quantity and add-ons.",
+        "Cart with quantity changes and a correct total.",
+        "Checkout form (name, phone, address) with validation.",
+        "Order status screen: placed → preparing → out for delivery → delivered (polled from the API).",
+        "Order history stored on the device.",
+      ],
+      niceToHave: ["Push notification on status change.", "Favourite items.", "Reorder from history."],
+      outOfScope: ["Real payments.", "Multiple restaurants."],
+      flows: [
+        { name: "Place an order", steps: ["Customer browses and adds items.", "Opens the cart and checks out.", "Sees the order status screen."] },
+        { name: "Track", steps: ["Status screen polls the API.", "Status steps light up as they change."] },
+      ],
+      overview: "Menu and orders come from a REST API; the cart lives in app state and is saved on the device so it survives restarts.",
+      data: [
+        { name: "MenuItem", fields: ["id", "name", "category", "price", "imageUrl", "addOns[]"] },
+        { name: "CartItem", fields: ["menuItemId", "quantity", "addOns[]"] },
+        { name: "Order", fields: ["id", "items[]", "total", "status", "createdAt"] },
+      ],
+      interface: [
+        { label: "Menu (tab)", detail: "Categories, search, item cards." },
+        { label: "Item detail", detail: "Quantity, add-ons, add to cart." },
+        { label: "Cart (tab)", detail: "Items, total, checkout." },
+        { label: "Order status", detail: "Live status steps." },
+        { label: "Orders (tab)", detail: "History." },
+      ],
+      weeks: [
+        ["Map five screens.", "Expo setup; explore the mock API.", "Plan cart state."],
+        ["Menu and item detail screens.", "Navigation with tabs + stack.", "Cart screen with local persistence."],
+        ["Checkout and order creation via the API.", "Status polling and history.", "Loading and offline error states."],
+        ["Polish; icon and splash.", "Release APK with EAS Build; README and recording.", "Final review."],
+      ],
+      doneWhen: [
+        "Cart total matches item prices × quantity + add-ons.",
+        "The cart survives closing the app.",
+        "Status updates without restarting the app.",
+        "APK linked in the README.",
+      ],
+    },
+  ],
+}

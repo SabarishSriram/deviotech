@@ -1,0 +1,121 @@
+import type { TrackDocs } from "@/data/docs/types"
+
+export const uiUxDocs: TrackDocs = {
+  track: "ui-ux",
+  projects: [
+    {
+      slug: "app-redesign",
+      pitch: "Pick an app you use every week, find its real usability problems through research, and redesign the flows that matter most.",
+      users: [{ who: "That app's everyday users", need: "Complete common tasks with less confusion and fewer steps." }],
+      mustHave: [
+        "Pick the app and the 1–2 flows to redesign (agree with your mentor).",
+        "Heuristic review of the current flows with screenshots.",
+        "Interview 3–5 real users; affinity map the findings.",
+        "Persona and journey map grounded in the interviews.",
+        "Redesigned flows: wireframes → high-fidelity screens → clickable prototype.",
+        "Usability test the prototype with 3–5 people; iterate once.",
+      ],
+      niceToHave: ["A/B comparison of two variants.", "Accessibility audit (contrast, tap targets)."],
+      outOfScope: ["Redesigning the whole app.", "Brand or logo redesign."],
+      flows: [{ name: "Your process", steps: ["Audit current flow.", "Interview and synthesise.", "Redesign and prototype.", "Test and iterate.", "Write the case study."] }],
+      overview: "Every design decision should trace back to something you observed in research or testing. Your case study tells that story.",
+      data: [
+        { name: "Research artefacts", fields: ["Interview notes", "Affinity map", "Persona", "Journey map"] },
+        { name: "Design artefacts", fields: ["Before screenshots", "Wireframes", "Hi-fi screens", "Prototype link", "Test findings"] },
+      ],
+      interface: [
+        { label: "Current-state audit", detail: "Annotated screenshots of the existing flow." },
+        { label: "Redesigned flow screens", detail: "Every step of the 1–2 chosen flows." },
+        { label: "Before / after comparison", detail: "Side by side with what changed and why." },
+      ],
+      weeks: [
+        ["Choose the app and flows; write the problem statement.", "Heuristic review.", "Interviews and affinity map."],
+        ["Persona and journey map.", "User flows for the redesign.", "Low-fidelity wireframes; feedback round."],
+        ["Mini design system (colour, type, components).", "High-fidelity screens.", "Clickable prototype."],
+        ["Usability test and iterate.", "Developer handoff notes.", "Case study; final review."],
+      ],
+      doneWhen: [
+        "Each change links to a research or testing finding.",
+        "The prototype works end to end for the chosen flows.",
+        "Test results show what improved (time, errors or confidence).",
+        "The case study is public.",
+      ],
+    },
+    {
+      slug: "campus-app",
+      pitch: "Design an app that solves one everyday problem for students on your campus — from finding a free room to sharing notes.",
+      users: [{ who: "Students at your college", need: "One real recurring problem solved — you'll find which one in research." }],
+      mustHave: [
+        "Survey or interview at least 5 students to choose the problem.",
+        "Problem statement and “how might we” questions.",
+        "Persona, journey map and competitor scan (what they use today).",
+        "Information architecture and user flows.",
+        "Wireframes → design system → hi-fi screens → prototype of the core flow.",
+        "Usability test with 3–5 students; iterate once.",
+      ],
+      niceToHave: ["Onboarding flow.", "Empty and error states for every screen."],
+      outOfScope: ["Building the app in code."],
+      flows: [{ name: "Your process", steps: ["Discover the problem.", "Define it sharply.", "Design and prototype.", "Test with students.", "Write the case study."] }],
+      overview: "The hardest and most valuable step is choosing the right problem. Spend real time on discovery before opening Figma.",
+      data: [
+        { name: "Research artefacts", fields: ["Survey results", "Interview notes", "Problem statement", "Persona", "Competitor scan"] },
+        { name: "Design artefacts", fields: ["Sitemap", "User flows", "Wireframes", "Design system", "Prototype", "Test findings"] },
+      ],
+      interface: [
+        { label: "Onboarding / home", detail: "First-run experience and main screen." },
+        { label: "Core flow screens", detail: "Every step of the main task." },
+        { label: "States", detail: "Empty, loading and error versions of key screens." },
+      ],
+      weeks: [
+        ["Survey/interviews.", "Problem statement and HMW questions.", "Persona and competitor scan."],
+        ["Sitemap and user flows.", "Wireframes.", "Feedback round with 2 students."],
+        ["Design system.", "Hi-fi screens.", "Prototype the core flow."],
+        ["Usability test and iterate.", "Handoff notes.", "Case study; final review."],
+      ],
+      doneWhen: [
+        "The problem is backed by what students actually said.",
+        "The core flow is fully clickable.",
+        "Screens use the design system's components consistently.",
+        "The case study is public.",
+      ],
+    },
+    {
+      slug: "fintech-onboarding",
+      pitch: "Design the sign-up and KYC (identity verification) flow for a fintech app so it feels fast, clear and trustworthy.",
+      users: [{ who: "First-time user of a money app", need: "Sign up confidently without abandoning halfway." }],
+      mustHave: [
+        "Review 3 real fintech onboarding flows; note drop-off risks.",
+        "Interview 3–5 people about trust and sign-up frustrations.",
+        "Flow covering: phone/email, OTP, personal details, PAN/Aadhaar-style KYC step, selfie check, success.",
+        "Progress indicator, save-and-resume, and clear error recovery.",
+        "Microcopy that explains why each piece of data is needed.",
+        "Prototype and usability test with 3–5 people; iterate once.",
+      ],
+      niceToHave: ["Accessibility review.", "Variant with fewer steps for comparison."],
+      outOfScope: ["Real KYC integration.", "The rest of the app."],
+      flows: [{ name: "Onboarding", steps: ["Enter phone → OTP.", "Personal details.", "ID verification.", "Selfie check.", "Account ready."] }],
+      overview: "Trust is designed through clarity: tell users what's next, why you need their data, and how to recover from mistakes.",
+      data: [
+        { name: "Research artefacts", fields: ["Competitor teardown", "Interview notes", "Persona", "Journey map with drop-off points"] },
+        { name: "Design artefacts", fields: ["Flow diagram", "Wireframes", "Design system", "Hi-fi screens", "Prototype", "Test findings"] },
+      ],
+      interface: [
+        { label: "Sign-up & OTP", detail: "Including wrong-OTP and resend states." },
+        { label: "Details & KYC", detail: "Forms with inline validation and help text." },
+        { label: "Verification & success", detail: "Pending, failed and approved states." },
+      ],
+      weeks: [
+        ["Competitor teardown.", "Interviews and synthesis.", "Journey map with drop-off risks."],
+        ["Flow diagram including error paths.", "Wireframes.", "Microcopy draft."],
+        ["Design system.", "Hi-fi screens with all states.", "Prototype."],
+        ["Usability test and iterate.", "Handoff notes.", "Case study; final review."],
+      ],
+      doneWhen: [
+        "Every screen has error and recovery states.",
+        "Each data request explains why it's needed.",
+        "Test participants complete the flow without help.",
+        "The case study is public.",
+      ],
+    },
+  ],
+}

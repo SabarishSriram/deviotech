@@ -4,7 +4,6 @@ import {
   FileText,
   FileUser,
   GitPullRequest,
-  MessagesSquare,
   Network,
   type LucideIcon,
 } from "lucide-react"
@@ -18,7 +17,6 @@ const featureIcons: Record<FeatureId, LucideIcon> = {
   architecture: Network,
   docs: BookOpen,
   reviews: GitPullRequest,
-  community: MessagesSquare,
   certificate: BadgeCheck,
   resume: FileUser,
 }
@@ -26,9 +24,8 @@ const featureIcons: Record<FeatureId, LucideIcon> = {
 const span: Record<FeatureId, string> = {
   prd: "lg:col-span-4",
   reviews: "lg:col-span-2",
-  architecture: "lg:col-span-2",
-  docs: "lg:col-span-2",
-  community: "lg:col-span-2",
+  architecture: "lg:col-span-3",
+  docs: "lg:col-span-3",
   certificate: "lg:col-span-3",
   resume: "lg:col-span-3",
 }

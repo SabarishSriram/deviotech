@@ -24,7 +24,7 @@ export const trackCategories: TrackCategory[] = ["Development", "Programming", "
 /** One week of a track: concrete tasks plus the artefact it ends with. */
 export type TrackWeek = { title: string; points: string[]; deliverable: string }
 
-export type TrackProject = { name: string; description: string }
+export type TrackProject = { slug: string; name: string; description: string }
 
 export type Track = {
   slug: TrackSlug
@@ -89,9 +89,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Job application tracker", description: "Track applications through each stage, with reminders and a dashboard of your pipeline." },
-      { name: "Event booking platform", description: "Browse events, book seats with live availability, and manage bookings as an organiser." },
-      { name: "Team task manager", description: "Boards, assignees and due dates, with role-based access for team admins." },
+      { slug: "job-tracker", name: "Job application tracker", description: "Track applications through each stage, with reminders and a dashboard of your pipeline." },
+      { slug: "event-booking", name: "Event booking platform", description: "Browse events, book seats with live availability, and manage bookings as an organiser." },
+      { slug: "task-manager", name: "Team task manager", description: "Boards, assignees and due dates, with role-based access for team admins." },
     ],
     buildWithAi: "Use AI to scaffold APIs and components, then write tests and review every PR yourself.",
   },
@@ -143,9 +143,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "URL shortener with analytics", description: "Short links with custom aliases, click tracking and per-link analytics." },
-      { name: "E-commerce backend", description: "Products, carts, orders and inventory, with a checkout flow and admin APIs." },
-      { name: "Booking system API", description: "Time-slot booking with conflict checks, cancellations and email confirmations." },
+      { slug: "url-shortener", name: "URL shortener with analytics", description: "Short links with custom aliases, click tracking and per-link analytics." },
+      { slug: "ecommerce-backend", name: "E-commerce backend", description: "Products, carts, orders and inventory, with a checkout flow and admin APIs." },
+      { slug: "booking-api", name: "Booking system API", description: "Time-slot booking with conflict checks, cancellations and email confirmations." },
     ],
     buildWithAi: "Generate boilerplate and tests with AI, then load-test and harden what it produces.",
   },
@@ -198,9 +198,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Personal finance dashboard", description: "Charts, budgets and filters over a year of transactions." },
-      { name: "Movie discovery app", description: "Search, filter and save movies from a public movie API, with infinite scroll." },
-      { name: "Admin panel", description: "Data tables, forms and role-based views for managing users and orders." },
+      { slug: "finance-dashboard", name: "Personal finance dashboard", description: "Charts, budgets and filters over a year of transactions." },
+      { slug: "movie-discovery", name: "Movie discovery app", description: "Search, filter and save movies from a public movie API, with infinite scroll." },
+      { slug: "admin-panel", name: "Admin panel", description: "Data tables, forms and role-based views for managing users and orders." },
     ],
     buildWithAi: "Turn designs into components with AI, then refactor for clean, accessible code.",
   },
@@ -251,9 +251,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Habit tracker", description: "Daily check-ins, streaks and reminder notifications, stored on the device." },
-      { name: "Expense manager", description: "Log spending by category, see monthly charts and set budget alerts." },
-      { name: "Food ordering app", description: "Browse a menu, build a cart, place orders and track their status." },
+      { slug: "habit-tracker", name: "Habit tracker", description: "Daily check-ins, streaks and reminder notifications, stored on the device." },
+      { slug: "expense-manager", name: "Expense manager", description: "Log spending by category, see monthly charts and set budget alerts." },
+      { slug: "food-ordering", name: "Food ordering app", description: "Browse a menu, build a cart, place orders and track their status." },
     ],
     buildWithAi: "Prototype screens quickly with AI and debug device-specific issues with it.",
   },
@@ -303,9 +303,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Resume screener", description: "Score resumes against a job description and explain each match." },
-      { name: "Document Q&A bot (RAG)", description: "Upload PDFs and ask questions, with answers that cite their sources." },
-      { name: "Fake news classifier", description: "Classify headlines and articles, and report precision and recall." },
+      { slug: "resume-screener", name: "Resume screener", description: "Score resumes against a job description and explain each match." },
+      { slug: "document-qa", name: "Document Q&A bot (RAG)", description: "Upload PDFs and ask questions, with answers that cite their sources." },
+      { slug: "fake-news-classifier", name: "Fake news classifier", description: "Classify headlines and articles, and report precision and recall." },
     ],
     buildWithAi: "Build with LLM APIs directly — prompt design, RAG and evaluating AI output.",
   },
@@ -355,9 +355,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "IPL performance analysis", description: "Player and team trends across seasons, with a match-winner breakdown." },
-      { name: "Sales insights dashboard", description: "Revenue by region, product and month, with the drivers behind each trend." },
-      { name: "Real-estate price analysis", description: "What drives prices across localities, with a simple price estimator." },
+      { slug: "ipl-analysis", name: "IPL performance analysis", description: "Player and team trends across seasons, with a match-winner breakdown." },
+      { slug: "sales-dashboard", name: "Sales insights dashboard", description: "Revenue by region, product and month, with the drivers behind each trend." },
+      { slug: "real-estate-analysis", name: "Real-estate price analysis", description: "What drives prices across localities, with a simple price estimator." },
     ],
     buildWithAi: "Use AI to speed up cleaning and charting, then verify every number yourself.",
   },
@@ -409,9 +409,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Expense tracker CLI + API", description: "Log expenses from the terminal and query them through a FastAPI service." },
-      { name: "Web scraper with alerts", description: "Watch prices or listings on a site and get alerted when something changes." },
-      { name: "Automation toolkit", description: "Scripts that rename, organise and report on files, run on a schedule." },
+      { slug: "expense-cli", name: "Expense tracker CLI + API", description: "Log expenses from the terminal and query them through a FastAPI service." },
+      { slug: "web-scraper", name: "Web scraper with alerts", description: "Watch prices or listings on a site and get alerted when something changes." },
+      { slug: "automation-toolkit", name: "Automation toolkit", description: "Scripts that rename, organise and report on files, run on a schedule." },
     ],
     buildWithAi: "Use AI as a pair programmer to learn faster — and explain every line in review.",
   },
@@ -462,9 +462,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Library management API", description: "Books, members and loans, with due dates and fine calculation." },
-      { name: "Banking system API", description: "Accounts, deposits, transfers and statements, with safe transactions." },
-      { name: "Inventory system", description: "Products, suppliers and stock levels, with low-stock alerts." },
+      { slug: "library-api", name: "Library management API", description: "Books, members and loans, with due dates and fine calculation." },
+      { slug: "banking-api", name: "Banking system API", description: "Accounts, deposits, transfers and statements, with safe transactions." },
+      { slug: "inventory-system", name: "Inventory system", description: "Products, suppliers and stock levels, with low-stock alerts." },
     ],
     buildWithAi: "Use AI to understand Spring concepts and generate tests, then refactor by hand.",
   },
@@ -514,9 +514,9 @@ export const tracks: Track[] = [
       },
     ],
     projects: [
-      { name: "Redesign of a popular app", description: "Find real usability problems in an app you use and redesign the flows." },
-      { name: "Campus utility app", description: "Design an app that solves one everyday problem for students on your campus." },
-      { name: "Fintech onboarding flow", description: "Design a sign-up and KYC flow that feels fast, clear and trustworthy." },
+      { slug: "app-redesign", name: "Redesign of a popular app", description: "Find real usability problems in an app you use and redesign the flows." },
+      { slug: "campus-app", name: "Campus utility app", description: "Design an app that solves one everyday problem for students on your campus." },
+      { slug: "fintech-onboarding", name: "Fintech onboarding flow", description: "Design a sign-up and KYC flow that feels fast, clear and trustworthy." },
     ],
     buildWithAi: "Use AI for research synthesis and quick concepts, then design and justify the final work.",
   },

@@ -1,0 +1,152 @@
+import type { TrackDocs } from "@/data/docs/types"
+
+export const backendDocs: TrackDocs = {
+  track: "backend",
+  projects: [
+    {
+      slug: "url-shortener",
+      pitch: "Build the API behind a link shortener like bit.ly: turn long URLs into short codes, redirect fast, and count every click.",
+      users: [
+        { who: "Creator", need: "Shorten links, pick custom aliases and see how each link performs." },
+        { who: "Visitor", need: "Click a short link and land on the right page instantly." },
+      ],
+      mustHave: [
+        "API-key or JWT auth for creators.",
+        "Create a short link with a random code or a custom alias; reject duplicates.",
+        "GET /:code redirects (302) to the original URL.",
+        "Record each click: time, referrer, country (from a header) and device type.",
+        "Analytics per link: total clicks, clicks per day, top referrers.",
+        "Redis cache for code → URL lookups; rate limiting on link creation.",
+      ],
+      niceToHave: ["Link expiry dates.", "QR code endpoint.", "Disable a link without deleting it."],
+      outOfScope: ["A frontend — test with an HTTP client and Swagger.", "Custom domains."],
+      flows: [
+        { name: "Shorten a link", steps: ["Creator sends POST /api/links with a URL.", "API validates the URL and generates a unique code.", "Returns the short URL."] },
+        { name: "Redirect", steps: ["Visitor hits /:code.", "API checks Redis, falls back to the database.", "Records the click and redirects."] },
+      ],
+      overview: "Redirects are the hot path: read from Redis first and record the click without slowing the response down.",
+      data: [
+        { name: "User", fields: ["id", "email", "passwordHash or apiKeyHash"] },
+        { name: "Link", fields: ["id", "userId → User", "code (unique)", "targetUrl", "expiresAt (optional)", "createdAt"] },
+        { name: "Click", fields: ["id", "linkId → Link", "at", "referrer", "country", "device"] },
+      ],
+      interface: [
+        { label: "POST /api/links", detail: "Create a link (optional customAlias). Rate-limited." },
+        { label: "GET /api/links?page=", detail: "Creator's links, paginated." },
+        { label: "GET /:code", detail: "302 redirect; records a click." },
+        { label: "GET /api/links/:id/stats?from=&to=", detail: "Clicks per day, referrers, devices." },
+        { label: "DELETE /api/links/:id", detail: "Remove a link and clear its cache entry." },
+        { label: "GET /docs", detail: "Swagger UI for the whole API." },
+      ],
+      weeks: [
+        ["Write the OpenAPI contract for every endpoint.", "Design the schema; decide Postgres vs MongoDB with your mentor.", "Plan the layers (routes, services, data)."],
+        ["Link CRUD with zod validation and consistent errors.", "Auth and the redirect endpoint.", "Integration tests for create + redirect."],
+        ["Redis cache for redirects; rate limiting on POST /api/links.", "Click analytics endpoint.", "Load-test the redirect and note before/after numbers."],
+        ["Dockerfile; deploy API and database.", "Publish Swagger docs; README with your performance numbers.", "Final review."],
+      ],
+      doneWhen: [
+        "Redirects are served from Redis after the first hit.",
+        "Creating more links than the limit returns 429.",
+        "Stats match the clicks you made.",
+        "Swagger documents every endpoint and the API is deployed.",
+      ],
+    },
+    {
+      slug: "ecommerce-backend",
+      pitch: "Build the backend of an online store: products, carts, orders and stock that never goes negative.",
+      users: [
+        { who: "Shopper", need: "Browse products, manage a cart and place orders." },
+        { who: "Store admin", need: "Manage products and stock, and update order status." },
+      ],
+      mustHave: [
+        "Auth with customer and admin roles.",
+        "Products with categories, price and stock; search, filter and paginate.",
+        "Cart: add, update quantity, remove; cart total calculated on the server.",
+        "Checkout creates an order and reduces stock in one transaction.",
+        "Order history for customers; admins update status (placed → shipped → delivered).",
+        "Cache the product list in Redis; invalidate on product changes.",
+      ],
+      niceToHave: ["Coupon codes.", "Low-stock report for admins.", "Soft-delete products."],
+      outOfScope: ["Real payment processing (mark orders paid manually).", "A frontend."],
+      flows: [
+        { name: "Checkout", steps: ["Customer adds items to the cart.", "Calls POST /api/orders.", "API checks stock, creates the order, reduces stock and clears the cart — all or nothing."] },
+        { name: "Restock", steps: ["Admin updates a product's stock.", "Cache for the product list is cleared."] },
+      ],
+      overview: "Money and stock must always be right. Prices are copied onto order items at checkout so later price changes don't rewrite history.",
+      data: [
+        { name: "User", fields: ["id", "email", "passwordHash", "role (CUSTOMER | ADMIN)"] },
+        { name: "Product", fields: ["id", "name", "category", "priceInPaise", "stock", "createdAt"] },
+        { name: "CartItem", fields: ["userId → User", "productId → Product", "quantity"] },
+        { name: "Order", fields: ["id", "userId → User", "status (PLACED | SHIPPED | DELIVERED | CANCELLED)", "totalInPaise", "createdAt"] },
+        { name: "OrderItem", fields: ["orderId → Order", "productId → Product", "quantity", "unitPriceInPaise"] },
+      ],
+      interface: [
+        { label: "GET /api/products?category=&q=&page=", detail: "Cached, paginated product list." },
+        { label: "POST /api/products · PATCH /:id", detail: "Admin manages products." },
+        { label: "GET/POST/PATCH/DELETE /api/cart", detail: "The current user's cart." },
+        { label: "POST /api/orders", detail: "Checkout in a transaction." },
+        { label: "GET /api/orders", detail: "Customer's orders (admins: all, filterable)." },
+        { label: "PATCH /api/orders/:id/status", detail: "Admin updates order status." },
+      ],
+      weeks: [
+        ["OpenAPI contract.", "Schema — note why prices are stored in paise.", "Layer plan."],
+        ["Auth and roles; product CRUD with validation.", "Cart endpoints.", "Integration tests for cart totals."],
+        ["Checkout transaction; test what happens when stock runs out mid-checkout.", "Redis cache for products; rate limiting.", "Order history and status updates."],
+        ["Docker + deploy.", "Swagger docs and README.", "Final review."],
+      ],
+      doneWhen: [
+        "Stock never goes below zero, even with two simultaneous checkouts.",
+        "Order totals are calculated on the server, never trusted from the client.",
+        "Only admins can change products or order status.",
+        "Deployed with Swagger docs.",
+      ],
+    },
+    {
+      slug: "booking-api",
+      pitch: "Build a booking API for a service business (a salon, clinic or tutor): customers book time slots and the API guarantees no double bookings.",
+      users: [
+        { who: "Customer", need: "See open slots and book or cancel one." },
+        { who: "Provider", need: "Set working hours and see the day's bookings." },
+      ],
+      mustHave: [
+        "Providers define weekly working hours and slot length.",
+        "Available slots for a date are calculated from hours minus existing bookings.",
+        "Booking a slot fails if it's already taken (no overlaps).",
+        "Customers cancel up to a cut-off time before the slot.",
+        "Confirmation email on booking (or a logged message if email isn't set up).",
+        "Redis cache for availability; rate limiting on bookings.",
+      ],
+      niceToHave: ["Holidays / blocked days.", "Reschedule endpoint.", "Reminder 24 hours before."],
+      outOfScope: ["Payments.", "Multiple time zones (assume one)."],
+      flows: [
+        { name: "Book a slot", steps: ["Customer asks for availability on a date.", "Picks a slot and sends POST /api/bookings.", "API re-checks the slot is free, saves, sends confirmation."] },
+        { name: "Cancel", steps: ["Customer cancels before the cut-off.", "Slot becomes available again; cache is cleared."] },
+      ],
+      overview: "Availability is computed, not stored. A database constraint (unique provider + start time) is the final guard against double booking.",
+      data: [
+        { name: "Provider", fields: ["id", "name", "slotMinutes"] },
+        { name: "WorkingHours", fields: ["providerId → Provider", "weekday (0–6)", "startTime", "endTime"] },
+        { name: "Booking", fields: ["id", "providerId → Provider", "customerEmail", "startsAt", "status (BOOKED | CANCELLED)", "unique (providerId, startsAt) for BOOKED"] },
+      ],
+      interface: [
+        { label: "GET /api/providers/:id/availability?date=", detail: "Free slots for that date (cached)." },
+        { label: "POST /api/bookings", detail: "Book a slot; 409 if taken." },
+        { label: "DELETE /api/bookings/:id", detail: "Cancel before the cut-off." },
+        { label: "PUT /api/providers/:id/hours", detail: "Provider sets weekly hours." },
+        { label: "GET /api/providers/:id/bookings?date=", detail: "Provider's day view." },
+      ],
+      weeks: [
+        ["OpenAPI contract.", "Schema and the availability algorithm written out in plain words.", "Layer plan."],
+        ["Working hours and availability endpoints.", "Booking + cancel with conflict checks.", "Tests for overlapping bookings."],
+        ["Cache availability; clear it on booking/cancel.", "Rate limiting and confirmation email.", "Load-test the availability endpoint."],
+        ["Docker + deploy.", "Swagger docs and README.", "Final review."],
+      ],
+      doneWhen: [
+        "Two requests for the same slot: exactly one succeeds.",
+        "Availability excludes booked and past slots.",
+        "Cancellation after the cut-off is refused.",
+        "Deployed with Swagger docs.",
+      ],
+    },
+  ],
+}

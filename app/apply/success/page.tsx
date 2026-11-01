@@ -1,4 +1,4 @@
-import { Check, Mail, MessagesSquare, CalendarDays, type LucideIcon } from "lucide-react"
+import { Check, KeyRound, Video, Wallet, type LucideIcon } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   robots: { index: false },
 }
 
-const stepIcons: LucideIcon[] = [Mail, MessagesSquare, CalendarDays]
+const stepIcons: LucideIcon[] = [KeyRound, Video, Wallet]
 
 export default function ApplySuccessPage() {
   return (

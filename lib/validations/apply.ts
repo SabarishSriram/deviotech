@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { TRACK_SLUGS } from "@/data/tracks"
+
 /** Shared by the /apply form (client) and the /api/apply route (server). */
 export const applicationSchema = z.object({
   fullName: z.string().trim().min(2, "Enter your full name"),
@@ -21,7 +23,7 @@ export const applicationSchema = z.object({
       (value) => value === "" || /^https?:\/\/([a-z]{2,3}\.)?linkedin\.com\/.+/i.test(value),
       "Enter a valid LinkedIn URL"
     ),
-  track: z.enum(["full-stack", "backend", "frontend"], { error: "Choose a track" }),
+  track: z.enum(TRACK_SLUGS, { error: "Choose a track" }),
   skillLevel: z.enum(["beginner", "intermediate", "advanced"], { error: "Select your skill level" }),
   motivation: z
     .string()

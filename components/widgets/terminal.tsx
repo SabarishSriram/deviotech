@@ -22,10 +22,14 @@ const lines: Line[] = [
   { prefix: "✓", text: "use parameterized queries · ln 42", tone: "ok" },
   { prefix: "✓", text: "extract AuthService · ln 88", tone: "ok" },
   { prefix: "$", text: "git commit --amend && push", tone: "cmd" },
-  { prefix: "✓", text: "approved — merged to main", tone: "ok" },
+  { prefix: "→", text: "ci: 24 tests passed", tone: "muted" },
+  { prefix: "◆", text: "mentor approved the changes", tone: "accent" },
+  { prefix: "✓", text: "merged to main · deployed", tone: "ok" },
 ]
 
 const total = lines.reduce((n, l) => n + l.text.length, 0)
+/** Character offset where each line begins in the overall typing sequence. */
+const starts = lines.map((_, i) => lines.slice(0, i).reduce((n, l) => n + l.text.length, 0))
 
 /** A looping, self-typing PR-review terminal. Shows full text under reduced-motion. */
 export function Terminal({ className }: { className?: string }) {
@@ -52,15 +56,15 @@ export function Terminal({ className }: { className?: string }) {
   }, [inView, reduce, typed === 0])
 
   // Resolve how much of each line is visible given the global typed count.
-  let remaining = typed
-  const visible = lines.map((l) => {
-    const show = Math.max(0, Math.min(l.text.length, remaining))
-    remaining -= l.text.length
+  const visible = lines.map((l, i) => {
+    const show = Math.max(0, Math.min(l.text.length, typed - starts[i]))
     return { ...l, shown: l.text.slice(0, show), active: show > 0 && show < l.text.length }
   })
 
+  const done = typed >= total
+
   return (
-    <div ref={ref} className={cn("font-mono text-[12.5px] leading-relaxed sm:text-[13px]", className)}>
+    <div ref={ref} className={cn("flex flex-col font-mono text-[12.5px] leading-relaxed sm:text-[13px]", className)}>
       {visible.map((l, i) => {
         // Not yet reached: render the full line invisibly so the block keeps
         // a constant height and never pushes neighbouring widgets around.
@@ -75,6 +79,23 @@ export function Terminal({ className }: { className?: string }) {
           </div>
         )
       })}
+
+      {/* PR status bar — pinned to the bottom so the log fills its widget */}
+      <div aria-hidden="true" className="min-h-4 flex-1" />
+      <div className="flex items-center gap-3 border-t pt-3.5">
+        <span className={cn("w-20 shrink-0 label-mono", done ? "text-brand-text" : "text-muted-foreground")}>
+          {done ? "merged" : "in review"}
+        </span>
+        <span className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
+          <span
+            className="block h-full rounded-full bg-brand transition-[width] duration-200 ease-linear"
+            style={{ width: `${(typed / total) * 100}%` }}
+          />
+        </span>
+        <span className="shrink-0 text-xs">
+          <span className="text-foreground">+128</span> <span className="text-muted-foreground">−34</span>
+        </span>
+      </div>
     </div>
   )
 }

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1128 191" width="1128" height="191" role="img" aria-label="Devio Tech">
+  <title>Devio Tech — Don't just learn. Build.</title>
+
+  <defs>
+    <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="1.2" cy="1.2" r="1.2" fill="#ffffff" opacity="0.07" />
+    </pattern>
+    <radialGradient id="dotsFade" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <mask id="dotsMask">
+      <rect width="1128" height="191" fill="url(#dotsFade)" />
+    </mask>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF2A33" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#FF2A33" stop-opacity="0" />
+    </radialGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="28" />
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1128" height="191" fill="#0a0a0a" />
+  <circle cx="860" cy="30" r="190" fill="url(#glow)" filter="url(#blur)" />
+  <rect width="1128" height="191" fill="url(#dots)" mask="url(#dotsMask)" />
+
+  <!-- logo mark + wordmark — kept inside the top band so the LinkedIn
+       profile-photo overlay (bottom-left) never covers it -->
+  <g transform="translate(40,16) scale(1.125)">
+    <rect width="32" height="32" rx="8" fill="#FF2A33" />
+    <path d="M10 11l5 5-5 5M17 21h6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <text x="92" y="44" font-family="'Geist Mono', 'JetBrains Mono', ui-monospace, monospace" font-size="26" font-weight="700" letter-spacing="2.5" fill="#fafafa">DEVIO TECH</text>
+  <text x="93" y="61" font-family="'Geist Mono', 'JetBrains Mono', ui-monospace, monospace" font-size="10.5" letter-spacing="1.6" fill="#9a9a9a">REAL PROJECTS · CODE REVIEWS · VERIFIED CERTIFICATE</text>
+
+  <!-- terminal card -->
+  <g font-family="'Geist Mono', 'JetBrains Mono', ui-monospace, monospace">
+    <rect x="672" y="18" width="400" height="152" rx="16" fill="#141414" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+
+    <text x="690" y="40" font-size="11" letter-spacing="1.5" fill="#9a9a9a">review.log</text>
+    <circle cx="1022" cy="35" r="3" fill="#4b4b4b" />
+    <circle cx="1034" cy="35" r="3" fill="#4b4b4b" />
+    <circle cx="1046" cy="35" r="3" fill="#FF2A33" />
+    <rect x="690" y="48" width="364" height="1" fill="rgba(255,255,255,0.08)" />
+
+    <text x="690" y="70" font-size="12.5" fill="#e5e5e5"><tspan fill="#FF6B70">$</tspan> devio apply --track=full-stack</text>
+    <text x="690" y="90" font-size="12.5" fill="#9a9a9a">&gt; PR #42 reviewed by mentor</text>
+    <text x="690" y="110" font-size="12.5" fill="#9a9a9a">&gt; deploying to production...</text>
+    <text x="690" y="130" font-size="12.5" fill="#e5e5e5"><tspan fill="#34d399">✓</tspan> certificate DEVIO-2026-0001 verified</text>
+    <text x="690" y="150" font-size="12.5" fill="#e5e5e5">
+      <tspan fill="#FF6B70">$</tspan>
+      <tspan dx="6">_</tspan>
+      <animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite" />
+    </text>
+  </g>
+</svg>

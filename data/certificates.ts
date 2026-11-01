@@ -1,4 +1,4 @@
-import type { TrackId } from "@/data/site"
+import type { TrackSlug } from "@/data/tracks"
 
 /**
  * Mock certificate registry. Replace with a database / API lookup
@@ -8,7 +8,7 @@ import type { TrackId } from "@/data/site"
 export type Certificate = {
   id: string
   studentName: string
-  track: TrackId
+  track: TrackSlug
   project: string
   issueDate: string // ISO date
   status: "verified" | "revoked"

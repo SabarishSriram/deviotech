@@ -11,6 +11,11 @@ type PaymentRequest = {
  *  PLACEHOLDER — Razorpay checkout goes here.
  * ============================================================
  *
+ * Applying is free; applicants pay only after their 1:1 session.
+ * Call this from the post-session payment step (e.g. a payment page
+ * linked from the applicant's dashboard or follow-up email), not
+ * from the application form.
+ *
  * Right now this resolves immediately so the flow can be tested
  * end to end. To integrate Razorpay:
  *

@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { Certificate } from "@/data/certificates"
-import { tracks, verifyPage } from "@/data/site"
+import { verifyPage } from "@/data/site"
+import { getTrack } from "@/data/tracks"
 import { findCertificate, normalizeCertificateId } from "@/lib/certificates"
 
 type Result = { status: "idle" } | { status: "found"; certificate: Certificate } | { status: "not-found"; id: string }
@@ -79,7 +80,7 @@ export function VerifyForm({ initialId = "" }: { initialId?: string }) {
 }
 
 function CertificateCard({ certificate }: { certificate: Certificate }) {
-  const trackName = tracks.items.find((track) => track.id === certificate.track)?.name ?? certificate.track
+  const trackName = getTrack(certificate.track)?.name ?? certificate.track
   const verified = certificate.status === "verified"
 
   const rows = [

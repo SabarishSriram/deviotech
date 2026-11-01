@@ -8,26 +8,21 @@ export const site = {
   url: "https://deviotech.in",
   tagline: "Real projects. Real reviews. A certificate that means something.",
   description:
-    "A developer mentorship program where you build real-world projects under a senior mentor, get PR-based code reviews, and earn a verifiable certificate.",
+    "A project-based virtual internship where you build real-world projects, use AI tools the way real teams do, get mentor reviews, and earn a verifiable certificate.",
   contactEmail: "hello@deviotech.in",
   copyright: "© 2026 Devio Tech",
 } as const
 
+export const program = {
+  name: "Devio Tech Project Internship Program",
+  durationWeeks: 4,
+  durationLabel: "4 weeks",
+} as const
+
 export const pricing = {
   currency: "₹",
-  price: 699,
-  originalPrice: 1499,
-  badge: "Launch price",
-  terms: "One-time · 4–6 weeks",
-  refundNote: "7-day refund guarantee if you haven't submitted any work.",
-  included: [
-    "A real-world PRD for your project",
-    "Architecture guidelines & tech-stack docs",
-    "PR-based code reviews from your mentor",
-    "Community access on Discord",
-    "Final project review",
-    "Verified certificate with a unique ID",
-  ],
+  price: 499,
+  payAfter: "Apply free. You only pay after your 1:1 session — if you want to continue.",
 } as const
 
 /** Formats an amount like 1499 → "₹1,499". */
@@ -36,95 +31,124 @@ export function formatPrice(amount: number) {
 }
 
 export const nav = {
-  links: [
-    { label: "How it works", href: "/#how-it-works" },
-    { label: "Tracks", href: "/#tracks" },
-    { label: "Pricing", href: "/#pricing" },
-    { label: "FAQ", href: "/#faq" },
-    { label: "Verify", href: "/verify" },
-  ],
-  cta: { label: "Apply now", href: "/apply" },
+  cta: { label: "Apply free", href: "/apply" },
 } as const
 
 export const hero = {
-  badge: "Batch 01 — Applications open",
   headline: { lead: "Don't just learn.", accent: "Build." },
   subtext:
-    "Work on real-world projects with a senior developer mentor. Ship production-grade code, get reviewed like a real team, and earn a verified certificate.",
-  primaryCta: { label: `Apply now — ${formatPrice(pricing.price)}`, href: "/apply" },
+    "Work on real-world projects with a senior developer mentor. Ship production-grade code with AI tools the way real teams do, get reviewed, and earn a verified certificate.",
+  primaryCta: { label: "Apply free", href: "/apply" },
   secondaryCta: { label: "See how it works", href: "/#how-it-works" },
-  trust: ["Real projects", "Code reviews", "Verified certificate"],
+  trust: ["Real projects", "Code reviews", "Resume review", "Verified certificate"],
   stats: [
-    { value: 8, suffix: "", label: "Specialised tracks" },
-    { value: 5, suffix: "", label: "Projects per track" },
-    { value: 40, suffix: "+", label: "Real projects to build" },
+    { value: 250, suffix: "+", label: "Students enrolled" },
+    { value: 9, suffix: "", label: "Specialised tracks" },
+    { value: 40, suffix: "+", label: "Projects to build" },
+    { value: 4, suffix: "", label: "Weeks, fully online" },
   ],
-  seats: { filled: 68, label: "Batch 01 seats filled" },
   marquee: [
     "REAL PROJECTS",
     "PR CODE REVIEWS",
     "SENIOR MENTORS",
+    "FREE 1:1 SESSION",
     "VERIFIED CERTIFICATE",
     "SHIP LIKE A TEAM",
-    "FULL-STACK · BACKEND · FRONTEND",
+    "9 TRACKS · BUILD WITH AI",
   ],
 } as const
 
 export const howItWorks = {
   eyebrow: "how it works",
-  title: "From application to certificate in four steps",
-  description: "A structured path that mirrors how real engineering teams ship.",
+  title: "Seven steps. Four weeks. One shipped project.",
+  description: "No lectures or busywork. You work exactly the way an engineering team ships.",
   steps: [
     {
-      title: "Apply & choose your track",
-      description: "Pick Full-Stack, Backend or Frontend based on what you want to get better at.",
+      id: "apply",
+      when: "Free",
+      title: "Apply",
+      description: "Fill a short form and pick a track. Your login credentials arrive by email.",
     },
     {
-      title: "Get your PRD, architecture & docs",
-      description: "Receive a real product spec, architecture guidelines and the tech-stack docs to build from.",
+      id: "call",
+      when: "Free",
+      title: "Meet your mentor",
+      description: `A 1:1 session to walk you through the program. Like it? Pay ${formatPrice(pricing.price)} and your four weeks begin.`,
     },
     {
-      title: "Build, commit & get PR reviews",
-      description: "Push your work in small PRs. Your mentor reviews each one like a senior on a real team.",
+      id: "plan",
+      when: "Week 1",
+      title: "Plan",
+      description: "Get your product spec, then map the architecture, pipeline or user flow. Your mentor signs off before you code.",
     },
     {
-      title: "Final review → earn your certificate",
-      description: "Pass the final project review and receive a certificate anyone can verify online.",
+      id: "build",
+      when: "Weeks 2–3",
+      title: "Build",
+      description: "Work in small pull requests with AI tools like Claude and Cursor. A senior mentor reviews every one.",
+    },
+    {
+      id: "ship",
+      when: "Week 4",
+      title: "Ship",
+      description: "Put it live — app, model, dashboard or prototype — and record a short demo.",
+    },
+    {
+      id: "certify",
+      when: "Week 4",
+      title: "Get certified",
+      description:
+        "Pass the final review and earn a certificate anyone can check online. Not there yet? You get feedback and a second attempt.",
+    },
+    {
+      id: "resume",
+      when: "After",
+      title: "Stand out",
+      description: "Your mentor reviews how you present the project, so recruiters actually notice it.",
     },
   ],
+  cta: { label: "Start at step 01", note: "Free to apply", href: "/apply" },
 } as const
 
-export const tracks = {
-  eyebrow: "tracks",
-  title: "Choose what you want to build",
-  description: "8 specialised tracks, ~5 real projects each. Here are three to get a feel for it.",
-  note: "+5 more tracks · ~5 projects per track",
+export type HowItWorksStepId = (typeof howItWorks.steps)[number]["id"]
+
+export const buildWithAi = {
+  eyebrow: "build with ai",
+  title: "Learn to build the way teams build in 2026.",
+  description:
+    "AI writes code fast. Engineers who can plan, review and ship it are the ones who get hired. Every track teaches you to use AI as a tool — not a crutch.",
   items: [
     {
-      id: "full-stack",
-      name: "Full-Stack",
-      description: "Own a feature end to end — from the database schema to the UI your users click.",
-      stack: ["Next.js", "Node.js", "PostgreSQL", "Docker"],
-      build: "A full-stack web app with auth, a relational database and a containerised deploy.",
+      id: "plan",
+      title: "Plan with AI",
+      description: "Break down a PRD, draft architecture and schemas with AI, then refine them yourself.",
     },
     {
-      id: "backend",
-      name: "Backend",
-      description: "Design APIs that are secure, well-structured and easy for other developers to use.",
-      stack: ["Node.js", "Python", "PostgreSQL", "REST APIs"],
-      build: "A production-style REST API with authentication, validation and a documented schema.",
+      id: "build",
+      title: "Build faster",
+      description: "Use Claude, Cursor and Copilot to scaffold and iterate.",
     },
     {
-      id: "frontend",
-      name: "Frontend",
-      description: "Build interfaces that are fast, accessible and organised to scale with a team.",
-      stack: ["React", "Next.js", "TypeScript", "Tailwind"],
-      build: "A responsive, component-driven web app built on a typed, reusable UI layer.",
+      id: "review",
+      title: "Review everything",
+      description: "Test, debug and explain every line AI gives you.",
+    },
+    {
+      id: "own",
+      title: "Own the output",
+      description: "In reviews you defend your decisions, not the AI's.",
     },
   ],
 } as const
 
-export type TrackId = (typeof tracks.items)[number]["id"]
+export type BuildWithAiId = (typeof buildWithAi.items)[number]["id"]
+
+export const tracksSection = {
+  eyebrow: "tracks",
+  title: "Choose what you want to build",
+  description: "9 specialised tracks across development, programming, AI & data and design.",
+  filters: ["All", "Development", "Programming", "AI & Data", "Design"] as const,
+} as const
 
 export const features = {
   eyebrow: "what you get",
@@ -137,51 +161,24 @@ export const features = {
     { id: "reviews", title: "PR-based code reviews", description: "Line-by-line feedback on every pull request you open." },
     { id: "community", title: "Community access", description: "A Discord server with your batch and mentors to unblock you fast." },
     { id: "certificate", title: "Verifiable certificate", description: "Each certificate carries a unique ID that anyone can check online." },
+    { id: "resume", title: "Resume & profile review", description: "Your mentor reviews your resume, GitHub and LinkedIn before you apply." },
   ],
 } as const
 
 export type FeatureId = (typeof features.items)[number]["id"]
 
-export const pricingSection = {
-  eyebrow: "pricing",
-  title: "One price. Everything included.",
-  description: "No subscriptions, no upsells.",
-  cta: { label: "Apply now", href: "/apply" },
-} as const
-
-export const faq = {
-  eyebrow: "faq",
-  title: "Questions, answered",
-  items: [
-    {
-      question: "Is this a job or paid internship?",
-      answer: "No. It's a mentorship program focused on real project experience. We don't promise placements.",
-    },
-    {
-      question: "Who is this for?",
-      answer: "College students and beginners who know the basics and want real project experience.",
-    },
-    {
-      question: "How is the certificate earned?",
-      answer: "Only after your final project passes review. Every certificate has a unique ID and can be verified online.",
-    },
-    { question: "How much time do I need?", answer: "About 6–8 hours per week." },
-    { question: "What if I get stuck?", answer: "Ask in the community, and get feedback on every PR." },
-    { question: "Refund policy?", answer: "Full refund within 7 days if no work has been submitted." },
-  ],
-} as const
-
 export const finalCta = {
-  title: "Ready to build something real?",
-  description: "Batch 01 applications are open. It takes about five minutes to apply.",
-  cta: { label: "Apply now", href: "/apply" },
+  eyebrow: "Free to apply",
+  title: "Ship your first real project",
+  description: "Apply in five minutes. Meet your mentor 1:1, and only pay if you want to continue.",
+  cta: { label: "Apply free", href: "/apply" },
+  tracksLabel: "Or start with a track",
 } as const
 
 export const footer = {
   links: [
     { label: "Privacy", href: "/legal/privacy" },
     { label: "Terms", href: "/legal/terms" },
-    { label: "Refund policy", href: "/legal/refund-policy" },
     { label: "Contact", href: `mailto:${site.contactEmail}` },
     { label: "Verify a certificate", href: "/verify" },
   ],
@@ -200,11 +197,20 @@ export type SocialPlatform = (typeof footer.socials)[number]["platform"]
 
 export const applyPage = {
   eyebrow: "apply",
-  title: "Apply to Batch 01",
-  description: "Tell us a little about yourself. It takes about five minutes.",
-  submitLabel: `Continue to payment — ${formatPrice(pricing.price)}`,
+  title: "Start your application",
+  description: "Tell us a little about yourself. It takes about five minutes, and it's free.",
+  submitLabel: "Submit application",
+  next: {
+    title: "What happens next",
+    steps: [
+      { title: "Submit this form", description: "Takes about five minutes." },
+      { title: "Get your login", description: "Credentials land in your inbox." },
+      { title: "Free 1:1 session", description: "Meet a mentor and see how it works." },
+      { title: `Pay ${formatPrice(pricing.price)} if you continue`, description: "Your four weeks start then." },
+    ],
+  },
   submittingLabel: "Submitting…",
-  successToast: "Application received! Redirecting…",
+  successToast: "Application received! Check your email.",
   errorToast: "Something went wrong. Please try again.",
   yearOptions: [
     { value: "1", label: "1st year" },
@@ -218,23 +224,25 @@ export const applyPage = {
     { value: "intermediate", label: "Intermediate" },
     { value: "advanced", label: "Advanced" },
   ],
-  // Rendered as: "I agree to the program terms and refund policy"
+  trackPlaceholder: "Select a track",
+  // Rendered as: "I agree to the program terms"
   terms: {
     prefix: "I agree to the",
     termsLink: { label: "program terms", href: "/legal/terms" },
-    joiner: "and",
-    refundLink: { label: "refund policy", href: "/legal/refund-policy" },
   },
 } as const
 
 export const successPage = {
-  title: "You're in!",
-  description: "Check your email for next steps.",
+  title: "Application received",
+  description: "Check your email for your login credentials.",
   nextStepsTitle: "What happens next",
   nextSteps: [
-    { title: "Welcome email", description: "Your onboarding details, PRD and track docs land in your inbox." },
-    { title: "Discord invite", description: "Join your batch and mentors in the community server." },
-    { title: "Kickoff date", description: "We'll confirm your batch start date and kickoff call over email and WhatsApp." },
+    { title: "Login credentials", description: "Your login details land in your inbox shortly." },
+    { title: "Free 1:1 session", description: "Meet a mentor one-on-one. They'll walk you through your track and how the program works." },
+    {
+      title: "Decide, then pay",
+      description: `Want to continue? Pay ${formatPrice(pricing.price)} and you get your project brief, Discord access and kickoff date.`,
+    },
   ],
   cta: { label: "Back to home", href: "/" },
 } as const
@@ -284,11 +292,11 @@ export const legalPages = {
     sections: [
       {
         heading: "What the program is",
-        body: "Devio Tech is a mentorship program focused on real project experience. It is not a job, internship or placement program, and we don't promise employment.",
+        body: `${program.name} is a paid, project-based virtual internship focused on real project experience. It is not a job-placement program — there's no stipend and no job guarantee.`,
       },
       {
         heading: "Your commitment",
-        body: "Plan for about 6–8 hours per week over 4–6 weeks. The work you submit must be your own.",
+        body: `Plan for about 6–8 hours per week over ${program.durationLabel}. The work you submit must be your own.`,
       },
       {
         heading: "Certificates",
@@ -297,23 +305,6 @@ export const legalPages = {
       {
         heading: "Community conduct",
         body: "Be respectful in the community and in code reviews. We may remove anyone who harasses other members.",
-      },
-    ],
-  },
-  "refund-policy": {
-    title: "Refund policy",
-    sections: [
-      {
-        heading: "7-day guarantee",
-        body: "You can request a full refund within 7 days of payment, as long as you haven't submitted any work.",
-      },
-      {
-        heading: "How to request a refund",
-        body: `Email ${site.contactEmail} from the address you applied with. Refunds go back to your original payment method.`,
-      },
-      {
-        heading: "After you submit work",
-        body: "Once you've opened your first pull request for review, the program fee is no longer refundable.",
       },
     ],
   },

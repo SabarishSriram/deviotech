@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Lock, LogOut } from "lucide-react"
+import { ArrowRight, Check, KeyRound, Lock, LogOut } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -82,6 +82,30 @@ async function Portal() {
   const application = data as ApplicationRow | null
   const email = typeof auth.claims.email === "string" ? auth.claims.email : ""
 
+  // First login with an emailed (temporary) password: replace it before anything else.
+  if (auth.claims.app_metadata?.must_change_password) {
+    return (
+      <Widget interactive={false} className="mx-auto w-full max-w-lg p-6 sm:p-8">
+        <p className="flex items-center gap-2 label-mono text-brand-text">
+          <KeyRound className="size-3.5" aria-hidden="true" />
+          One quick step
+        </p>
+        <h1 className="mt-3 font-sans text-2xl font-semibold tracking-tight">Set your own password</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          You logged in with the temporary password we emailed you. Choose a new one that only you know — you&apos;ll use it from now on.
+        </p>
+        <div className="mt-6">
+          <PasswordForm submitLabel="Save and continue" />
+        </div>
+        <form action={studentLogout} className="mt-6 border-t pt-4">
+          <button type="submit" className="text-sm text-muted-foreground hover:text-foreground">
+            Log out
+          </button>
+        </form>
+      </Widget>
+    )
+  }
+
   return (
     <>
       <header className="flex flex-wrap items-end justify-between gap-4 pb-2">
@@ -149,11 +173,6 @@ function Journey({ application }: { application: ApplicationRow }) {
             <p className="label-mono text-brand-text">Next step</p>
             <p className="mt-1.5 text-pretty">{nextStep[application.status]}</p>
           </div>
-          {track && (
-            <Link href={`/tracks/${track.slug}`} className="relative inline-flex w-fit items-center gap-1.5 label-mono text-brand-text">
-              View full curriculum <ArrowRight className="size-3.5" aria-hidden="true" />
-            </Link>
-          )}
         </Widget>
 
         {/* ---- Progress ---- */}

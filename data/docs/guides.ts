@@ -14,14 +14,38 @@ export const welcomeGuide: GuideSection[] = [
     ],
   },
   {
-    title: "Your docs, in order",
+    title: "Start here — do these in order",
+    paragraphs: [
+      "Don't worry if words like Git, terminal or repository are new — each page explains them as you go. Read these three pages first, in this order:",
+    ],
+    steps: [
+      {
+        text: "Setup — get your computer ready. You'll install the tools your track uses (each one explains what it is and why you need it), then create an empty project that runs. This takes 1–2 hours the first time. Everything else depends on it, so do it first.",
+      },
+      {
+        text: "Environment & secrets — where passwords and keys go so they never end up public. Short, but it prevents the most common beginner mistake.",
+      },
+      {
+        text: "How we work — how you'll save your work with Git, put it on GitHub, and send it to your mentor for review. Read it once Setup is done, so the commands make sense.",
+      },
+    ],
+  },
+  {
+    title: "Then, once your project is assigned",
     bullets: [
-      "Setup — install your tools and create the project skeleton. Do this first.",
-      "How we work — Git, pull requests, reviews and how to use AI tools.",
       "PRD — what you're building, for whom, and what “done” means.",
       "User flows — the paths a user takes through your product.",
       "Architecture — how the pieces fit together, the data model and the interface.",
+      "API contract and Sample data — the exact endpoints and the data to start with (where your project has them).",
       "Milestones — your week-by-week task list.",
+    ],
+  },
+  {
+    title: "Keep these open while you build",
+    bullets: [
+      "Coding standards, Testing and Deployment — how to write, check and ship your code.",
+      "Troubleshooting — common errors and fixes. Look here first when something breaks.",
+      "Review rubric — exactly what your mentor checks, so there are no surprises.",
     ],
   },
   {
@@ -42,6 +66,24 @@ export const welcomeGuide: GuideSection[] = [
 ]
 
 export const workflowGuide: GuideSection[] = [
+  {
+    title: "First, the words in plain English",
+    bullets: [
+      "Git — a tool on your computer that saves snapshots of your project. Each snapshot is a “commit”, so you can always see what changed and go back.",
+      "Repository (repo) — your project folder, tracked by Git.",
+      "GitHub — a website that stores a copy of your repo online. Your mentor reads your code there, and it becomes part of your portfolio.",
+      "Branch — a separate copy of the code where you work on one task without breaking the main version (called main).",
+      "Pull request (PR) — a request to add your branch's changes into main. It's where your mentor reviews your work and leaves comments.",
+      "Push / pull — push sends your commits up to GitHub; pull brings the latest changes down to your computer.",
+    ],
+  },
+  {
+    title: "Why work this way?",
+    paragraphs: [
+      "It's exactly how real engineering teams work. Small branches and pull requests mean every change gets reviewed, mistakes are caught early, and nothing you do can break the working version.",
+      "You'll repeat the same five-step loop below for every task. After the first few times, it becomes muscle memory.",
+    ],
+  },
   {
     title: "The loop you'll repeat all program",
     steps: [
@@ -95,7 +137,9 @@ export const workflowGuide: GuideSection[] = [
 const repoSteps = (name: string) => ({
   title: "Create your repository",
   steps: [
-    { text: "Create an empty repository on GitHub and clone it. Replace the name with your project's:", code: `gh repo create ${name} --public --clone\ncd ${name}` },
+    { text: "Open a terminal and move into the devio folder you made in the terminal basics above:", code: "cd devio" },
+    { text: "Create an empty repository on GitHub and download (clone) it as a new folder, then move into that folder. Replace the name with your project's:", code: `gh repo create ${name} --public --clone\ncd ${name}` },
+    { text: "Check where you are — the path should now end in devio/" + name + ":", code: "pwd" },
     { text: "Open the folder in VS Code:", code: "code ." },
   ],
 })
@@ -104,8 +148,14 @@ const pythonEnv = (packages: string) => ({
   title: "Create a virtual environment",
   steps: [
     { text: "A virtual environment keeps this project's libraries separate from everything else on your computer. Create one:", code: "python3 -m venv .venv" },
-    { text: "Activate it — do this every time you open a new terminal. Mac/Linux:", code: "source .venv/bin/activate" },
-    { text: "Windows (PowerShell):", code: ".venv\\Scripts\\activate" },
+    {
+      text: "Activate it — do this every time you open a new terminal:",
+      variants: [
+        { os: "mac", text: "In Terminal:", code: "source .venv/bin/activate" },
+        { os: "windows", text: "In PowerShell:", code: ".venv\\Scripts\\activate" },
+        { os: "linux", text: "In your terminal:", code: "source .venv/bin/activate" },
+      ],
+    },
     { text: "Your prompt now starts with (.venv). Install the libraries for your track:", code: `pip install ${packages}` },
     { text: "Record them so anyone can reinstall the same versions:", code: "pip freeze > requirements.txt" },
     { text: "Create a .gitignore so the environment and secrets never get committed:", code: "printf \".venv/\\n.env\\n__pycache__/\\n.ipynb_checkpoints/\\n\" > .gitignore" },
@@ -180,7 +230,8 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Create the Next.js app",
         steps: [
-          { text: "Create the app. Accept the recommended defaults (TypeScript, ESLint, Tailwind CSS, App Router):", code: "npx create-next-app@latest my-app\ncd my-app" },
+          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Create the app. It makes a new my-app folder; then move into it. Accept the recommended defaults (TypeScript, ESLint, Tailwind CSS, App Router):", code: "npx create-next-app@latest my-app\ncd my-app" },
           { text: "Start the development server and open localhost:3000:", code: "npm run dev" },
         ],
       },
@@ -207,7 +258,8 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Create the Expo app",
         steps: [
-          { text: "Create a new project:", code: "npx create-expo-app@latest my-app\ncd my-app" },
+          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Create the project. It makes a new my-app folder; then move into it:", code: "npx create-expo-app@latest my-app\ncd my-app" },
           { text: "Start the development server:", code: "npx expo start" },
           { text: "Scan the QR code with Expo Go (Android) or your Camera app (iPhone). The app opens on your phone and reloads every time you save." },
         ],
@@ -289,7 +341,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
         steps: [
           { text: "Go to start.spring.io and choose: Maven, Java, Java 21, the latest stable Spring Boot." },
           { text: "Add dependencies: Spring Web, Spring Data JPA, PostgreSQL Driver, Validation." },
-          { text: "Click Generate, unzip the download, and open the folder in IntelliJ (File → Open)." },
+          { text: "Click Generate. Unzip the download and move the folder into your devio folder, then open it in IntelliJ (File → Open)." },
         ],
       },
       {
@@ -324,7 +376,8 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Set up your case study",
         steps: [
-          { text: "Create a GitHub repository for your case study — its README becomes the write-up:", code: "gh repo create my-case-study --public --clone" },
+          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Create a GitHub repository for your case study and download it as a folder — its README becomes the write-up:", code: "gh repo create my-case-study --public --clone" },
           { text: "Add a README.md with headings: Problem, Users, Research, Flows, Design, Testing, Outcome. You'll fill it in each week." },
         ],
       },

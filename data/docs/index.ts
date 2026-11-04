@@ -42,9 +42,9 @@ export function isTrackProject(track: string, projectSlug: string) {
    is assigned. */
 export const DOC_PAGES = [
   { id: "welcome", title: "Welcome", group: "Getting started", locked: false },
-  { id: "workflow", title: "How we work", group: "Getting started", locked: false },
-  { id: "setup", title: "Setup", group: "Getting started", locked: false },
-  { id: "environment", title: "Environment & secrets", group: "Getting started", locked: false },
+  { id: "setup", title: "1. Setup", group: "Getting started", locked: false },
+  { id: "environment", title: "2. Environment & secrets", group: "Getting started", locked: false },
+  { id: "workflow", title: "3. How we work", group: "Getting started", locked: false },
   { id: "standards", title: "Coding standards", group: "Building", locked: false },
   { id: "testing", title: "Testing", group: "Building", locked: false },
   { id: "deployment", title: "Deployment", group: "Building", locked: false },

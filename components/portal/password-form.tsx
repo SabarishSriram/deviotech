@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function PasswordForm() {
+export function PasswordForm({ submitLabel = "Change password" }: { submitLabel?: string }) {
   const [state, formAction, pending] = useActionState(changePassword, undefined)
 
   return (
@@ -26,7 +26,7 @@ export function PasswordForm() {
       <div className="flex items-center gap-3">
         <Button type="submit" size="sm" variant="outline" disabled={pending} className="rounded-full">
           {pending && <Loader2 className="animate-spin" aria-hidden="true" />}
-          Change password
+          {submitLabel}
         </Button>
         {state && "ok" in state && <p className="text-sm text-brand-text">Password updated.</p>}
         {state && "error" in state && <p className="text-sm text-destructive">{state.error}</p>}

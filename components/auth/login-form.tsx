@@ -1,13 +1,13 @@
 "use client"
 
 import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react"
-import { useActionState, useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-type LoginState = { error: string } | undefined
+type LoginState = { error: string } | { redirectTo: string } | undefined
 
 type Field = {
   name: string
@@ -28,6 +28,13 @@ export function LoginForm({
 }) {
   const [state, formAction, pending] = useActionState(action, undefined)
   const [showPassword, setShowPassword] = useState(false)
+  const redirectTo = state && "redirectTo" in state ? state.redirectTo : null
+
+  // After a successful login, do a full page load rather than a client-side
+  // navigation, so the next page is rendered fresh with the new session cookie.
+  useEffect(() => {
+    if (redirectTo) window.location.assign(redirectTo)
+  }, [redirectTo])
 
   return (
     <form action={formAction} className="space-y-4">
@@ -60,14 +67,14 @@ export function LoginForm({
         </div>
       ))}
 
-      {state?.error && (
+      {state && "error" in state && (
         <p role="alert" className="rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
         </p>
       )}
 
-      <Button type="submit" size="lg" disabled={pending} className="group h-11 w-full rounded-full">
-        {pending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
+      <Button type="submit" size="lg" disabled={pending || Boolean(redirectTo)} className="group h-11 w-full rounded-full">
+        {pending || redirectTo ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
         {submitLabel}
         {!pending && <ArrowRight className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />}
       </Button>

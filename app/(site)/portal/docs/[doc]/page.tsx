@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function PortalDocPage({ params }: PageProps<"/portal/docs/[doc]">) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
       <Suspense fallback={<p className="text-sm text-muted-foreground">Loading docs…</p>}>
         <PortalDoc params={params} />
       </Suspense>
@@ -40,6 +40,8 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
   const supabase = await createClient()
   const { data: auth } = await supabase.auth.getClaims()
   if (!auth?.claims) redirect("/portal/login")
+  // Temporary password still in use: the portal home asks them to replace it first.
+  if (auth.claims.app_metadata?.must_change_password) redirect("/portal")
 
   // RLS: only the signed-in student's own application is readable.
   const { data } = await supabase

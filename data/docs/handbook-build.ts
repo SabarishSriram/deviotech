@@ -251,7 +251,20 @@ export function standardsGuide(track: TrackSlug): GuideSection[] {
             "Classes PascalCase (LoanService), methods and variables camelCase (calculateFine).",
             "Constants UPPER_SNAKE_CASE (MAX_LOANS).",
             "Never return @Entity objects from controllers — map them to DTOs.",
-            "Format with IntelliJ: Code → Reformat Code (Ctrl+Alt+L / Cmd+Option+L) before committing.",
+          ],
+        },
+        {
+          title: "Formatting",
+          steps: [
+            {
+              text: "Format every file before committing — in IntelliJ: Code → Reformat Code, or the shortcut:",
+              icon: "IntelliJ IDEA",
+              variants: [
+                { os: "mac", text: "Cmd + Option + L" },
+                { os: "windows", text: "Ctrl + Alt + L" },
+                { os: "linux", text: "Ctrl + Alt + L" },
+              ],
+            },
           ],
         },
         {
@@ -353,7 +366,14 @@ export function environmentGuide(track: TrackSlug): GuideSection[] {
           paragraphs: ["In Expo, variables starting with EXPO_PUBLIC_ are built into the app. Treat them as public — anyone can read them from the APK. Never put real secrets in a mobile app."],
           steps: [
             { text: "Create .env.example (commit it) and .env (don't):", file: ".env.example", code: "# Your computer's address on Wi-Fi, not localhost\nEXPO_PUBLIC_API_URL=http://192.168.1.10:4000" },
-            { text: "Why not localhost? On your phone, “localhost” means the phone itself. Find your computer's Wi-Fi IP — Mac: System Settings → Wi-Fi → Details; Windows: run ipconfig and look for IPv4 Address." },
+            {
+              text: "Why not localhost? On your phone, “localhost” means the phone itself. Use your computer's Wi-Fi address instead:",
+              variants: [
+                { os: "mac", text: "System Settings → Wi-Fi → Details next to your network → IP address." },
+                { os: "windows", text: "Run this in PowerShell and look for “IPv4 Address”:", code: "ipconfig" },
+                { os: "linux", text: "Run this — the first address is the one you want:", code: "hostname -I" },
+              ],
+            },
             { text: "Use it in code:", file: "lib/api.ts", code: "const API_URL = process.env.EXPO_PUBLIC_API_URL" },
           ],
         },
@@ -382,7 +402,7 @@ export function environmentGuide(track: TrackSlug): GuideSection[] {
           steps: [
             { text: "Install python-dotenv:", code: "pip install python-dotenv" },
             { text: "Commit an example file:", file: ".env.example", code: "DATABASE_PATH=data.db\n# Web scraper alerts (optional)\nTELEGRAM_BOT_TOKEN=\nTELEGRAM_CHAT_ID=" },
-            { text: "Telegram alerts: message @BotFather on Telegram, send /newbot, and it gives you the token. Send your bot any message, then open https://api.telegram.org/bot<TOKEN>/getUpdates to find your chat id." },
+            { text: "Telegram alerts: message @BotFather on Telegram, send /newbot, and it gives you the token. Send your bot any message, then open https://api.telegram.org/bot<TOKEN>/getUpdates to find your chat id.", icon: "Telegram" },
             { text: "Load the values:", file: "app/config.py", code: 'import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\nDATABASE_PATH = os.getenv("DATABASE_PATH", "data.db")' },
           ],
         },
@@ -397,7 +417,14 @@ export function environmentGuide(track: TrackSlug): GuideSection[] {
             { text: "Reference environment variables instead of typing values:", file: "src/main/resources/application.properties", code: "spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/java_app}\nspring.datasource.username=${DB_USER:postgres}\nspring.datasource.password=${DB_PASSWORD}" },
             { text: "The part after : is a default. DB_PASSWORD has none, so the app won't start until you set it." },
             { text: "In IntelliJ: Run → Edit Configurations → Environment variables → add DB_PASSWORD=yourpassword." },
-            { text: "Or in the terminal before running (Mac/Linux):", code: "export DB_PASSWORD=yourpassword\n./mvnw spring-boot:run" },
+            {
+              text: "Or set it in the terminal before running:",
+              variants: [
+                { os: "mac", text: "In Terminal:", code: "export DB_PASSWORD=yourpassword\n./mvnw spring-boot:run" },
+                { os: "windows", text: "In PowerShell:", code: "$env:DB_PASSWORD=\"yourpassword\"\n.\\mvnw spring-boot:run" },
+                { os: "linux", text: "In your terminal:", code: "export DB_PASSWORD=yourpassword\n./mvnw spring-boot:run" },
+              ],
+            },
           ],
         },
       ]
@@ -637,8 +664,8 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "2. Database and API on Render",
           steps: [
-            { text: "Sign up at render.com with GitHub. New → PostgreSQL → Free. Copy the “Internal Database URL” when it's ready." },
-            { text: "New → Web Service → pick your repo. Root directory: server." },
+            { text: "Sign up at render.com with GitHub. New → PostgreSQL → Free. Copy the “Internal Database URL” when it's ready.", icon: "Render" },
+            { text: "New → Web Service → pick your repo. Root directory: server.", icon: "Render" },
             { text: "Build command:", code: "npm install && npx prisma migrate deploy && npm run build" },
             { text: "Start command:", code: "npm start" },
             { text: "Environment: add DATABASE_URL (the internal URL), JWT_SECRET (a new random one) and CLIENT_URL (fill in after step 3)." },
@@ -648,7 +675,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "3. Frontend on Vercel",
           steps: [
-            { text: "Sign up at vercel.com with GitHub. Add New → Project → import your repo." },
+            { text: "Sign up at vercel.com with GitHub. Add New → Project → import your repo.", icon: "Vercel" },
             { text: "Root directory: client. Framework: Vite (detected automatically)." },
             { text: "Environment variable: VITE_API_URL = https://YOUR-API.onrender.com" },
             { text: "Deploy. Copy the Vercel URL into CLIENT_URL on Render and redeploy the API." },
@@ -671,7 +698,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
           steps: [
             { text: "Create this in the project root:", file: "Dockerfile", code: "FROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npx prisma generate && npm run build\nEXPOSE 4000\nCMD [\"npm\", \"start\"]" },
             { text: "Keep junk out of the image:", file: ".dockerignore", code: "node_modules\n.env\ndist" },
-            { text: "Build and run it locally first:", code: "docker build -t my-api .\ndocker run -p 4000:4000 --env-file .env my-api" },
+            { text: "Build and run it locally first:", code: "docker build -t my-api .\ndocker run -p 4000:4000 --env-file .env my-api", icon: "Docker" },
           ],
         },
         {
@@ -684,7 +711,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "3. Deploy on Render",
           steps: [
-            { text: "New → Web Service → your repo. Render detects the Dockerfile." },
+            { text: "New → Web Service → your repo. Render detects the Dockerfile.", icon: "Render" },
             { text: "Add DATABASE_URL, REDIS_URL, JWT_SECRET and RATE_LIMIT_PER_MINUTE." },
             { text: "Run migrations: Render Shell (or a pre-deploy command):", code: "npx prisma migrate deploy" },
             { text: "Check it works and that Swagger loads at /docs:", code: "curl https://YOUR-API.onrender.com/health" },
@@ -698,7 +725,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
           title: "Deploy on Vercel",
           steps: [
             { text: "Push your code to GitHub." },
-            { text: "vercel.com → Add New → Project → import the repo. Next.js is detected automatically." },
+            { text: "vercel.com → Add New → Project → import the repo. Next.js is detected automatically.", icon: "Vercel" },
             { text: "Add your environment variables (e.g. TMDB_API_KEY) under Settings → Environment Variables." },
             { text: "Deploy. Every pull request now gets its own preview URL — paste it in the PR so your mentor can click through." },
           ],
@@ -713,7 +740,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
           steps: [
             { text: "Log in and configure builds (choose Android when asked):", code: "eas login\neas build:configure" },
             { text: "Edit eas.json so the preview profile builds an APK you can install directly:", file: "eas.json", code: '{\n  "build": {\n    "preview": {\n      "android": { "buildType": "apk" }\n    }\n  }\n}' },
-            { text: "Start the build. It runs in Expo's cloud and takes 10–20 minutes:", code: "eas build -p android --profile preview" },
+            { text: "Start the build. It runs in Expo's cloud and takes 10–20 minutes:", code: "eas build -p android --profile preview", icon: "Expo" },
             { text: "When it finishes you get a link. Open it on an Android phone, download the APK and allow “install unknown apps” when asked." },
             { text: "Put the link and a QR code in your README." },
           ],
@@ -727,7 +754,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
           title: "Deploy your Streamlit app (free)",
           steps: [
             { text: "Make sure requirements.txt lists every library your app imports:", code: "pip freeze > requirements.txt" },
-            { text: "Push to GitHub. Go to share.streamlit.io and sign in with GitHub." },
+            { text: "Push to GitHub. Go to share.streamlit.io and sign in with GitHub.", icon: "Streamlit" },
             { text: "Create app → pick the repo, branch main, and your app file (e.g. app/streamlit_app.py)." },
             { text: "API keys go in the app's Settings → Secrets, read in code with st.secrets[\"LLM_API_KEY\"]." },
             { text: "Deploy, open the URL, and try it as a stranger would." },
@@ -767,8 +794,14 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Run it on a schedule",
           steps: [
-            { text: "Mac/Linux — open your crontab and add a line to run every morning at 9:", code: "crontab -e\n0 9 * * * cd /path/to/my-tool && .venv/bin/python -m app.main check" },
-            { text: "Windows — open Task Scheduler → Create Basic Task → Daily → Start a program → your .venv\\Scripts\\python.exe with arguments -m app.main check." },
+            {
+              text: "Run your tool every morning at 9:",
+              variants: [
+                { os: "mac", text: "Open your crontab and add this line:", code: "crontab -e\n0 9 * * * cd /path/to/my-tool && .venv/bin/python -m app.main check" },
+                { os: "windows", text: "Open Task Scheduler → Create Basic Task → Daily → Start a program → choose .venv\\Scripts\\python.exe and set the arguments to -m app.main check." },
+                { os: "linux", text: "Open your crontab and add this line:", code: "crontab -e\n0 9 * * * cd /path/to/my-tool && .venv/bin/python -m app.main check" },
+              ],
+            },
             { text: "Free alternative: a scheduled GitHub Actions workflow runs it in the cloud — ask your mentor if you want to try this as a stretch goal." },
           ],
         },
@@ -787,9 +820,9 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "2. Deploy on Render",
           steps: [
-            { text: "Create a free PostgreSQL database on Render." },
+            { text: "Create a free PostgreSQL database on Render.", icon: "Render" },
             { text: "Render shows a URL like postgres://user:pass@host/db. Spring needs it split up: DB_URL = jdbc:postgresql://HOST:5432/DB, plus DB_USER and DB_PASSWORD." },
-            { text: "New → Web Service → your repo (Docker detected). Add DB_URL, DB_USER, DB_PASSWORD, and PORT=8080." },
+            { text: "New → Web Service → your repo (Docker detected). Add DB_URL, DB_USER, DB_PASSWORD, and PORT=8080.", icon: "Render" },
             { text: "Deploy and check an endpoint:", code: "curl https://YOUR-API.onrender.com/api/books" },
           ],
         },
@@ -800,7 +833,7 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Publishing your work",
           steps: [
-            { text: "Prototype: in Figma, Share → anyone with the link → can view. Test the link in a private window." },
+            { text: "Prototype: in Figma, Share → anyone with the link → can view. Test the link in a private window.", icon: "Figma" },
             { text: "Key screens: select frames → Export → PNG @2x, and add them to your case study." },
             { text: "Case study: your GitHub README, a public Notion page, or Behance — one public link." },
             { text: "Put all three links (Figma file, prototype, case study) at the top of your README." },

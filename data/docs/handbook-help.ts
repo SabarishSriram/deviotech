@@ -17,11 +17,40 @@ export const terminalBasics: GuideSection = {
     "The terminal is a window where you type commands instead of clicking. Most setup steps in these docs are commands you copy and paste into it.",
   ],
   steps: [
-    { text: "Open one. Mac: press Cmd + Space, type “Terminal”, press Enter. Windows: open VS Code and press Ctrl + ` (the key above Tab) — use “Git Bash” or “PowerShell” from the dropdown." },
-    { text: "Every command box in these docs has a copy button. Paste with Cmd/Ctrl + V (in Git Bash: Shift + Insert) and press Enter." },
-    { text: "See which folder you're in:", code: "pwd" },
-    { text: "List what's in this folder:", code: "ls" },
-    { text: "Move into a folder (cd = change directory). Go back up one level with “cd ..”:", code: "cd my-project" },
+    {
+      text: "Open a terminal:",
+      variants: [
+        { os: "mac", text: "Press Cmd + Space, type “Terminal” and press Enter." },
+        { os: "windows", text: "Open VS Code and press Ctrl + ` (the key above Tab). Pick “Git Bash” or “PowerShell” from the dropdown next to the + button." },
+        { os: "linux", text: "Press Ctrl + Alt + T." },
+      ],
+    },
+    {
+      text: "Every command box in these docs has a copy button. Paste the command into the terminal and press Enter:",
+      variants: [
+        { os: "mac", text: "Paste with Cmd + V." },
+        { os: "windows", text: "Paste with Ctrl + V (in Git Bash: Shift + Insert, or right-click)." },
+        { os: "linux", text: "Paste with Ctrl + Shift + V." },
+      ],
+    },
+    {
+      text: "Here's the one idea to understand: the terminal is always “standing inside” one folder, called the current folder. Every command you run acts on that folder. That's why later steps tell you to move into your project folder first — npm install or git commit run in the wrong folder simply won't work.",
+    },
+    {
+      text: "Ask the terminal which folder you're in right now (pwd = print working directory). When it first opens, it's your home folder:",
+      code: "pwd",
+      variants: [
+        { os: "mac", text: "You'll see something like /Users/asha" },
+        { os: "windows", text: "You'll see something like C:\\Users\\asha (PowerShell) or /c/Users/asha (Git Bash)" },
+        { os: "linux", text: "You'll see something like /home/asha" },
+      ],
+    },
+    { text: "Make one folder to keep all your program work in (mkdir = make directory). You only do this once:", code: "mkdir devio" },
+    { text: "Move into it (cd = change directory). Notice your prompt now shows devio:", code: "cd devio" },
+    { text: "List what's inside (ls = list). It's empty for now — your project will appear here during setup:", code: "ls" },
+    { text: "Go back up one level. “..” always means “the folder above this one”:", code: "cd .." },
+    { text: "Move back in. From now on, open a terminal and run cd devio before following any setup step:", code: "cd devio" },
+    { text: "Tip: type the first letters of a folder name and press Tab — the terminal completes it for you. If you see “No such file or directory”, run ls to check the name and that you're in the right place." },
     { text: "Some commands keep running (like a development server). Stop them with Ctrl + C." },
     { text: "Red text doesn't always mean failure — read the last few lines. If you're stuck, copy the whole error when you ask for help." },
   ],
@@ -126,7 +155,8 @@ const stackProblems: Record<Stack, GuideSection[]> = {
       code: { code: "pip install ipykernel" },
     },
     {
-      title: "Windows: “running scripts is disabled” when activating .venv",
+      title: "“Running scripts is disabled” when activating .venv",
+      os: ["windows"],
       paragraphs: ["PowerShell blocks scripts by default. Allow them for your user once, then activate again:"],
       code: { code: "Set-ExecutionPolicy -Scope CurrentUser RemoteSigned" },
     },
@@ -142,7 +172,8 @@ const stackProblems: Record<Stack, GuideSection[]> = {
   ],
   python: [
     {
-      title: "Windows: “running scripts is disabled” when activating .venv",
+      title: "“Running scripts is disabled” when activating .venv",
+      os: ["windows"],
       paragraphs: ["PowerShell blocks scripts by default. Allow them for your user once:"],
       code: { code: "Set-ExecutionPolicy -Scope CurrentUser RemoteSigned" },
     },
@@ -169,7 +200,8 @@ const stackProblems: Record<Stack, GuideSection[]> = {
       paragraphs: ["Spring can't find your database settings. Check application.properties and that DB_PASSWORD is set in your run configuration."],
     },
     {
-      title: "./mvnw: Permission denied (Mac/Linux)",
+      title: "./mvnw: Permission denied",
+      os: ["mac", "linux"],
       code: { code: "chmod +x mvnw" },
     },
     {

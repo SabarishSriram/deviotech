@@ -4,7 +4,7 @@ import { CodeBlock } from "@/components/docs/code-block"
 import { Mermaid } from "@/components/docs/mermaid"
 import { Mockup } from "@/components/docs/mockup"
 import { OsTabs } from "@/components/docs/os-tabs"
-import { Steps } from "@/components/docs/steps"
+import { OsBadge, Steps } from "@/components/docs/steps"
 import {
   contracts,
   getProjectDocs,
@@ -37,7 +37,7 @@ import { trackColorStyle } from "@/lib/track-icons"
 /* ------------------------------------------------------------------ */
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mt-10 mb-4 border-b pb-2 font-sans text-lg font-semibold tracking-tight first:mt-0">{children}</h2>
+  return <h2 className="mt-12 mb-4 border-b pb-2 font-sans text-lg font-semibold tracking-tight">{children}</h2>
 }
 
 function Callout({ icon: Icon = Lightbulb, children }: { icon?: typeof Lightbulb; children: React.ReactNode }) {
@@ -68,7 +68,7 @@ function Bullets({ items, icon: Icon }: { items: string[]; icon?: typeof CheckCi
 
 function DocTitle({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
   return (
-    <header className="mb-8">
+    <header className="mb-2">
       <p className="text-xs font-medium text-brand-text">{eyebrow}</p>
       <h1 className="mt-1 font-sans text-3xl font-semibold tracking-tight">{title}</h1>
       {intro && <p className="mt-3 text-base text-pretty text-muted-foreground">{intro}</p>}
@@ -79,7 +79,12 @@ function DocTitle({ eyebrow, title, intro }: { eyebrow: string; title: string; i
 function Guide({ sections }: { sections: GuideSection[] }) {
   return sections.map((section) => (
     <section key={section.title}>
-      <H2>{section.title}</H2>
+      <H2>
+        <span className="flex items-center gap-2.5">
+          {section.os?.map((os) => <OsBadge key={os} os={os} />)}
+          {section.title}
+        </span>
+      </H2>
       <div className="space-y-4">
         {section.paragraphs?.map((p) => (
           <p key={p} className="text-pretty">
@@ -134,17 +139,19 @@ function SetupDoc({ track }: { track: Track }) {
         Work through the tools in order. Each one tells you why you need it, how to install it on your OS, and a command to check it worked. Stuck for more than 30 minutes? Message your mentor with a screenshot of the error.
       </Callout>
 
-      {track.slug !== "ui-ux" && <Guide sections={[terminalBasics]} />}
+      <Guide sections={[terminalBasics]} />
 
       <H2>1. Install your tools</H2>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {guide.tools.map((id, index) => {
           const tool = tools[id]
           return (
-            <section key={id} id={`tool-${id}`} className="scroll-mt-24 rounded-xl border bg-card p-5">
+            <section key={id} id={`tool-${id}`} className="scroll-mt-24 rounded-2xl border bg-card p-6 sm:p-7">
               <div className="flex items-start gap-3">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border bg-background font-mono text-xs text-muted-foreground">
-                  {tool.icon ? <TechIcon name={tool.icon} className="size-4.5" /> : index + 1}
+                <span className="flex h-10 min-w-10 shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-background px-2.5 font-mono text-xs text-muted-foreground">
+                  {tool.icons
+                    ? tool.icons.map((icon) => <TechIcon key={icon} name={icon} className="size-5" />)
+                    : index + 1}
                 </span>
                 <div className="min-w-0">
                   <h3 className="flex flex-wrap items-center gap-2 font-sans text-base font-semibold">
@@ -157,7 +164,7 @@ function SetupDoc({ track }: { track: Track }) {
                 </div>
               </div>
 
-              <div className="mt-4 space-y-4">
+              <div className="mt-6 space-y-6 border-t pt-6">
                 <div>
                   <p className="mb-1 text-xs font-medium text-muted-foreground">Why you need it</p>
                   <p className="text-pretty">{tool.why}</p>

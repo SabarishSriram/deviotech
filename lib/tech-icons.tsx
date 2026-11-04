@@ -1,6 +1,5 @@
 import {
   Accessibility,
-  BarChart3,
   Bell,
   Boxes,
   ChartLine,
@@ -33,7 +32,8 @@ import {
 } from "lucide-react"
 import type { CSSProperties } from "react"
 import type { IconType } from "react-icons"
-import { FaJava } from "react-icons/fa"
+import { FaJava, FaWindows } from "react-icons/fa"
+import { VscVscode } from "react-icons/vsc"
 import {
   SiAndroid,
   SiApachemaven,
@@ -76,9 +76,41 @@ import {
   SiTailwindcss,
   SiTypescript,
   SiVercel,
+  SiApple,
+  SiAppstore,
+  SiClaude,
+  SiCursor,
+  SiEclipseadoptium,
+  SiEslint,
+  SiGithub,
+  SiGithubcopilot,
+  SiGnubash,
+  SiGoogleplay,
+  SiHomebrew,
+  SiIntellijidea,
+  SiKaggle,
+  SiLinux,
+  SiNotion,
+  SiNpm,
+  SiPrettier,
+  SiRuff,
+  SiTelegram,
+  SiThemoviedatabase,
+  SiVitest,
 } from "react-icons/si"
 
 import { cn } from "@/lib/utils"
+
+/** Power BI has no icon in react-icons — its three-bar mark, drawn in currentColor. */
+function PowerBiMark(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <rect x="13" y="2" width="6" height="20" rx="1.5" />
+      <rect x="8" y="7" width="6" height="15" rx="1.5" opacity="0.8" />
+      <rect x="3" y="12" width="6" height="10" rx="1.5" opacity="0.6" />
+    </svg>
+  )
+}
 
 type Brand = {
   icon: IconType
@@ -146,6 +178,32 @@ const brand: Record<string, Brand> = {
   JUnit: { icon: SiJunit5, light: "#25a162" },
   // Design
   Figma: { icon: SiFigma, light: "#f24e1e" },
+  // Tools & platforms used in setup and docs
+  "VS Code": { icon: VscVscode, light: "#007acc", dark: "#3b9ae1" },
+  GitHub: { icon: SiGithub },
+  "Git Bash": { icon: SiGnubash },
+  "IntelliJ IDEA": { icon: SiIntellijidea, light: "#e0245e", dark: "#fe5486" },
+  Temurin: { icon: SiEclipseadoptium, light: "#d4145a", dark: "#ff4f8b" },
+  Homebrew: { icon: SiHomebrew, light: "#c27c0e", dark: "#fbb040" },
+  npm: { icon: SiNpm, light: "#cb3837" },
+  ESLint: { icon: SiEslint, light: "#4b32c3", dark: "#8f80f2" },
+  Prettier: { icon: SiPrettier, light: "#c7871a", dark: "#f7b93e" },
+  Ruff: { icon: SiRuff, light: "#5c6b0a", dark: "#d7ff64" },
+  Vitest: { icon: SiVitest, light: "#5a8a12", dark: "#fcc72b" },
+  Kaggle: { icon: SiKaggle, light: "#0b8fc7", dark: "#20beff" },
+  Telegram: { icon: SiTelegram, light: "#229ed9", dark: "#26a5e4" },
+  Notion: { icon: SiNotion },
+  TMDB: { icon: SiThemoviedatabase, light: "#01b4e4" },
+  "Google Play": { icon: SiGoogleplay, light: "#01875f", dark: "#3bccff" },
+  "App Store": { icon: SiAppstore, light: "#0d96f6" },
+  Claude: { icon: SiClaude, light: "#d97757" },
+  Cursor: { icon: SiCursor },
+  "GitHub Copilot": { icon: SiGithubcopilot },
+  "Power BI": { icon: PowerBiMark, light: "#c49a00", dark: "#f2c811" },
+  // Operating systems
+  macOS: { icon: SiApple },
+  Windows: { icon: FaWindows, light: "#0078d4", dark: "#3a96dd" },
+  Linux: { icon: SiLinux },
 }
 
 /** Concepts with no brand get a matching generic icon, so every skill has one. */
@@ -170,7 +228,6 @@ const concept: Record<string, LucideIcon> = {
   "LLM APIs": Sparkles,
   RAG: FileSearch,
   Matplotlib: ChartLine,
-  "Power BI": BarChart3,
   "Data Cleaning": Eraser,
   EDA: ChartScatter,
   Statistics: Sigma,

@@ -1,11 +1,17 @@
 import type { TrackSlug } from "@/data/tracks"
 
+export type OS = "mac" | "windows" | "linux"
+
 /** One instruction, optionally with a command or file contents to copy. */
 export type Step = {
   text: string
   code?: string
   /** File the code belongs in, shown above the block (e.g. "server/src/index.ts"). */
   file?: string
+  /** Logo shown instead of the step number (a name from lib/tech-icons, e.g. "Kaggle"). */
+  icon?: string
+  /** When the instruction differs by operating system: one row per OS, each with its logo. */
+  variants?: { os: OS; text: string; code?: string }[]
 }
 
 export type ToolId =
@@ -29,8 +35,8 @@ export type ToolId =
 export type Tool = {
   id: ToolId
   name: string
-  /** Skill name for its logo (see lib/tech-icons). */
-  icon?: string
+  /** Logo name(s) from lib/tech-icons — several for tool bundles like the AI tools. */
+  icons?: string[]
   what: string
   why: string
   /** Per-OS steps, or `all` when every OS is the same. */
@@ -100,6 +106,8 @@ export type TrackDocs = { track: TrackSlug; projects: [ProjectDocs, ProjectDocs,
 /** A section of a prose guide (welcome, workflow, standards, …). */
 export type GuideSection = {
   title: string
+  /** Shows OS logos next to the title for OS-specific sections. */
+  os?: OS[]
   paragraphs?: string[]
   bullets?: string[]
   steps?: Step[]

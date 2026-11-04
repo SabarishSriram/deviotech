@@ -13,7 +13,7 @@ const prismaSeedSetup = (example: string): Step[] => [
 ]
 
 const kaggle = (search: string, files: string, load: string): Step[] => [
-  { text: `Go to kaggle.com (free account), search for “${search}”, open a well-rated dataset and click Download.` },
+  { text: `Go to kaggle.com (free account), search for “${search}”, open a well-rated dataset and click Download.`, icon: "Kaggle" },
   { text: `Unzip it into data/raw/. You should see ${files}.` },
   { text: "Write down the dataset's name and link in your README — always credit your source." },
   { text: "Load it in your first notebook cell:", file: "notebooks/01-cleaning.ipynb", code: load },
@@ -56,7 +56,7 @@ export const sampleData: Record<string, Step[]> = {
     { text: "Budgets can live in a small hard-coded object to start: { Food: 5000, Travel: 2000, … }." },
   ],
   "movie-discovery": [
-    { text: "Create a free account at themoviedb.org, then go to Settings → API and request a developer key." },
+    { text: "Create a free account at themoviedb.org, then go to Settings → API and request a developer key.", icon: "TMDB" },
     { text: "Put it in .env.local as TMDB_API_KEY (see Environment & secrets)." },
     { text: "Check it works — this should return JSON with a results list:", code: "curl \"https://api.themoviedb.org/3/trending/movie/week?api_key=YOUR_KEY\"" },
     { text: "TMDB's terms require crediting them — add “This product uses the TMDB API but is not endorsed or certified by TMDB” and their logo to your footer." },

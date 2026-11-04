@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
+import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
 
-export type PortalLoginState = { error: string } | undefined
+export type PortalLoginState = { error: string } | { redirectTo: string } | undefined
 
 export async function studentLogin(_: PortalLoginState, formData: FormData): Promise<PortalLoginState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase()
@@ -16,10 +17,11 @@ export async function studentLogin(_: PortalLoginState, formData: FormData): Pro
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return { error: "Wrong email or password." }
 
-  // Drop the browser's cached copy of pages rendered while logged out (e.g. /portal
-  // redirecting to login); otherwise the redirect below can replay it once.
-  revalidatePath("/", "layout")
-  redirect("/portal")
+  // The session cookie is now on this response. The form does a full page load
+  // to /portal (see LoginForm) instead of a client-side redirect, so the portal
+  // is always rendered fresh with the new cookie — never from the router's
+  // copy cached while logged out, which bounced people back to this page once.
+  return { redirectTo: "/portal" }
 }
 
 export async function studentLogout() {
@@ -43,5 +45,16 @@ export async function changePassword(_: PasswordState, formData: FormData): Prom
 
   const { error } = await supabase.auth.updateUser({ password })
   if (error) return { error: error.message }
+
+  // Clear the "temporary password" flag (only the server can change app_metadata),
+  // then refresh the session so the new token no longer carries it.
+  if (data.claims.app_metadata?.must_change_password) {
+    await createAdminClient().auth.admin.updateUserById(data.claims.sub, {
+      app_metadata: { must_change_password: false },
+    })
+    await supabase.auth.refreshSession()
+  }
+
+  revalidatePath("/portal", "layout")
   return { ok: true }
 }

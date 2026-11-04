@@ -10,7 +10,7 @@ import { isEmailConfigured, sendPortalCredentials } from "@/lib/email"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { isApplicationStatus } from "@/lib/supabase/types"
 
-export type AdminLoginState = { error: string } | undefined
+export type AdminLoginState = { error: string } | { redirectTo: string } | undefined
 
 export async function adminLogin(_: AdminLoginState, formData: FormData): Promise<AdminLoginState> {
   const username = String(formData.get("username") ?? "")
@@ -23,10 +23,8 @@ export async function adminLogin(_: AdminLoginState, formData: FormData): Promis
   }
 
   await startAdminSession()
-  // Drop the browser's cached copy of pages rendered while logged out (e.g. /portal
-  // redirecting to login); otherwise the redirect below can replay it once.
-  revalidatePath("/", "layout")
-  redirect("/admin")
+  // Full page load to /admin (see LoginForm), same reason as the student login.
+  return { redirectTo: "/admin" }
 }
 
 export async function adminLogout() {
@@ -104,7 +102,11 @@ export async function createStudentLogin(_: StudentLoginState, formData: FormDat
   }
 
   if (userId) {
-    const { error } = await supabase.auth.admin.updateUserById(userId, { password })
+    // The emailed password is temporary: the student must replace it on next login.
+    const { error } = await supabase.auth.admin.updateUserById(userId, {
+      password,
+      app_metadata: { must_change_password: true },
+    })
     if (error) return { error: error.message }
   } else {
     const { data, error } = await supabase.auth.admin.createUser({
@@ -112,6 +114,7 @@ export async function createStudentLogin(_: StudentLoginState, formData: FormDat
       password,
       email_confirm: true,
       user_metadata: { full_name: application.full_name },
+      app_metadata: { must_change_password: true },
     })
     if (error) return { error: error.message }
     userId = data.user.id

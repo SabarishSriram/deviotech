@@ -101,7 +101,7 @@ export function Hero() {
               </span>
               <div className="min-w-0">
                 <p className="label-mono text-muted-foreground">Certificate</p>
-                <p className="mt-0.5 truncate font-mono text-sm font-medium">DEVIO-2026-0001</p>
+                <p className="mt-0.5 truncate font-mono text-sm font-medium">DEVVY-2026-0001</p>
                 <p className="mt-1 flex items-center gap-1.5 text-xs text-brand-text">
                   <BadgeCheck className="size-3.5 shrink-0" aria-hidden="true" />
                   Verified · Full-Stack

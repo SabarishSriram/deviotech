@@ -82,65 +82,75 @@ async function Portal() {
   const application = data as ApplicationRow | null
   const email = typeof auth.claims.email === "string" ? auth.claims.email : ""
 
-  // First login with an emailed (temporary) password: replace it before anything else.
-  if (auth.claims.app_metadata?.must_change_password) {
-    return (
-      <Widget interactive={false} className="mx-auto w-full max-w-lg p-6 sm:p-8">
-        <p className="flex items-center gap-2 label-mono text-brand-text">
-          <KeyRound className="size-3.5" aria-hidden="true" />
-          One quick step
-        </p>
-        <h1 className="mt-3 font-sans text-2xl font-semibold tracking-tight">Set your own password</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          You logged in with the temporary password we emailed you. Choose a new one that only you know — you&apos;ll use it from now on.
-        </p>
-        <div className="mt-6">
-          <PasswordForm submitLabel="Save and continue" />
-        </div>
-        <form action={studentLogout} className="mt-6 border-t pt-4">
-          <button type="submit" className="text-sm text-muted-foreground hover:text-foreground">
-            Log out
-          </button>
-        </form>
-      </Widget>
-    )
-  }
+  const mustChangePassword = Boolean(auth.claims.app_metadata?.must_change_password)
 
   return (
     <>
-      <header className="flex flex-wrap items-end justify-between gap-4 pb-2">
-        <div>
-          <p className="flex items-center gap-2 label-mono text-muted-foreground">
-            <span className="signal-dot" aria-hidden="true" />
-            student portal
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight uppercase">
-            {application ? `Hi, ${application.full_name.split(" ")[0]}` : "Welcome"}
-          </h1>
-        </div>
-        <form action={studentLogout}>
-          <Button type="submit" variant="outline" size="sm" className="rounded-full">
-            <LogOut aria-hidden="true" />
-            Log out
-          </Button>
-        </form>
-      </header>
+      {/* The real portal, rendered as normal. When a password change is forced,
+          it sits blurred and non-interactive behind the dialog below. */}
+      <div
+        aria-hidden={mustChangePassword}
+        inert={mustChangePassword}
+        className={cn("space-y-4 transition-[filter] duration-200", mustChangePassword && "pointer-events-none blur-md select-none")}
+      >
+        <header className="flex flex-wrap items-end justify-between gap-4 pb-2">
+          <div>
+            <p className="flex items-center gap-2 label-mono text-muted-foreground">
+              <span className="signal-dot" aria-hidden="true" />
+              student portal
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight uppercase">
+              {application ? `Hi, ${application.full_name.split(" ")[0]}` : "Welcome"}
+            </h1>
+          </div>
+          <form action={studentLogout}>
+            <Button type="submit" variant="outline" size="sm" className="rounded-full">
+              <LogOut aria-hidden="true" />
+              Log out
+            </Button>
+          </form>
+        </header>
 
-      {application ? <Journey application={application} /> : (
-        <Widget interactive={false} className="p-8 text-sm text-muted-foreground">
-          We couldn&apos;t find an application linked to {email || "this account"}. Email {site.contactEmail} and we&apos;ll sort it out.
-        </Widget>
+        {application ? (
+          <Journey application={application} />
+        ) : (
+          <Widget interactive={false} className="p-8 text-sm text-muted-foreground">
+            We couldn&apos;t find an application linked to {email || "this account"}. Email {site.contactEmail} and we&apos;ll sort it out.
+          </Widget>
+        )}
+      </div>
+
+      {/* First login with an emailed (temporary) password: replace it before anything else. */}
+      {mustChangePassword && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="set-password-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-md"
+        >
+          <div className="widget w-full max-w-md p-6 sm:p-8">
+            <p className="flex items-center gap-2 label-mono text-brand-text">
+              <KeyRound className="size-3.5" aria-hidden="true" />
+              One quick step
+            </p>
+            <h1 id="set-password-title" className="mt-3 font-sans text-2xl font-semibold tracking-tight">
+              Set your own password
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              You logged in with the temporary password we emailed you. Choose a new one that only you know — you&apos;ll use it from
+              now on.
+            </p>
+            <div className="mt-6">
+              <PasswordForm submitLabel="Save and continue" />
+            </div>
+            <form action={studentLogout} className="mt-4 border-t pt-4">
+              <button type="submit" className="text-sm text-muted-foreground hover:text-foreground">
+                Log out
+              </button>
+            </form>
+          </div>
+        </div>
       )}
-
-      <Widget interactive={false} className="p-6">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="label-mono text-muted-foreground">Account</h2>
-          <p className="font-mono text-xs text-muted-foreground">{email}</p>
-        </div>
-        <div className="mt-4 max-w-xl">
-          <PasswordForm />
-        </div>
-      </Widget>
     </>
   )
 }

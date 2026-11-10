@@ -16,7 +16,7 @@ export type Certificate = {
 
 export const certificates: Certificate[] = [
   {
-    id: "DEVIO-2026-0001",
+    id: "DEVVY-2026-0001",
     studentName: "Aarav Sharma",
     track: "full-stack",
     project: "Campus event booking platform",

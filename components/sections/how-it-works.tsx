@@ -490,7 +490,7 @@ function CertifyVisual({ on }: { on: boolean }) {
         <QrMark />
       </span>
       <div className="min-w-0">
-        <p className="truncate font-mono text-xs font-medium sm:text-sm">DEVIO-2026-0001</p>
+        <p className="truncate font-mono text-xs font-medium sm:text-sm">DEVVY-2026-0001</p>
         <p className="truncate font-mono text-[11px] text-muted-foreground">deviotech.in/verify</p>
       </div>
       <span

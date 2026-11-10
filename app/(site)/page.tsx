@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/layout/site-footer"
 import { BuildWithAi } from "@/components/sections/build-with-ai"
 import { Features } from "@/components/sections/features"
 import { FinalCta } from "@/components/sections/final-cta"
@@ -17,6 +18,7 @@ export default function Home() {
       <BuildWithAi />
       <Features />
       <FinalCta />
+      <SiteFooter />
     </>
   )
 }

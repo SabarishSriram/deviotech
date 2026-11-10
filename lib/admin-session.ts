@@ -10,7 +10,7 @@ import { redirect } from "next/navigation"
  * login sets an httpOnly cookie holding an expiry signed with ADMIN_SESSION_SECRET.
  */
 
-const COOKIE = "devio_admin"
+const COOKIE = "devvy_admin"
 const MAX_AGE_SECONDS = 60 * 60 * 8
 
 function sessionSecret() {

@@ -48,9 +48,12 @@ export default function ApplySuccessPage() {
         </ol>
       </FadeIn>
 
-      <div className="mt-10 text-center">
-        <Button asChild variant="outline" size="lg" className="h-11 rounded-full px-6">
+      <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <Button asChild size="lg" className="h-11 rounded-full px-6">
           <Link href={successPage.cta.href}>{successPage.cta.label}</Link>
+        </Button>
+        <Button asChild variant="outline" size="lg" className="h-11 rounded-full px-6">
+          <Link href={successPage.secondaryCta.href}>{successPage.secondaryCta.label}</Link>
         </Button>
       </div>
     </div>

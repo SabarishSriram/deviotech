@@ -12,7 +12,7 @@ export function CreateLogin({ applicationId, hasLogin }: { applicationId: string
   const [copied, setCopied] = useState(false)
 
   if (state && "password" in state) {
-    const message = `Your Devio Tech student portal login:\nEmail: ${state.email}\nPassword: ${state.password}\nLog in at https://deviotech.in/portal/login`
+    const message = `Your Devvy Tech student portal login:\nEmail: ${state.email}\nPassword: ${state.password}\nLog in at https://deviotech.in/portal/login`
     return (
       <div className="space-y-3">
         {state.emailed ? (

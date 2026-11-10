@@ -1,7 +1,10 @@
-import { SiteFooter } from "@/components/layout/site-footer"
 import { SiteHeader } from "@/components/layout/site-header"
 
-/** Public site chrome. The admin dashboard lives outside this group, so it gets neither. */
+/**
+ * Public site chrome. The admin dashboard lives outside this group, so it
+ * gets neither. The footer is not here — it only renders on the home page,
+ * directly from app/(site)/page.tsx, not on every page.
+ */
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>
@@ -9,7 +12,6 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <main id="main" className="flex-1">
         {children}
       </main>
-      <SiteFooter />
     </>
   )
 }

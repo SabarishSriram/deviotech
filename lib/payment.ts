@@ -31,7 +31,7 @@ type PaymentRequest = {
  *        order_id,
  *        amount: pricing.price * 100,
  *        currency: "INR",
- *        name: "Devio Tech",
+ *        name: "Devvy Tech",
  *        prefill: { name: applicant.fullName, email: applicant.email, contact: applicant.phone },
  *        handler: (response) => { ...step 3... },
  *      })

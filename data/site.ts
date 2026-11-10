@@ -4,17 +4,17 @@
  */
 
 export const site = {
-  name: "Devio Tech",
+  name: "Devvy Tech",
   url: "https://deviotech.in",
   tagline: "Real projects. Real reviews. A certificate that means something.",
   description:
     "A project-based virtual internship where you build real-world projects, use AI tools the way real teams do, get mentor reviews, and earn a verifiable certificate.",
   contactEmail: "hello@deviotech.in",
-  copyright: "© 2026 Devio Tech",
+  copyright: "© 2026 Devvy Tech",
 } as const
 
 export const program = {
-  name: "Devio Tech Project Internship Program",
+  name: "Devvy Tech Project Internship Program",
   durationWeeks: 4,
   durationLabel: "4 weeks",
 } as const
@@ -185,8 +185,8 @@ export const footer = {
   ],
   socials: [
     { platform: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/deviotech" },
-    { platform: "instagram", label: "Instagram", href: "https://www.instagram.com/deviotech" },
-    { platform: "github", label: "GitHub", href: "https://github.com/deviotech" },
+    { platform: "instagram", label: "Instagram", href: "https://www.instagram.com/devvytech" },
+    { platform: "github", label: "GitHub", href: "https://github.com/devvytech" },
   ],
 } as const
 
@@ -235,27 +235,28 @@ export const applyPage = {
 
 export const successPage = {
   title: "Application received",
-  description: "Check your email for your login credentials.",
+  description: "We've emailed your student portal login to your Gmail. Log in to see what's next.",
   nextStepsTitle: "What happens next",
   nextSteps: [
-    { title: "Login credentials", description: "Your login details land in your inbox shortly." },
+    { title: "Login credentials", description: "Sent to your email — log in to the student portal with them." },
     { title: "Free 1:1 session", description: "Meet a mentor one-on-one. They'll walk you through your track and how the program works." },
     {
       title: "Decide, then pay",
       description: `Want to continue? Pay ${formatPrice(pricing.price)} and you get your project brief, docs and kickoff date.`,
     },
   ],
-  cta: { label: "Back to home", href: "/" },
+  cta: { label: "Log in to student portal", href: "/portal" },
+  secondaryCta: { label: "Back to home", href: "/" },
 } as const
 
 export const verifyPage = {
   eyebrow: "verify",
   title: "Verify a certificate",
-  description: "Enter the certificate ID printed on a Devio Tech certificate to confirm it's genuine.",
-  placeholder: "e.g. DEVIO-2026-0001",
+  description: "Enter the certificate ID printed on a Devvy Tech certificate to confirm it's genuine.",
+  placeholder: "e.g. DEVVY-2026-0001",
   button: "Verify",
   notFoundTitle: "Certificate not found",
-  notFoundDescription: "Double-check the ID for typos. IDs look like DEVIO-2026-0001.",
+  notFoundDescription: "Double-check the ID for typos. IDs look like DEVVY-2026-0001.",
 } as const
 
 /* ------------------------------------------------------------------ */

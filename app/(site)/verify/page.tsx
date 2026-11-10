@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/verify" },
 }
 
-/** Reads ?id= so verification links like /verify?id=DEVIO-2026-0001 are shareable. */
+/** Reads ?id= so verification links like /verify?id=DEVVY-2026-0001 are shareable. */
 async function VerifyFormWithQuery({ searchParams }: Pick<PageProps<"/verify">, "searchParams">) {
   const { id } = await searchParams
   const initialId = typeof id === "string" ? id : ""

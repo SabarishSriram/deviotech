@@ -65,9 +65,9 @@ export type StudentLoginState =
   | { error: string }
   | undefined
 
-/** Readable, random temporary password, e.g. "devio-k3Fp9xQ2wZ". */
+/** Readable, random temporary password, e.g. "devvy-k3Fp9xQ2wZ". */
 function temporaryPassword() {
-  return `devio-${randomBytes(8).toString("base64url").slice(0, 10)}`
+  return `devvy-${randomBytes(8).toString("base64url").slice(0, 10)}`
 }
 
 /**

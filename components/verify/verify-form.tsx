@@ -29,7 +29,7 @@ export function VerifyForm({ initialId = "" }: { initialId?: string }) {
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setResult(lookup(value))
-    // Keep the URL shareable, e.g. /verify?id=DEVIO-2026-0001
+    // Keep the URL shareable, e.g. /verify?id=DEVVY-2026-0001
     const url = new URL(window.location.href)
     if (value.trim()) url.searchParams.set("id", normalizeCertificateId(value))
     else url.searchParams.delete("id")

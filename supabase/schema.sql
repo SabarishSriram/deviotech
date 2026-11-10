@@ -1,4 +1,4 @@
--- Devio Tech — database schema.
+-- Devvy Tech — database schema.
 -- Run once in the Supabase dashboard: SQL Editor → New query → paste → Run.
 
 create table if not exists public.applications (

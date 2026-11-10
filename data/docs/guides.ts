@@ -1,134 +1,9 @@
-import type { GuideSection, SetupGuide, TrackArchitecture } from "@/data/docs/types"
+import type { SetupGuide, TrackArchitecture } from "@/data/docs/types"
 import type { TrackSlug } from "@/data/tracks"
 
 /* ------------------------------------------------------------------ */
 /* Shared by every track                                               */
 /* ------------------------------------------------------------------ */
-
-export const welcomeGuide: GuideSection[] = [
-  {
-    title: "How the program works",
-    paragraphs: [
-      "You'll build one real project over four weeks, the way a junior engineer (or designer) works on a team: you get a spec, plan it, build it in small pieces, get every piece reviewed, and ship it.",
-      "Each week ends with a deliverable your mentor reviews. You'll find this week's tasks under Milestones once your project is assigned.",
-    ],
-  },
-  {
-    title: "Start here — do these in order",
-    paragraphs: [
-      "Don't worry if words like Git, terminal or repository are new — each page explains them as you go. Read these three pages first, in this order:",
-    ],
-    steps: [
-      {
-        text: "Setup — get your computer ready. You'll install the tools your track uses (each one explains what it is and why you need it), then create an empty project that runs. This takes 1–2 hours the first time. Everything else depends on it, so do it first.",
-      },
-      {
-        text: "Environment & secrets — where passwords and keys go so they never end up public. Short, but it prevents the most common beginner mistake.",
-      },
-      {
-        text: "How we work — how you'll save your work with Git, put it on GitHub, and send it to your mentor for review. Read it once Setup is done, so the commands make sense.",
-      },
-    ],
-  },
-  {
-    title: "Then, once your project is assigned",
-    bullets: [
-      "PRD — what you're building, for whom, and what “done” means.",
-      "User flows — the paths a user takes through your product.",
-      "Architecture — how the pieces fit together, the data model and the interface.",
-      "API contract and Sample data — the exact endpoints and the data to start with (where your project has them).",
-      "Milestones — your week-by-week task list.",
-    ],
-  },
-  {
-    title: "Keep these open while you build",
-    bullets: [
-      "Coding standards, Testing and Deployment — how to write, check and ship your code.",
-      "Troubleshooting — common errors and fixes. Look here first when something breaks.",
-      "Review rubric — exactly what your mentor checks, so there are no surprises.",
-    ],
-  },
-  {
-    title: "Your weekly rhythm",
-    bullets: [
-      "Start of the week: read that week's milestone and break it into small tasks.",
-      "During the week: open small pull requests often — one feature or fix each. Small PRs get reviewed faster.",
-      "When stuck for more than 30 minutes: message your mentor with what you tried, what you expected and what happened.",
-      "End of the week: make sure the week's deliverable is merged (or shared) and ready for review.",
-    ],
-  },
-  {
-    title: "Getting your certificate",
-    paragraphs: [
-      "Your final project goes through a final review. When it passes, you receive a certificate with a unique ID anyone can verify on our website. If it isn't there yet, you'll get specific feedback and another attempt.",
-    ],
-  },
-]
-
-export const workflowGuide: GuideSection[] = [
-  {
-    title: "First, the words in plain English",
-    bullets: [
-      "Git — a tool on your computer that saves snapshots of your project. Each snapshot is a “commit”, so you can always see what changed and go back.",
-      "Repository (repo) — your project folder, tracked by Git.",
-      "GitHub — a website that stores a copy of your repo online. Your mentor reads your code there, and it becomes part of your portfolio.",
-      "Branch — a separate copy of the code where you work on one task without breaking the main version (called main).",
-      "Pull request (PR) — a request to add your branch's changes into main. It's where your mentor reviews your work and leaves comments.",
-      "Push / pull — push sends your commits up to GitHub; pull brings the latest changes down to your computer.",
-    ],
-  },
-  {
-    title: "Why work this way?",
-    paragraphs: [
-      "It's exactly how real engineering teams work. Small branches and pull requests mean every change gets reviewed, mistakes are caught early, and nothing you do can break the working version.",
-      "You'll repeat the same five-step loop below for every task. After the first few times, it becomes muscle memory.",
-    ],
-  },
-  {
-    title: "The loop you'll repeat all program",
-    steps: [
-      { text: "Get the latest code before starting anything new:", code: "git checkout main && git pull" },
-      { text: "Create a branch named after the task:", code: "git checkout -b feat/login-page" },
-      { text: "Make a small change, then save it as a commit with a clear message:", code: "git add .\ngit commit -m \"Add login form with validation\"" },
-      { text: "Push your branch to GitHub:", code: "git push -u origin feat/login-page" },
-      { text: "Open a pull request (PR) for review:", code: "gh pr create --fill" },
-      { text: "Read your mentor's comments, push fixes to the same branch, and merge once it's approved." },
-    ],
-  },
-  {
-    title: "Writing a good pull request",
-    bullets: [
-      "What: one sentence on what this PR does.",
-      "Why: which task or milestone it's for.",
-      "How to test: the exact steps to see it working.",
-      "Screenshots or a short screen recording for anything visual.",
-      "AI usage: which parts AI helped with — and confirm you've read and understood them.",
-    ],
-  },
-  {
-    title: "Branch and commit names",
-    bullets: [
-      "Branches: feat/… for features, fix/… for bugs, docs/… for documentation. Example: feat/booking-api.",
-      "Commits: start with a verb, describe what changed. “Add pagination to /orders” beats “update”.",
-      "Never commit .env files, passwords or API keys. Your .gitignore should list .env from the first commit.",
-    ],
-  },
-  {
-    title: "Using AI tools the right way",
-    bullets: [
-      "Use AI to plan, scaffold, explain errors and suggest tests — that's how modern teams work.",
-      "Read every line it gives you. If you can't explain it in a review, don't submit it.",
-      "Test what it writes. AI code often looks right and fails on edge cases.",
-      "Never paste secrets, passwords or your .env file into an AI tool.",
-    ],
-  },
-  {
-    title: "Design track? Same idea, different tools",
-    paragraphs: [
-      "Designers share Figma links instead of pull requests. Post your file link with the same structure — what, why, what feedback you want — and resolve your mentor's comments directly in Figma. Keep your case study in a GitHub repository README or a Notion page.",
-    ],
-  },
-]
 
 /* ------------------------------------------------------------------ */
 /* Setup per track                                                     */
@@ -137,9 +12,9 @@ export const workflowGuide: GuideSection[] = [
 const repoSteps = (name: string) => ({
   title: "Create your repository",
   steps: [
-    { text: "Open a terminal and move into the devio folder you made in the terminal basics above:", code: "cd devio" },
+    { text: "Open a terminal and move into the devvy folder you made in the terminal basics above:", code: "cd devvy" },
     { text: "Create an empty repository on GitHub and download (clone) it as a new folder, then move into that folder. Replace the name with your project's:", code: `gh repo create ${name} --public --clone\ncd ${name}` },
-    { text: "Check where you are — the path should now end in devio/" + name + ":", code: "pwd" },
+    { text: "Check where you are — the path should now end in devvy/" + name + ":", code: "pwd" },
     { text: "Open the folder in VS Code:", code: "code ." },
   ],
 })
@@ -230,7 +105,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Create the Next.js app",
         steps: [
-          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Open a terminal and move into your devvy folder:", code: "cd devvy" },
           { text: "Create the app. It makes a new my-app folder; then move into it. Accept the recommended defaults (TypeScript, ESLint, Tailwind CSS, App Router):", code: "npx create-next-app@latest my-app\ncd my-app" },
           { text: "Start the development server and open localhost:3000:", code: "npm run dev" },
         ],
@@ -258,7 +133,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Create the Expo app",
         steps: [
-          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Open a terminal and move into your devvy folder:", code: "cd devvy" },
           { text: "Create the project. It makes a new my-app folder; then move into it:", code: "npx create-expo-app@latest my-app\ncd my-app" },
           { text: "Start the development server:", code: "npx expo start" },
           { text: "Scan the QR code with Expo Go (Android) or your Camera app (iPhone). The app opens on your phone and reloads every time you save." },
@@ -341,7 +216,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
         steps: [
           { text: "Go to start.spring.io and choose: Maven, Java, Java 21, the latest stable Spring Boot." },
           { text: "Add dependencies: Spring Web, Spring Data JPA, PostgreSQL Driver, Validation." },
-          { text: "Click Generate. Unzip the download and move the folder into your devio folder, then open it in IntelliJ (File → Open)." },
+          { text: "Click Generate. Unzip the download and move the folder into your devvy folder, then open it in IntelliJ (File → Open)." },
         ],
       },
       {
@@ -376,7 +251,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Set up your case study",
         steps: [
-          { text: "Open a terminal and move into your devio folder:", code: "cd devio" },
+          { text: "Open a terminal and move into your devvy folder:", code: "cd devvy" },
           { text: "Create a GitHub repository for your case study and download it as a folder — its README becomes the write-up:", code: "gh repo create my-case-study --public --clone" },
           { text: "Add a README.md with headings: Problem, Users, Research, Flows, Design, Testing, Outcome. You'll fill it in each week." },
         ],

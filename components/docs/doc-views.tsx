@@ -3,25 +3,23 @@ import { CheckCircle2, ExternalLink, Lightbulb, Lock, Sparkles, Target, XCircle 
 import { CodeBlock } from "@/components/docs/code-block"
 import { Mermaid } from "@/components/docs/mermaid"
 import { Mockup } from "@/components/docs/mockup"
-import { OsTabs } from "@/components/docs/os-tabs"
+import { welcomeScreens } from "@/components/docs/screens/welcome"
+import { walkthroughFor } from "@/components/docs/track-walkthroughs"
+import { Walkthrough } from "@/components/docs/walkthrough"
+import { welcomeWalk } from "@/data/docs/welcome"
 import { OsBadge, Steps } from "@/components/docs/steps"
 import {
   contracts,
   getProjectDocs,
   sampleData,
-  setupGuides,
-  tools,
   trackArchitecture,
-  welcomeGuide,
-  workflowGuide,
   type DocId,
 } from "@/data/docs"
-import { deploymentGuide, environmentGuide, standardsGuide, testingGuide } from "@/data/docs/handbook-build"
+import { deploymentGuide, standardsGuide, testingGuide } from "@/data/docs/handbook-build"
 import {
   resourcesGuide,
   rubricGuide,
   submissionGuide,
-  terminalBasics,
   trackStretchGoals,
   troubleshootingGuide,
 } from "@/data/docs/handbook-help"
@@ -29,7 +27,6 @@ import { mocks } from "@/data/docs/mocks"
 import type { GuideSection, ProjectDocs } from "@/data/docs/types"
 import type { Track } from "@/data/tracks"
 import { dataDiagram, flowDiagram, systemDiagram } from "@/lib/docs-diagrams"
-import { TechIcon } from "@/lib/tech-icons"
 import { trackColorStyle } from "@/lib/track-icons"
 
 /* ------------------------------------------------------------------ */
@@ -130,74 +127,6 @@ function Checklist({ items }: { items: string[] }) {
 /* Pages                                                               */
 /* ------------------------------------------------------------------ */
 
-function SetupDoc({ track }: { track: Track }) {
-  const guide = setupGuides[track.slug]
-  return (
-    <>
-      <DocTitle eyebrow="Getting started" title={`Setup — ${track.name}`} intro={guide.intro} />
-      <Callout>
-        Work through the tools in order. Each one tells you why you need it, how to install it on your OS, and a command to check it worked. Stuck for more than 30 minutes? Message your mentor with a screenshot of the error.
-      </Callout>
-
-      <Guide sections={[terminalBasics]} />
-
-      <H2>1. Install your tools</H2>
-      <div className="space-y-8">
-        {guide.tools.map((id, index) => {
-          const tool = tools[id]
-          return (
-            <section key={id} id={`tool-${id}`} className="scroll-mt-24 rounded-2xl border bg-card p-6 sm:p-7">
-              <div className="flex items-start gap-3">
-                <span className="flex h-10 min-w-10 shrink-0 items-center justify-center gap-1.5 rounded-xl border bg-background px-2.5 font-mono text-xs text-muted-foreground">
-                  {tool.icons
-                    ? tool.icons.map((icon) => <TechIcon key={icon} name={icon} className="size-5" />)
-                    : index + 1}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="flex flex-wrap items-center gap-2 font-sans text-base font-semibold">
-                    {tool.name}
-                    {tool.optional && (
-                      <span className="rounded-full border px-2 py-0.5 text-[11px] font-normal text-muted-foreground">If needed</span>
-                    )}
-                  </h3>
-                  <p className="mt-0.5 text-muted-foreground">{tool.what}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 space-y-6 border-t pt-6">
-                <div>
-                  <p className="mb-1 text-xs font-medium text-muted-foreground">Why you need it</p>
-                  <p className="text-pretty">{tool.why}</p>
-                </div>
-                <div>
-                  <p className="mb-2 text-xs font-medium text-muted-foreground">Install</p>
-                  {"all" in tool.install ? <Steps steps={tool.install.all} /> : <OsTabs install={tool.install} />}
-                </div>
-                {tool.verify && (
-                  <div>
-                    <p className="text-xs font-medium text-muted-foreground">Check it worked</p>
-                    <CodeBlock code={tool.verify.code} />
-                    <p className="mt-1.5 text-xs text-muted-foreground">You should see: {tool.verify.expect}</p>
-                  </div>
-                )}
-                {tool.tip && <Callout>{tool.tip}</Callout>}
-              </div>
-            </section>
-          )
-        })}
-      </div>
-
-      {guide.start.map((block, i) => (
-        <section key={block.title}>
-          <H2>
-            {i + 2}. {block.title}
-          </H2>
-          <Steps steps={block.steps} />
-        </section>
-      ))}
-    </>
-  )
-}
 
 function PrdDoc({ track, project, name }: { track: Track; project: ProjectDocs; name: string }) {
   return (
@@ -435,7 +364,6 @@ function SampleDataDoc({ track, slug, name }: { track: Track; slug: string; name
 
 /** Track-level handbook pages, open to every student. */
 const handbookPages = {
-  environment: { group: "Getting started", title: "Environment & secrets", intro: () => "Where passwords and API keys live, how to set them up locally, and the one rule you must never break.", sections: environmentGuide },
   standards: { group: "Building", title: "Coding standards", intro: (t: Track) => (t.slug === "ui-ux" ? "How to keep your Figma files organised so anyone can pick them up." : "How to structure, name, format and commit your code so reviews stay fast and focused."), sections: standardsGuide },
   testing: { group: "Building", title: "Testing", intro: (t: Track) => (t.slug === "ui-ux" ? "How to test your designs with real people." : "What must be tested, the tools to use, and the minimum bar for every pull request."), sections: testingGuide },
   deployment: { group: "Building", title: "Deployment", intro: (t: Track) => (t.slug === "ui-ux" ? "How to publish your prototype and case study." : "Step by step from your laptop to a live link, on free tiers."), sections: deploymentGuide },
@@ -468,20 +396,49 @@ export function DocBody({ doc, track, projectSlug }: { doc: DocId; track: Track;
   if (doc === "welcome") {
     return (
       <>
-        <DocTitle eyebrow="Getting started" title="Welcome to Devio Tech" intro="Everything you need to go from setup to a shipped project." />
-        <Guide sections={welcomeGuide} />
+        <DocTitle
+          eyebrow="Getting started"
+          title="Welcome to Devvy Tech"
+          intro="Start here. In five minutes you'll know how the program works, where everything is in these docs, and exactly what to do first."
+        />
+        <Walkthrough
+          parts={welcomeWalk}
+          screens={welcomeScreens}
+          pickOs={false}
+          done={["Open 1. Setup in the sidebar", "Work through it in order, checking each step", "Then 2. How we work, then 3. Environment & secrets"]}
+          doneTitle="What to do now"
+          doneIntro="Your next hour or two, in three lines."
+        />
       </>
     )
   }
-  if (doc === "workflow") {
+  if (doc === "setup" || doc === "workflow" || doc === "environment") {
+    const walk = walkthroughFor(track.slug, doc)
     return (
       <>
-        <DocTitle eyebrow="Getting started" title="How we work" intro="The Git and pull-request loop you'll repeat all program, plus the rules for using AI tools." />
-        <Guide sections={workflowGuide} />
+        <DocTitle eyebrow="Getting started" title={doc === "setup" ? `Setup — ${track.name}` : walk.title} intro={walk.intro} />
+        {walk.facts && (
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {walk.facts.map(([title, text]) => (
+              <div key={title} className="rounded-xl border bg-card p-4">
+                <p className="text-xs font-medium text-muted-foreground">{title}</p>
+                <p className="mt-1 text-pretty">{text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        <Walkthrough
+          parts={walk.parts}
+          screens={walk.screens}
+          done={walk.done}
+          doneTitle={walk.doneTitle}
+          doneIntro={walk.doneIntro}
+          next={walk.next}
+          pickOs={walk.pickOs}
+        />
       </>
     )
   }
-  if (doc === "setup") return <SetupDoc track={track} />
 
   const handbook = handbookPages[doc as keyof typeof handbookPages]
   if (handbook) {

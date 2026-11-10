@@ -11,50 +11,6 @@ import type { TrackSlug } from "@/data/tracks"
 /* Terminal basics (top of every code track's setup page)              */
 /* ------------------------------------------------------------------ */
 
-export const terminalBasics: GuideSection = {
-  title: "Never used a terminal? Start here",
-  paragraphs: [
-    "The terminal is a window where you type commands instead of clicking. Most setup steps in these docs are commands you copy and paste into it.",
-  ],
-  steps: [
-    {
-      text: "Open a terminal:",
-      variants: [
-        { os: "mac", text: "Press Cmd + Space, type “Terminal” and press Enter." },
-        { os: "windows", text: "Open VS Code and press Ctrl + ` (the key above Tab). Pick “Git Bash” or “PowerShell” from the dropdown next to the + button." },
-        { os: "linux", text: "Press Ctrl + Alt + T." },
-      ],
-    },
-    {
-      text: "Every command box in these docs has a copy button. Paste the command into the terminal and press Enter:",
-      variants: [
-        { os: "mac", text: "Paste with Cmd + V." },
-        { os: "windows", text: "Paste with Ctrl + V (in Git Bash: Shift + Insert, or right-click)." },
-        { os: "linux", text: "Paste with Ctrl + Shift + V." },
-      ],
-    },
-    {
-      text: "Here's the one idea to understand: the terminal is always “standing inside” one folder, called the current folder. Every command you run acts on that folder. That's why later steps tell you to move into your project folder first — npm install or git commit run in the wrong folder simply won't work.",
-    },
-    {
-      text: "Ask the terminal which folder you're in right now (pwd = print working directory). When it first opens, it's your home folder:",
-      code: "pwd",
-      variants: [
-        { os: "mac", text: "You'll see something like /Users/asha" },
-        { os: "windows", text: "You'll see something like C:\\Users\\asha (PowerShell) or /c/Users/asha (Git Bash)" },
-        { os: "linux", text: "You'll see something like /home/asha" },
-      ],
-    },
-    { text: "Make one folder to keep all your program work in (mkdir = make directory). You only do this once:", code: "mkdir devio" },
-    { text: "Move into it (cd = change directory). Notice your prompt now shows devio:", code: "cd devio" },
-    { text: "List what's inside (ls = list). It's empty for now — your project will appear here during setup:", code: "ls" },
-    { text: "Go back up one level. “..” always means “the folder above this one”:", code: "cd .." },
-    { text: "Move back in. From now on, open a terminal and run cd devio before following any setup step:", code: "cd devio" },
-    { text: "Tip: type the first letters of a folder name and press Tab — the terminal completes it for you. If you see “No such file or directory”, run ls to check the name and that you're in the right place." },
-    { text: "Some commands keep running (like a development server). Stop them with Ctrl + C." },
-    { text: "Red text doesn't always mean failure — read the last few lines. If you're stuck, copy the whole error when you ask for help." },
-  ],
-}
 
 /* ------------------------------------------------------------------ */
 /* Troubleshooting                                                     */
@@ -193,7 +149,7 @@ const stackProblems: Record<Stack, GuideSection[]> = {
   java: [
     {
       title: "“JAVA_HOME is not set” or the wrong Java version runs",
-      paragraphs: ["Reinstall Temurin 21 with “Set JAVA_HOME” ticked (Windows), then open a new terminal and check java -version. In IntelliJ: File → Project Structure → SDK → 21."],
+      paragraphs: ["Reinstall Temurin 21 with “Set JAVA_HOME” ticked (Windows), then open a new terminal and check java -version. In VS Code: press F1, run Java: Configure Java Runtime, and pick 21 for the project."],
     },
     {
       title: "“Failed to configure a DataSource”",

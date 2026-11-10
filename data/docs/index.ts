@@ -11,7 +11,7 @@ import { contracts } from "@/data/docs/contracts"
 import type { ProjectDocs, TrackDocs } from "@/data/docs/types"
 import { getTrack, type TrackSlug } from "@/data/tracks"
 
-export { setupGuides, trackArchitecture, welcomeGuide, workflowGuide } from "@/data/docs/guides"
+export { setupGuides, trackArchitecture } from "@/data/docs/guides"
 export { tools } from "@/data/docs/tools"
 export { contracts } from "@/data/docs/contracts"
 export { sampleData } from "@/data/docs/project-data"
@@ -43,8 +43,8 @@ export function isTrackProject(track: string, projectSlug: string) {
 export const DOC_PAGES = [
   { id: "welcome", title: "Welcome", group: "Getting started", locked: false },
   { id: "setup", title: "1. Setup", group: "Getting started", locked: false },
-  { id: "environment", title: "2. Environment & secrets", group: "Getting started", locked: false },
-  { id: "workflow", title: "3. How we work", group: "Getting started", locked: false },
+  { id: "workflow", title: "2. How we work", group: "Getting started", locked: false },
+  { id: "environment", title: "3. Environment & secrets", group: "Getting started", locked: false },
   { id: "standards", title: "Coding standards", group: "Building", locked: false },
   { id: "testing", title: "Testing", group: "Building", locked: false },
   { id: "deployment", title: "Deployment", group: "Building", locked: false },

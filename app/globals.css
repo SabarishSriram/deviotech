@@ -297,3 +297,15 @@
     animation: none !important;
   }
 }
+
+/* Docs walkthroughs: show only the student's OS (components/docs/os-scope.tsx) */
+[data-os="mac"] [data-only]:not([data-only~="mac"]),
+[data-os="windows"] [data-only]:not([data-only~="windows"]),
+[data-os="linux"] [data-only]:not([data-only~="linux"]) {
+  display: none;
+}
+
+/* Step numbers count only the steps that are visible for that OS. */
+.walk-part { counter-reset: walk-step; }
+.walk-step { counter-increment: walk-step; }
+.walk-step-num::before { content: counter(walk-step); }

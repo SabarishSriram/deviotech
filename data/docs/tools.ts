@@ -56,7 +56,7 @@ export const tools: Record<ToolId, Tool> = {
       linux: [{ text: "Install it with your package manager:", code: "sudo apt update && sudo apt install git" }],
     },
     verify: { code: "git --version", expect: "git version 2.x" },
-    tip: "Then tell Git who you are (use the email from your GitHub account):\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"",
+    tip: "Then tell Git who you are. Use the email you'll sign up to GitHub with in the next step (it doesn't have to exist yet — just remember what you typed):\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"",
   },
 
   github: {

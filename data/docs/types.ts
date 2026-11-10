@@ -145,3 +145,46 @@ export type Mock = {
   nav?: string[]
   blocks: MockBlock[]
 }
+
+/* ------------------------------------------------------------------ */
+/* Walkthroughs — linear, start-from-nothing guides (e.g. setup)        */
+/* ------------------------------------------------------------------ */
+
+/** A screen picture, the same for every OS or one per OS (ids from components/docs/screens). */
+export type ScreenRef = string | Partial<Record<OS, string>>
+
+/** One thing to do inside a step. */
+export type WalkAction = {
+  text: string
+  code?: string
+  /** File the code belongs in, shown above the block. */
+  file?: string
+  /** Only show this action on these operating systems. */
+  os?: OS[]
+}
+
+/** One numbered step: what to do, why, a picture of it, and how to check it worked. */
+export type WalkStep = {
+  title: string
+  /** Only show this step on these operating systems. */
+  os?: OS[]
+  why?: string
+  actions: WalkAction[]
+  screen?: ScreenRef
+  caption?: string
+  check?: { text: string; code?: string; expect?: string; os?: OS[] }[]
+  /** A friendly tip. */
+  note?: string
+  /** Something that commonly goes wrong. */
+  warn?: string
+}
+
+/** A chapter of a walkthrough, e.g. "Install VS Code". */
+export type WalkPart = {
+  id: string
+  title: string
+  intro: string
+  /** Rough time, e.g. "5 min". */
+  time?: string
+  steps: WalkStep[]
+}

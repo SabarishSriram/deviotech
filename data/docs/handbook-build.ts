@@ -242,7 +242,7 @@ export function standardsGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Folder structure",
           code: {
-            code: "src/main/java/com/devio/app/\n├── controller/      REST endpoints (BookController)\n├── service/         Business rules (LoanService)\n├── repository/      Spring Data JPA interfaces\n├── model/           @Entity classes\n├── dto/             Request/response objects\n└── exception/       Custom exceptions + global handler\nsrc/test/java/...    Tests mirror the same packages",
+            code: "src/main/java/com/devvy/app/\n├── controller/      REST endpoints (BookController)\n├── service/         Business rules (LoanService)\n├── repository/      Spring Data JPA interfaces\n├── model/           @Entity classes\n├── dto/             Request/response objects\n└── exception/       Custom exceptions + global handler\nsrc/test/java/...    Tests mirror the same packages",
           },
         },
         {
@@ -307,149 +307,6 @@ export function standardsGuide(track: TrackSlug): GuideSection[] {
 /* ------------------------------------------------------------------ */
 /* Environment & secrets                                               */
 /* ------------------------------------------------------------------ */
-
-const neverCommit: GuideSection = {
-  title: "The one rule: never commit secrets",
-  paragraphs: [
-    "Passwords, API keys and database URLs go in a .env file that Git ignores. You commit a .env.example with the same names and empty values, so others know what to fill in.",
-    "If you ever commit a real key by accident, deleting the file isn't enough — it's still in Git history. Revoke the key at the provider, create a new one, and tell your mentor.",
-  ],
-}
-
-export function environmentGuide(track: TrackSlug): GuideSection[] {
-  switch (stackOf[track]) {
-    case "express":
-      return [
-        neverCommit,
-        {
-          title: "Your .env.example",
-          steps: [
-            {
-              text: "Commit this file (with empty values) so anyone can set the project up:",
-              file: track === "full-stack" ? "server/.env.example" : ".env.example",
-              code:
-                track === "full-stack"
-                  ? "# PostgreSQL connection — postgresql://USER:PASSWORD@HOST:PORT/DATABASE\nDATABASE_URL=\n# Long random string used to sign login tokens\nJWT_SECRET=\n# Port the API listens on\nPORT=4000\n# Where the React app runs (allowed by CORS)\nCLIENT_URL=http://localhost:5173"
-                  : "# PostgreSQL or MongoDB connection string\nDATABASE_URL=\n# Redis running in Docker locally\nREDIS_URL=redis://localhost:6379\n# Long random string used to sign tokens\nJWT_SECRET=\nPORT=4000\nRATE_LIMIT_PER_MINUTE=100",
-            },
-            { text: "Copy it to a real .env and fill in your values:", code: track === "full-stack" ? "cp server/.env.example server/.env" : "cp .env.example .env" },
-            { text: "Generate a strong JWT_SECRET:", code: "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"" },
-            { text: "Load it at the very top of src/index.ts:", file: "src/index.ts", code: 'import "dotenv/config"' },
-            ...(track === "full-stack"
-              ? [{ text: "The React app has its own file. Vite only exposes variables starting with VITE_ to the browser:", file: "client/.env", code: "VITE_API_URL=http://localhost:4000" }]
-              : []),
-          ],
-        },
-        { title: "Check .gitignore", steps: [{ text: "Make sure it contains these lines:", file: ".gitignore", code: "node_modules\n.env\ndist" }] },
-      ]
-
-    case "next":
-      return [
-        neverCommit,
-        {
-          title: "Your .env.local",
-          paragraphs: ["Next.js reads .env.local automatically. Variables are server-only unless their name starts with NEXT_PUBLIC_ — then they're visible in the browser to anyone."],
-          steps: [
-            { text: "Create the example file and commit it:", file: ".env.example", code: "# Server-only: never sent to the browser\nTMDB_API_KEY=\n# Base URL of your API or mock API\nAPI_URL=http://localhost:4000" },
-            { text: "Copy it and fill in real values (create-next-app already ignores .env*.local):", code: "cp .env.example .env.local" },
-            { text: "Movie project: get a free key at themoviedb.org → Settings → API, and keep it server-only by fetching in server components." },
-            { text: "Restart npm run dev after changing env files — they're only read at start-up." },
-          ],
-        },
-      ]
-
-    case "expo":
-      return [
-        neverCommit,
-        {
-          title: "Configuring the app",
-          paragraphs: ["In Expo, variables starting with EXPO_PUBLIC_ are built into the app. Treat them as public — anyone can read them from the APK. Never put real secrets in a mobile app."],
-          steps: [
-            { text: "Create .env.example (commit it) and .env (don't):", file: ".env.example", code: "# Your computer's address on Wi-Fi, not localhost\nEXPO_PUBLIC_API_URL=http://192.168.1.10:4000" },
-            {
-              text: "Why not localhost? On your phone, “localhost” means the phone itself. Use your computer's Wi-Fi address instead:",
-              variants: [
-                { os: "mac", text: "System Settings → Wi-Fi → Details next to your network → IP address." },
-                { os: "windows", text: "Run this in PowerShell and look for “IPv4 Address”:", code: "ipconfig" },
-                { os: "linux", text: "Run this — the first address is the one you want:", code: "hostname -I" },
-              ],
-            },
-            { text: "Use it in code:", file: "lib/api.ts", code: "const API_URL = process.env.EXPO_PUBLIC_API_URL" },
-          ],
-        },
-      ]
-
-    case "pyml":
-      return [
-        neverCommit,
-        {
-          title: "Using a .env file in Python",
-          steps: [
-            { text: "Install python-dotenv:", code: "pip install python-dotenv" },
-            { text: "Commit an example file:", file: ".env.example", code: "# Only needed for projects that call an LLM (e.g. the document Q&A bot)\nLLM_API_KEY=" },
-            { text: "Load it in your code:", file: "app/config.py", code: 'import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\nLLM_API_KEY = os.getenv("LLM_API_KEY")' },
-            { text: "Deploying on Streamlit Community Cloud? Put keys in the app's Settings → Secrets instead, and read them with st.secrets." },
-            { text: "Large datasets don't belong in Git either: add data/raw/ to .gitignore if files are bigger than ~50 MB, and link the source in your README." },
-          ],
-        },
-      ]
-
-    case "python":
-      return [
-        neverCommit,
-        {
-          title: "Using a .env file",
-          steps: [
-            { text: "Install python-dotenv:", code: "pip install python-dotenv" },
-            { text: "Commit an example file:", file: ".env.example", code: "DATABASE_PATH=data.db\n# Web scraper alerts (optional)\nTELEGRAM_BOT_TOKEN=\nTELEGRAM_CHAT_ID=" },
-            { text: "Telegram alerts: message @BotFather on Telegram, send /newbot, and it gives you the token. Send your bot any message, then open https://api.telegram.org/bot<TOKEN>/getUpdates to find your chat id.", icon: "Telegram" },
-            { text: "Load the values:", file: "app/config.py", code: 'import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\nDATABASE_PATH = os.getenv("DATABASE_PATH", "data.db")' },
-          ],
-        },
-      ]
-
-    case "java":
-      return [
-        neverCommit,
-        {
-          title: "Keep passwords out of application.properties",
-          steps: [
-            { text: "Reference environment variables instead of typing values:", file: "src/main/resources/application.properties", code: "spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/java_app}\nspring.datasource.username=${DB_USER:postgres}\nspring.datasource.password=${DB_PASSWORD}" },
-            { text: "The part after : is a default. DB_PASSWORD has none, so the app won't start until you set it." },
-            { text: "In IntelliJ: Run → Edit Configurations → Environment variables → add DB_PASSWORD=yourpassword." },
-            {
-              text: "Or set it in the terminal before running:",
-              variants: [
-                { os: "mac", text: "In Terminal:", code: "export DB_PASSWORD=yourpassword\n./mvnw spring-boot:run" },
-                { os: "windows", text: "In PowerShell:", code: "$env:DB_PASSWORD=\"yourpassword\"\n.\\mvnw spring-boot:run" },
-                { os: "linux", text: "In your terminal:", code: "export DB_PASSWORD=yourpassword\n./mvnw spring-boot:run" },
-              ],
-            },
-          ],
-        },
-      ]
-
-    case "design":
-      return [
-        {
-          title: "Research data is sensitive",
-          bullets: [
-            "Ask interviewees for consent before recording, and tell them how you'll use their answers.",
-            "Use first names or “P1, P2” in your case study — never full names, phone numbers or photos without permission.",
-            "Keep raw recordings private; publish only your synthesis.",
-          ],
-        },
-        {
-          title: "Sharing your files",
-          bullets: [
-            "Share the Figma file with your mentor as “can comment”.",
-            "For your portfolio, share the prototype with “anyone with the link can view”.",
-            "Keep one source of truth — don't duplicate files for each version; use Figma's version history.",
-          ],
-        },
-      ]
-  }
-}
 
 /* ------------------------------------------------------------------ */
 /* Testing                                                             */
@@ -611,7 +468,7 @@ export function testingGuide(track: TrackSlug): GuideSection[] {
           steps: [
             {
               text: "A plain unit test for a rule:",
-              file: "src/test/java/com/devio/app/service/FineCalculatorTest.java",
+              file: "src/test/java/com/devvy/app/service/FineCalculatorTest.java",
               code: "class FineCalculatorTest {\n\n    @Test\n    void chargesTenRupeesPerLateDay() {\n        assertEquals(30, FineCalculator.fineFor(3));\n    }\n\n    @Test\n    void noFineWhenOnTime() {\n        assertEquals(0, FineCalculator.fineFor(0));\n    }\n}",
             },
             { text: "Run all tests:", code: "./mvnw test" },

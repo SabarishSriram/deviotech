@@ -23,9 +23,10 @@ import {
 } from "lucide-react"
 import { SiGithub, SiReact, SiVite } from "react-icons/si"
 
-import { Board, Browser, Mark, Menu, MONO_FONT } from "@/components/docs/screens/kit"
+import { Board, Browser, EmailCompose, Mark, Menu, MONO_FONT } from "@/components/docs/screens/kit"
+import { MENTOR_EMAIL } from "@/components/docs/screens/welcome"
 import { PROJECT, SERVER, term, USER } from "@/components/docs/screens/fullstack"
-import { VSCode, type TermLine, type TreeNode } from "@/components/docs/screens/vscode"
+import { VSCode, type TermLine, type TreeNode, type VSCodeProps } from "@/components/docs/screens/vscode"
 import type { OS } from "@/data/docs/types"
 import { cn } from "@/lib/utils"
 
@@ -326,6 +327,56 @@ export function GoodBad({ rows, headers = ["Good", "Avoid"] }: { rows: { title: 
   )
 }
 
+/** GitHub → Settings → Collaborators, adding the mentor. Used by every code track's Setup. */
+export function CollaboratorsScreen({ repo, os }: { repo: string; os: OS }) {
+  return (
+    <GitHubRepo repo={repo} os={os} path="/settings/access" tab="Settings">
+      <div className="relative flex min-h-[340px] gap-6 px-6 py-5">
+        <div className="relative z-10 w-44 shrink-0 space-y-0.5 text-[12.5px]">
+          <p className="rounded-md px-2 py-1">General</p>
+          <p className="px-2 pt-2 pb-1 text-[11px] text-[#59636e]">Access</p>
+          <Mark n={1} badge="r">
+            <p className="rounded-md bg-[#eff2f5] px-2 py-1 font-semibold">Collaborators</p>
+          </Mark>
+          <p className="px-2 pt-2 pb-1 text-[11px] text-[#59636e]">Code and automation</p>
+          {["Branches", "Rules", "Actions", "Webhooks"].map((s) => (
+            <p key={s} className="rounded-md px-2 py-1">
+              {s}
+            </p>
+          ))}
+        </div>
+        <div className="flex-1">
+          <p className="border-b border-[#d1d9e0] pb-2 text-[18px]">Collaborators and teams</p>
+          <div className="mt-4 rounded-md border border-[#d1d9e0] p-6 text-center">
+            <p className="text-[13px] font-semibold">You haven&apos;t invited any collaborators yet</p>
+            <span className="mt-3 inline-block rounded-md bg-[#1f883d] px-3 py-1.5 text-[12px] font-semibold text-white">Add people</span>
+          </div>
+        </div>
+        <div className="absolute inset-0 flex items-start bg-black/30 pt-10 pl-[236px]">
+          <div className="w-[380px] rounded-lg bg-white p-5 shadow-2xl">
+            <p className="flex items-center justify-between text-[14px] font-semibold">
+              Add a collaborator to {repo} <X className="size-4 text-[#59636e]" />
+            </p>
+            <Mark n={2} badge="r" className="mt-4">
+              <div className="flex h-8 items-center gap-2 rounded-md border-2 border-[#0969da] px-2 text-[12.5px]">
+                <Search className="size-3.5 text-[#59636e]" /> {MENTOR}
+              </div>
+            </Mark>
+            <p className="mt-2 flex items-center gap-2 rounded-md bg-[#f6f8fa] px-2 py-1.5 text-[12px]">
+              <Avatar who="mentor" /> <b>{MENTOR}</b> <span className="text-[#59636e]">Invite collaborator</span>
+            </p>
+            <Mark n={3} badge="r" className="mt-4">
+              <span className="block rounded-md bg-[#1f883d] py-1.5 text-center text-[12px] font-semibold text-white">
+                Add {MENTOR} to this repository
+              </span>
+            </Mark>
+          </div>
+        </div>
+      </div>
+    </GitHubRepo>
+  )
+}
+
 export type WfCtx = {
   repo: string
   /** Top-level files and folders of the project, as VS Code's Explorer lists them. */
@@ -334,6 +385,8 @@ export type WfCtx = {
   readmeExists: boolean
   /** Lines the "## You need" fix adds. */
   fixLines: number
+  /** Short track name for email subjects, e.g. "Full-Stack". */
+  tag: string
 }
 
 /** Sorts like VS Code's Explorer: folders first, then files, by name. */
@@ -640,53 +693,6 @@ export function workflowScreensFor(c: WfCtx): Record<string, Screen> {
     </PrPage>
   )
 
-  const wfCollaborators: Screen = (os) => (
-    <GitHubRepo repo={c.repo} os={os} path="/settings/access" tab="Settings">
-      <div className="relative flex min-h-[340px] gap-6 px-6 py-5">
-        <div className="relative z-10 w-44 shrink-0 space-y-0.5 text-[12.5px]">
-          <p className="rounded-md px-2 py-1">General</p>
-          <p className="px-2 pt-2 pb-1 text-[11px] text-[#59636e]">Access</p>
-          <Mark n={1} badge="r">
-            <p className="rounded-md bg-[#eff2f5] px-2 py-1 font-semibold">Collaborators</p>
-          </Mark>
-          <p className="px-2 pt-2 pb-1 text-[11px] text-[#59636e]">Code and automation</p>
-          {["Branches", "Rules", "Actions", "Webhooks"].map((s) => (
-            <p key={s} className="rounded-md px-2 py-1">
-              {s}
-            </p>
-          ))}
-        </div>
-        <div className="flex-1">
-          <p className="border-b border-[#d1d9e0] pb-2 text-[18px]">Collaborators and teams</p>
-          <div className="mt-4 rounded-md border border-[#d1d9e0] p-6 text-center">
-            <p className="text-[13px] font-semibold">You haven&apos;t invited any collaborators yet</p>
-            <span className="mt-3 inline-block rounded-md bg-[#1f883d] px-3 py-1.5 text-[12px] font-semibold text-white">Add people</span>
-          </div>
-        </div>
-        <div className="absolute inset-0 flex items-start bg-black/30 pt-10 pl-[236px]">
-          <div className="w-[380px] rounded-lg bg-white p-5 shadow-2xl">
-            <p className="flex items-center justify-between text-[14px] font-semibold">
-              Add a collaborator to {c.repo} <X className="size-4 text-[#59636e]" />
-            </p>
-            <Mark n={2} badge="r" className="mt-4">
-              <div className="flex h-8 items-center gap-2 rounded-md border-2 border-[#0969da] px-2 text-[12.5px]">
-                <Search className="size-3.5 text-[#59636e]" /> {MENTOR}
-              </div>
-            </Mark>
-            <p className="mt-2 flex items-center gap-2 rounded-md bg-[#f6f8fa] px-2 py-1.5 text-[12px]">
-              <Avatar who="mentor" /> <b>{MENTOR}</b> <span className="text-[#59636e]">Invite collaborator</span>
-            </p>
-            <Mark n={3} badge="r" className="mt-4">
-              <span className="block rounded-md bg-[#1f883d] py-1.5 text-center text-[12px] font-semibold text-white">
-                Add {MENTOR} to this repository
-              </span>
-            </Mark>
-          </div>
-        </div>
-      </div>
-    </GitHubRepo>
-  )
-
   const wfReviewers: Screen = (os) => (
     <PrPage
       repo={c.repo}
@@ -859,7 +865,207 @@ export function workflowScreensFor(c: WfCtx): Record<string, Screen> {
       { tree: rootTree([{ name: "README.md" }]), panel: 0.7 }
     )
 
+  const wfEmail: Screen = () => (
+    <EmailCompose to={MENTOR_EMAIL} subject={`[${c.tag}] PR ready for review: Add README with how to run the project`} toMark={1} subjectMark={2}>
+      <p>Hi! My README pull request is ready for review:</p>
+      <Mark n={3} badge="r" className="mr-8 inline-block">
+        <p className="px-1 text-[#0b57d0] underline">https://github.com/{REPO}/pull/1</p>
+      </Mark>
+      <p>Could you check the run steps are clear enough for someone new?</p>
+    </EmailCompose>
+  )
+
+  /* ---- Git commands explained / Oops ---- */
+  const FB = "feat/your-task"
+  const withReadme = (status?: "M" | "U") => rootTree([{ name: "README.md", status }])
+  const g = (os: OS, lines: TermLine[], branch = FB, extra: Partial<VSCodeProps> = {}) =>
+    term(os, PROJECT, lines, { tree: withReadme("M"), branch, panel: 0.66, ...extra })
+
+  const gcStatus: Screen = (os) =>
+    g(os, [
+      { cmd: "git status" },
+      { out: `On branch ${FB}`, mark: 1 },
+      { out: "Changes not staged for commit:" },
+      { out: '  (use "git add <file>..." to update what will be committed)', tone: "dim" },
+      { out: "        modified:   README.md", tone: "err", mark: 2 },
+      { out: "" },
+      { out: 'no changes added to commit (use "git add" and/or "git commit -a")' },
+    ])
+  const gcDiff: Screen = (os) =>
+    g(os, [
+      { cmd: "git diff" },
+      { out: "diff --git a/README.md b/README.md", tone: "bold" },
+      { out: "@@ -5,3 +5,4 @@", tone: "accent" },
+      { out: " ## Run it locally" },
+      { out: "-1. Start it", tone: "err" },
+      { out: "+1. Install the libraries first", tone: "ok" },
+      { out: "+2. Then start it", tone: "ok" },
+    ])
+  const gcAdd: Screen = (os) =>
+    g(os, [
+      { cmd: "git add README.md" },
+      { cmd: "git status" },
+      { out: `On branch ${FB}` },
+      { out: "Changes to be committed:" },
+      { out: "        modified:   README.md", tone: "ok", mark: 1 },
+      { cmd: "" },
+    ])
+  const gcCommit: Screen = (os) =>
+    g(
+      os,
+      [{ cmd: 'git commit -m "Add setup steps to README"' }, { out: `[${FB} 6e1f2a4] Add setup steps to README` }, { out: " 1 file changed, 2 insertions(+), 1 deletion(-)", tone: "ok" }, { cmd: "" }],
+      FB,
+      { tree: withReadme() }
+    )
+  const gcLog: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: "git log --oneline" },
+        { out: `6e1f2a4 (HEAD -> ${FB}) Add setup steps to README`, tone: "warn" },
+        { out: "9e04b11 (origin/main, main) Merge pull request #1" },
+        { out: "4c7a90e Add requirements to README" },
+        { out: "8b1d4e2 Add README with how to run the project" },
+        { out: "3f9a7c2 Initial project setup" },
+        { cmd: "" },
+      ],
+      FB,
+      { tree: withReadme() }
+    )
+  const gcPush: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: `git push -u origin ${FB}` },
+        { out: `To https://github.com/${REPO}.git` },
+        { out: ` * [new branch]      ${FB} -> ${FB}`, tone: "ok" },
+        { out: `branch '${FB}' set up to track 'origin/${FB}'.` },
+        { cmd: "git push" },
+        { out: "Everything up-to-date" },
+      ],
+      FB,
+      { tree: withReadme() }
+    )
+  const gcPull: Screen = (os) =>
+    g(
+      os,
+      [{ cmd: "git pull" }, { out: "Updating 9e04b11..c2d7e90" }, { out: "Fast-forward" }, { out: " README.md | 3 ++-", tone: "ok" }, { out: " 1 file changed, 2 insertions(+), 1 deletion(-)" }, { cmd: "" }],
+      "main",
+      { tree: withReadme() }
+    )
+  const gcBranch: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: `git checkout -b ${FB}` },
+        { out: `Switched to a new branch '${FB}'`, tone: "ok" },
+        { cmd: "git branch" },
+        { out: `* ${FB}`, tone: "ok", mark: 1 },
+        { out: "  main" },
+        { cmd: "" },
+      ],
+      FB,
+      { tree: withReadme() }
+    )
+
+  const oopsRestore: Screen = (os) =>
+    g(os, [{ cmd: "git restore README.md" }, { cmd: "git status" }, { out: `On branch ${FB}` }, { out: "nothing to commit, working tree clean", tone: "ok" }, { cmd: "" }], FB, { tree: withReadme() })
+  const oopsUnstage: Screen = (os) =>
+    g(os, [
+      { cmd: "git restore --staged README.md" },
+      { cmd: "git status" },
+      { out: `On branch ${FB}` },
+      { out: "Changes not staged for commit:" },
+      { out: "        modified:   README.md", tone: "err", mark: 1 },
+      { cmd: "" },
+    ])
+  const oopsAmend: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: 'git commit --amend -m "Add setup steps to README"' },
+        { out: `[${FB} 7a2c9d0] Add setup steps to README`, tone: "ok" },
+        { out: " Date: Tue Nov 11 10:24:13 2026 +0530" },
+        { out: " 1 file changed, 2 insertions(+), 1 deletion(-)" },
+        { cmd: "" },
+      ],
+      FB,
+      { tree: withReadme() }
+    )
+  const oopsReset: Screen = (os) =>
+    g(os, [
+      { cmd: "git reset --soft HEAD~1" },
+      { cmd: "git status" },
+      { out: `On branch ${FB}` },
+      { out: "Changes to be committed:" },
+      { out: "        modified:   README.md", tone: "ok", mark: 1 },
+      { cmd: "" },
+    ])
+  const oopsMain: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: `git branch ${FB}` },
+        { cmd: "git reset --hard origin/main" },
+        { out: "HEAD is now at 9e04b11 Merge pull request #1" },
+        { cmd: `git checkout ${FB}` },
+        { out: `Switched to branch '${FB}'`, tone: "ok" },
+        { cmd: "git log --oneline -2" },
+        { out: `6e1f2a4 (HEAD -> ${FB}) Add setup steps to README`, tone: "warn" },
+        { out: "9e04b11 (origin/main, main) Merge pull request #1" },
+      ],
+      FB,
+      { tree: withReadme() }
+    )
+  const oopsStash: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: "git checkout main" },
+        { out: "error: Your local changes to the following files would be overwritten by checkout:", tone: "err" },
+        { out: "        README.md", tone: "err" },
+        { out: "Please commit your changes or stash them before you switch branches.", tone: "err" },
+        { cmd: "git stash" },
+        { out: `Saved working directory and index state WIP on ${FB}: 6e1f2a4 Add setup steps to README`, tone: "ok" },
+        { cmd: "git checkout main" },
+        { out: "Switched to branch 'main'", tone: "ok" },
+      ],
+      "main",
+      { panel: 0.72 }
+    )
+  const oopsPager: Screen = (os) =>
+    g(
+      os,
+      [
+        { cmd: "git log" },
+        { out: `commit 6e1f2a4c0b… (HEAD -> ${FB})`, tone: "warn" },
+        { out: "Author: Asha Rao <asha@example.com>" },
+        { out: "Date:   Tue Nov 11 10:24:13 2026 +0530" },
+        { out: "" },
+        { out: "    Add setup steps to README" },
+        { out: "(END)", tone: "bold", mark: 1 },
+      ],
+      FB,
+      { tree: withReadme(), panel: 0.7 }
+    )
+
   return {
+    "wf-email": wfEmail,
+    "gc-status": gcStatus,
+    "gc-diff": gcDiff,
+    "gc-add": gcAdd,
+    "gc-commit": gcCommit,
+    "gc-log": gcLog,
+    "gc-push": gcPush,
+    "gc-pull": gcPull,
+    "gc-branch": gcBranch,
+    "oops-restore": oopsRestore,
+    "oops-unstage": oopsUnstage,
+    "oops-amend": oopsAmend,
+    "oops-reset": oopsReset,
+    "oops-main": oopsMain,
+    "oops-stash": oopsStash,
+    "oops-pager": oopsPager,
     "wf-map": wfMap,
     "wf-branch-diagram": wfBranchDiagram,
     "wf-loop": wfLoop,
@@ -873,7 +1079,6 @@ export function workflowScreensFor(c: WfCtx): Record<string, Screen> {
     "wf-push": wfPush,
     "wf-pr-create": wfPrCreate,
     "wf-pr-edit": wfPrEdit,
-    "wf-collaborators": wfCollaborators,
     "wf-reviewers": wfReviewers,
     "wf-review-comment": wfReviewComment,
     "wf-fix-push": wfFixPush,
@@ -1360,6 +1565,7 @@ export const workflowScreens: Record<string, Screen> = {
     readme: README,
     readmeExists: false,
     fixLines: 6,
+    tag: "Full-Stack",
   }),
   "env-diagram": envDiagram,
   "env-history": envHistory,

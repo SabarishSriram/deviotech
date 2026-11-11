@@ -1104,6 +1104,8 @@ const nodeLinux: Screen = (os) =>
         os,
         "devvy",
         [
+          { cmd: "sudo apt install -y curl" },
+          { out: "Setting up curl (8.5.0-2ubuntu10.6) ..." },
           {
             cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash",
           },

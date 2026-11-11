@@ -53,7 +53,7 @@ function choose(os: OS) {
   listeners.forEach((l) => l())
 }
 
-function useOs() {
+export function useOs() {
   return useSyncExternalStore(subscribe, getSnapshot, () => "windows" as OS)
 }
 

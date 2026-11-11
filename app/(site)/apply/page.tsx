@@ -40,7 +40,7 @@ export default function ApplyPage({ searchParams }: PageProps<"/apply">) {
             <p className="mt-2 text-muted-foreground">{applyPage.description}</p>
           </header>
 
-          <Widget interactive={false} className="p-5 sm:p-8">
+          <Widget eager interactive={false} className="p-5 sm:p-8">
             <Suspense fallback={<ApplyForm />}>
               <ApplyFormWithQuery searchParams={searchParams} />
             </Suspense>
@@ -49,14 +49,14 @@ export default function ApplyPage({ searchParams }: PageProps<"/apply">) {
 
         {/* ---- Side panel: what to expect ---- */}
         <aside className="space-y-4 lg:sticky lg:top-24 lg:pt-[7.5rem]">
-          <Widget delay={0.08} interactive={false} className="p-6">
+          <Widget eager delay={0.08} interactive={false} className="p-6">
             <div aria-hidden="true" className="widget-dots pointer-events-none absolute inset-0 opacity-40 mask-[radial-gradient(circle_at_100%_0%,#000,transparent_60%)]" />
             <p className="relative label-mono text-brand-text">Free to apply</p>
             <p className="relative mt-2 font-heading text-4xl font-semibold tracking-tight">₹0</p>
             <p className="relative mt-1 text-sm text-muted-foreground">Nothing to pay until you&apos;ve met your mentor.</p>
           </Widget>
 
-          <Widget delay={0.14} interactive={false} className="p-6">
+          <Widget eager delay={0.14} interactive={false} className="p-6">
             <h2 className="label-mono text-muted-foreground">{applyPage.next.title}</h2>
             <ol className="relative mt-5 space-y-5">
               <span aria-hidden="true" className="absolute top-2 bottom-2 left-[11px] w-px bg-border" />
@@ -80,7 +80,7 @@ export default function ApplyPage({ searchParams }: PageProps<"/apply">) {
             </ol>
           </Widget>
 
-          <Widget delay={0.2} interactive={false} className="flex items-center gap-3 p-5">
+          <Widget eager delay={0.2} interactive={false} className="flex items-center gap-3 p-5">
             <span className="font-mono text-2xl font-semibold tracking-tight">
               {enrolled.value}
               {enrolled.suffix}

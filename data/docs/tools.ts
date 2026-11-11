@@ -181,7 +181,7 @@ export const tools: Record<ToolId, Tool> = {
       ],
       linux: [{ text: "Python 3 is usually preinstalled. Add pip and venv support:", code: "sudo apt install python3 python3-pip python3-venv" }],
     },
-    verify: { code: "python3 --version", expect: "Python 3.12 or newer (on Windows, use “python --version”)" },
+    verify: { code: "python3 --version", expect: "Python 3.10 or newer (on Windows, use “python --version”)" },
     tip: "Every project gets its own virtual environment (a private folder of libraries). The setup steps below show how.",
   },
 

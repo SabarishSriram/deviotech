@@ -97,6 +97,22 @@ function seeOnGitHubStep(key: string, what: string): WalkStep {
   }
 }
 
+/** Done once per repo, in Setup, so the invite is accepted before the first pull request. */
+export function collaboratorStep(screen: string): WalkStep {
+  return {
+    title: "Add your mentor to the repository",
+    why: "Your mentor reviews every pull request you open. GitHub only lets you ask them for a review once they're a collaborator on the repo — and they need to accept your invite first, so you send it now.",
+    actions: [
+      { text: "Your mentor's GitHub username is in the welcome email we sent you." },
+      { text: "On your repository page, click Settings at the top, then Collaborators in the left menu (1)." },
+      { text: "Click Add people, type your mentor's GitHub username (2), and click Add … to this repository (3)." },
+    ],
+    screen,
+    check: [{ text: "Your mentor is listed under Collaborators as Pending invite. It changes once they accept — you don't need to wait." }],
+    note: "GitHub may ask for your password first. That's normal for Settings pages.",
+  }
+}
+
 function nextTimePart(key: string, repo: string, start: WalkAction[], extra: WalkStep[] = []): WalkPart {
   return {
     id: "next-time",
@@ -201,7 +217,7 @@ export const backendProject: WalkPart = {
       why: "Prisma is how your code talks to the database. schema.prisma describes your database; you'll add your tables in week 1.",
       actions: [
         { text: "In the terminal, run:", code: "npx prisma init" },
-        { text: "It creates a prisma folder containing schema.prisma, and a .env file." },
+        { text: "It creates a prisma folder containing schema.prisma, plus a .env file, a .gitignore and prisma.config.ts (Prisma's own settings — leave that one as it is)." },
         {
           text: "Open prisma › schema.prisma, delete everything in it, paste this, and save:",
           file: "prisma/schema.prisma",
@@ -286,6 +302,7 @@ export const backendProject: WalkPart = {
     }),
     pushStep("be"),
     seeOnGitHubStep("be", "your prisma and src folders and your files"),
+    collaboratorStep("be-collaborators"),
   ],
 }
 
@@ -407,6 +424,7 @@ export const frontendProject: WalkPart = {
       check: [{ text: "It says Created repository and Pushed commits (1)." }],
     },
     seeOnGitHubStep("fe", "your app and components folders"),
+    collaboratorStep("fe-collaborators"),
   ],
 }
 
@@ -450,44 +468,45 @@ export const appProject: WalkPart = {
         { text: "The first load takes up to a minute while your laptop builds the app." },
       ],
       screen: "app-scan",
-      warn: "Stuck on loading, or “Could not connect”? Check the phone and laptop are on the same Wi-Fi. Still stuck? Stop the server with Ctrl + C and run npx expo start --tunnel instead.",
+      warn: "Stuck on loading, or “Could not connect”? Check the phone and laptop are on the same Wi-Fi. Still stuck? Use your phone's hotspot for the laptop, then stop the server with Ctrl + C and run npx expo start again.",
     },
     {
       title: "See your app",
-      actions: [{ text: "Your phone shows the starter app with Welcome! at the top (1). It's running from your laptop." }],
+      actions: [{ text: "Your phone shows the starter app with Welcome to Expo in the middle (1). It's running from your laptop." }],
       screen: "app-phone-welcome",
     },
     {
       title: "Change it and watch it update",
       why: "Expo reloads the app on your phone as soon as you save. That's how you'll work all program.",
       actions: [
-        { text: "In the Explorer, open app › (tabs) › index.tsx." },
-        { text: "Find the line with Welcome! (1) and change it to Hello, Devvy! Save the file." },
+        { text: "In the Explorer, open src › app › index.tsx." },
+        { text: "Find the line that says Welcome to&nbsp;Expo (1). (&nbsp; is a space that never breaks onto a new line.) Replace the whole line with Hello, Devvy! and save the file." },
         { text: "Look at your phone — it changes within a second or two (2)." },
         { text: "If your file looks different, change any text you can see on the phone's first screen instead." },
       ],
       screen: "app-edit",
     },
     {
-      title: "Install the build tool",
-      why: "EAS turns your project into an installable app (an APK) in week 4. You set it up now so it's ready.",
+      title: "Log in to the build tool",
+      why: "EAS turns your project into an installable app (an APK) in week 4. You log in now so it's ready.",
       actions: [
-        { text: "Click + in the terminal panel for a second terminal (the first one is running Expo). Run:", code: "npm install -g eas-cli" },
-        { text: "Log in with the Expo account you made:", code: "eas login" },
-        { text: "Type your email or username, press Enter, then your password (nothing appears while you type it) and Enter." },
+        { text: "Click + in the terminal panel for a second terminal (the first one is running Expo). Run:", code: "npx eas-cli@latest login" },
+        { text: "If it says Ok to proceed? (y), type y and press Enter." },
+        { text: "Type your Expo email or username, press Enter, then your password (nothing appears while you type it) and Enter." },
       ],
       screen: "app-eas",
       check: [{ text: "It says Logged in as followed by your username (1)." }],
+      note: "npx runs a tool without installing it on your whole computer, so there's no permission error. Whenever a guide says eas, type npx eas-cli@latest instead.",
     },
     {
-      title: "Save your first snapshot (commit)",
-      why: "A commit is a saved snapshot of your project with a message. How we work explains this properly — for now, follow along.",
+      title: "Save your change (commit)",
+      why: "A commit is a saved snapshot of your project with a message. Expo already saved the starter app as a first commit, so this one saves your change. How we work explains this properly — for now, follow along.",
       actions: [
-        { text: "Make sure this folder is a Git repository. It's safe to run even if it already is:", code: "git init" },
-        { text: "Include every file and save the snapshot:", code: 'git add .\ngit commit -m "Initial Expo app"' },
-        { text: "If it says nothing to commit, Expo already saved a first commit for you — that's fine, carry on." },
+        { text: "Include every change and save the snapshot:", code: 'git add .\ngit commit -m "Say hello on the home screen"' },
+        { text: "If it says not a git repository, run git init first, then the two commands again." },
       ],
       screen: "app-git-commit",
+      check: [{ text: "It says 1 file changed (1)." }],
     },
     {
       title: "Put it on GitHub",
@@ -496,7 +515,8 @@ export const appProject: WalkPart = {
       screen: "app-gh-create",
       check: [{ text: "It says Created repository and Pushed commits (1)." }],
     },
-    seeOnGitHubStep("app", "your app, assets and components folders"),
+    seeOnGitHubStep("app", "your src, assets and scripts folders"),
+    collaboratorStep("app-collaborators"),
   ],
 }
 
@@ -598,6 +618,7 @@ function pythonProject(p: PyProject): WalkPart {
       commitStep(p.key, { message: "Initial project setup", mustNotSee: ".venv" }),
       pushStep(p.key),
       seeOnGitHubStep(p.key, p.done),
+      collaboratorStep(`${p.key}-collaborators`),
     ],
   }
 }
@@ -806,7 +827,10 @@ export const javaProject: WalkPart = {
         { os: ["linux"], text: "Run:", code: "sudo -u postgres createdb devvy_java" },
       ],
       screen: "java-createdb",
-      check: [{ text: "Nothing is printed (1). In the terminal, no news is good news." }],
+      check: [
+        { os: ["mac", "windows"], text: "Nothing is printed (1). In the terminal, no news is good news." },
+        { os: ["linux"], text: "Nothing is printed (1) — or only could not change directory to … Permission denied. Ignore that message: the postgres user just can't see your folder, and the database was still created." },
+      ],
     },
     {
       title: "Put your database login in .env",
@@ -898,6 +922,7 @@ export const javaProject: WalkPart = {
       check: [{ text: "It says Created repository and Pushed commits (1)." }],
     },
     seeOnGitHubStep("java", "your src folder, pom.xml and mvnw"),
+    collaboratorStep("java-collaborators"),
   ],
 }
 

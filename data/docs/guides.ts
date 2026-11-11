@@ -142,7 +142,7 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
       {
         title: "Prepare for builds (week 4)",
         steps: [
-          { text: "Install the Expo build tool and log in with your Expo account:", code: "npm install -g eas-cli\neas login" },
+          { text: "Install the Expo build tool and log in with your Expo account:", code: "npx eas-cli@latest login" },
           { text: "You'll configure an APK build in week 4 — nothing else needed now." },
         ],
       },
@@ -243,9 +243,9 @@ export const setupGuides: Record<TrackSlug, SetupGuide> = {
         title: "Set up your Figma file",
         steps: [
           { text: "Create a new design file named after your project." },
-          { text: "Add these pages (left sidebar → +): Cover, Research, Flows, Wireframes, Design system, UI, Prototype." },
+          { text: "Rename the first page Research, then add two more (left sidebar → +): Wireframes and UI." },
           { text: "Create a FigJam board for interview notes, affinity mapping and your journey map." },
-          { text: "Share both with your mentor with “can comment” access." },
+          { text: "Share both with your mentor with “can view” access (viewers can still comment)." },
         ],
       },
       {

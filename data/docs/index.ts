@@ -66,6 +66,11 @@ export function isDocId(value: unknown): value is DocId {
   return DOC_PAGES.some((page) => page.id === value)
 }
 
+/** A doc page's sidebar title for a track. UI/UX's page 3 is about research data, not secrets. */
+export function docTitle(page: { id: string; title: string }, track: string) {
+  return track === "ui-ux" && page.id === "environment" ? "3. Research data & sharing" : page.title
+}
+
 /** Doc pages that apply to a project — "API contract" only exists for projects with an API. */
 export function pagesFor(projectSlug: string | null) {
   return DOC_PAGES.filter((page) => page.id !== "api" || (projectSlug !== null && projectSlug in contracts))

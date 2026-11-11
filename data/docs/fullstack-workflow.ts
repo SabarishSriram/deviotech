@@ -237,7 +237,7 @@ export const fullStackEnvironment: WalkPart[] = [
         why: "GitHub scans pushes for things that look like real keys and stops them before they go public.",
         actions: [
           { text: "If git push fails with GH013 … Push cannot contain secrets (1), nothing was uploaded. Good." },
-          { text: "Don't open the link that allows the secret. Send your mentor a screenshot — they'll help you take it out of the commit." },
+          { text: "Don't open the link that allows the secret. Email your mentor a screenshot — they'll help you take it out of the commit." },
         ],
         screen: "env-push-blocked",
       },

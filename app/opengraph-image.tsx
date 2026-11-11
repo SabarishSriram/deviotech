@@ -42,10 +42,12 @@ export default function OpengraphImage() {
           </span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ display: "flex", fontSize: 96, fontWeight: 700, letterSpacing: -2, textTransform: "uppercase" }}>
-            {hero.headline.lead}&nbsp;
-            <span style={{ color: "#FF6B70" }}>{hero.headline.accent}</span>
-            <span style={{ color: "#FF2A33" }}>.</span>
+          <div style={{ display: "flex", flexWrap: "wrap", fontSize: 84, fontWeight: 700, letterSpacing: -2, lineHeight: 1.05, textTransform: "uppercase" }}>
+            <span style={{ marginRight: 28 }}>{hero.headline.lead}</span>
+            <span style={{ display: "flex", color: "#FF6B70" }}>
+              {hero.headline.accent.replace(/\.$/, "")}
+              <span style={{ color: "#FF2A33" }}>.</span>
+            </span>
           </div>
           <div style={{ fontSize: 28, color: "#a1a1aa", letterSpacing: 3, textTransform: "uppercase" }}>
             {hero.trust.join("  ·  ")}

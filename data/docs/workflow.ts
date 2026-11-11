@@ -1,3 +1,4 @@
+import { mentorEmailText } from "@/data/site"
 import type { WalkPart } from "@/data/docs/types"
 
 /*
@@ -154,23 +155,24 @@ export function codeWorkflow(c: WorkflowCtx): WalkPart[] {
           note: "Use these four headings in every PR. For anything visual, add a screenshot: drag the image file straight into the description box.",
         },
         {
-          title: "Add your mentor to the repository",
-          why: "You only do this once per repo. It lets your mentor be asked for reviews. Your mentor shares their GitHub username in your first 1:1.",
-          actions: [
-            { text: "At the top of your repository page, click Settings, then Collaborators in the left menu (1)." },
-            { text: "Click Add people, type your mentor's GitHub username (2), and click Add … to this repository (3)." },
-          ],
-          screen: "wf-collaborators",
-          note: "GitHub may ask for your password first. Your mentor gets an email invite; you can carry on while they accept it.",
-        },
-        {
           title: "Ask for a review",
           actions: [
             { text: "Go back to your pull request (the Pull requests tab at the top of the repo)." },
             { text: "On the right, click the gear next to Reviewers (1) and choose your mentor (2). Click anywhere outside the list to save." },
-            { text: "Send your mentor the pull request link with a one-line note, e.g. “README PR ready for review”." },
           ],
           screen: "wf-reviewers",
+          note: "Your mentor isn't in the list? They haven't accepted the invite you sent in Setup yet. Carry on with the next step, and come back to add them when they appear. Never sent the invite? Do Setup → Add your mentor to the repository now.",
+        },
+        {
+          title: "Email your mentor the link",
+          why: "GitHub notifies your mentor too, but an email makes sure your review never gets lost — and tells them what to look at.",
+          actions: [
+            { text: "Copy the pull request's address from your browser's address bar." },
+            { text: `Email ${mentorEmailText} (1).` },
+            { text: "Subject: your track in brackets, then PR ready for review and the PR's title (2)." },
+            { text: "In the email, paste the link (3) and add one line on anything you'd like them to look at closely." },
+          ],
+          screen: "wf-email",
         },
         {
           title: "Read the review",
@@ -235,7 +237,7 @@ export function codeWorkflow(c: WorkflowCtx): WalkPart[] {
             { text: "Create a branch for the task:", code: "git checkout -b feat/your-task" },
             { text: "Work in small steps. Commit each one:", code: 'git add .\ngit commit -m "Say what changed"' },
             { text: "Push the branch (the first time):", code: "git push -u origin feat/your-task" },
-            { text: "Open a pull request, write the description, ask for a review:", code: "gh pr create --fill" },
+            { text: "Open a pull request, write the description, request a review, and email your mentor the link:", code: "gh pr create --fill" },
             { text: "Fix comments with more commits and git push. Merge when approved, then pull main." },
           ],
           screen: "wf-loop",
@@ -263,15 +265,185 @@ export function codeWorkflow(c: WorkflowCtx): WalkPart[] {
         },
       ],
     },
+    ...gitReference,
   ]
 }
+
+/* ------------------------------------------------------------------ */
+/* Git commands explained, and fixing mistakes                         */
+/* ------------------------------------------------------------------ */
+
+const gitReference: WalkPart[] = [
+  {
+    id: "git-commands",
+    title: "Git commands, explained",
+    time: "10 min",
+    intro:
+      "Every Git command you've used so far, and a few more, in one place: what each one does and when to use it. Four of them only look and never change anything — git status, git diff, git log and git branch — so try those now in your project's terminal. Read the rest for now; you'll run them during real tasks.",
+    steps: [
+      {
+        title: "git status — what's changed?",
+        why: "Shows which branch you're on, which files you've changed since your last commit (red), and which are ready to be committed (green). It never changes anything, so run it whenever you're unsure.",
+        actions: [{ text: "Run:", code: "git status" }],
+        screen: "gc-status",
+        check: [{ text: "It names your branch (1) and lists changed files (2) — or says nothing to commit, working tree clean." }],
+      },
+      {
+        title: "git diff — what exactly did I change?",
+        why: "Shows the exact lines you changed in each file: lines starting with - in red were removed, lines starting with + in green were added.",
+        actions: [
+          { text: "Run:", code: "git diff" },
+          { text: "If it fills the screen, scroll with ↑ and ↓, and press q to get back to the prompt." },
+        ],
+        screen: "gc-diff",
+      },
+      {
+        title: "git add — choose what to save",
+        why: "Picks which changes go into your next commit (Git calls this staging). It doesn't save anything yet — it's like putting things in a box before you seal it.",
+        actions: [
+          { text: "Add one file:", code: "git add README.md" },
+          { text: "Or add every change in the project:", code: "git add ." },
+        ],
+        screen: "gc-add",
+        check: [{ text: "git status now lists the file in green, under Changes to be committed (1)." }],
+      },
+      {
+        title: "git commit — save a snapshot",
+        why: "Saves everything you added as one snapshot, with a message saying what changed. Your work is now safe on your computer, and you can always come back to it.",
+        actions: [{ text: "Run, with your own message:", code: 'git commit -m "Add setup steps to README"' }],
+        screen: "gc-commit",
+        note: "A good message starts with a verb and says what changed: “Fix login error message”, not “changes”.",
+      },
+      {
+        title: "git log — see your history",
+        why: "Lists your commits, newest first. --oneline shows each one on a single line: a short id and the message.",
+        actions: [
+          { text: "Run:", code: "git log --oneline" },
+          { text: "If the list is long and you see a colon at the bottom, press q to get back to the prompt." },
+        ],
+        screen: "gc-log",
+      },
+      {
+        title: "git push — upload to GitHub",
+        why: "Sends your commits from your computer to GitHub, so your mentor can see them and they're backed up.",
+        actions: [
+          { text: "The first time you push a new branch, tell Git where to send it:", code: "git push -u origin feat/your-task" },
+          { text: "After that, on the same branch, this is enough:", code: "git push" },
+        ],
+        screen: "gc-push",
+      },
+      {
+        title: "git pull — download from GitHub",
+        why: "Brings commits from GitHub into the branch you're on — for example, main after your pull request is merged.",
+        actions: [{ text: "Run:", code: "git pull" }],
+        screen: "gc-pull",
+      },
+      {
+        title: "Branches: git checkout and git branch",
+        why: "A branch is your own copy of the project for one task. These three commands are all you need.",
+        actions: [
+          { text: "Create a new branch and switch to it:", code: "git checkout -b feat/your-task" },
+          { text: "Switch to a branch that already exists:", code: "git checkout main" },
+          { text: "List your branches — the one marked with * is the one you're on (1):", code: "git branch" },
+        ],
+        screen: "gc-branch",
+      },
+    ],
+  },
+
+  /* ---------------------------------------------------------------- */
+  {
+    id: "oops",
+    title: "Oops! Fixing common mistakes",
+    time: "10 min",
+    intro:
+      "Everyone gets these wrong at some point. Find your situation, read what the command does, then run it. If you're not sure which one you need, run git status and email your mentor a screenshot before you try anything.",
+    steps: [
+      {
+        title: "Throw away changes to a file",
+        why: "git restore puts a file back exactly how it was at your last commit. Use it when you've made a mess of a file and want to start again.",
+        actions: [
+          { text: "One file:", code: "git restore README.md" },
+          { text: "Every changed file in the project:", code: "git restore ." },
+        ],
+        screen: "oops-restore",
+        warn: "The changes you throw away are gone for good — there's no undo. If in doubt, commit them on a branch instead.",
+      },
+      {
+        title: "Take a file out of the next commit",
+        why: "You ran git add on a file you didn't mean to. git restore --staged takes it back out of the commit, but keeps your changes in the file.",
+        actions: [{ text: "Run, with the file's name:", code: "git restore --staged README.md" }],
+        screen: "oops-unstage",
+        check: [{ text: "git status now lists the file in red again, not green (1)." }],
+      },
+      {
+        title: "Fix the last commit's message, or add a forgotten file",
+        why: "git commit --amend replaces your last commit with a corrected one. Only do this before you push.",
+        actions: [
+          { text: "Fix the message:", code: 'git commit --amend -m "Add setup steps to README"' },
+          { text: "Forgot a file? Add it, then amend without changing the message:", code: "git add README.md\ngit commit --amend --no-edit" },
+        ],
+        screen: "oops-amend",
+      },
+      {
+        title: "Undo the last commit, but keep the work",
+        why: "git reset --soft HEAD~1 takes back your last commit. HEAD~1 means “one commit before now”, and --soft means your changes stay in your files, ready to commit again. Only do this before you push.",
+        actions: [{ text: "Run:", code: "git reset --soft HEAD~1" }],
+        screen: "oops-reset",
+        check: [{ text: "git status shows your changes in green again — nothing was lost (1)." }],
+      },
+      {
+        title: "I committed on main by mistake",
+        why: "Your commits should be on a branch, not main. These three commands move them there. It only works if you haven't pushed main yet.",
+        actions: [
+          { text: "Make a branch that keeps your commits. git branch creates it without switching:", code: "git branch feat/your-task" },
+          { text: "Put main back the way it is on GitHub. --hard resets your files too, so make sure everything is committed first:", code: "git reset --hard origin/main" },
+          { text: "Switch to your branch — your commits are all there:", code: "git checkout feat/your-task" },
+        ],
+        screen: "oops-main",
+        warn: "Run git status first. If it lists any changed files, commit them before the reset, or they'll be lost.",
+      },
+      {
+        title: "Git won't let me switch branches",
+        why: "If you have unsaved changes that clash with the other branch, Git refuses to switch rather than lose them. git stash puts your changes on a shelf; git stash pop puts them back.",
+        actions: [
+          { text: "Put your changes on the shelf:", code: "git stash" },
+          { text: "Now switch:", code: "git checkout main" },
+          { text: "When you're back on your branch, take them off the shelf:", code: "git checkout feat/your-task\ngit stash pop" },
+        ],
+        screen: "oops-stash",
+        note: "Simpler option: commit your work on the branch first. Then you can switch freely.",
+      },
+      {
+        title: "I pushed something wrong",
+        why: "Once commits are on GitHub, don't try to rewrite them (never use git push --force). Just fix it with a new commit.",
+        actions: [
+          { text: "Make the fix, then commit and push as normal. Your pull request updates by itself." },
+          { text: "If what you pushed was a password or key, follow Environment & secrets → If a secret leaks, straight away." },
+        ],
+      },
+      {
+        title: "I'm stuck in a strange screen",
+        why: "Some Git commands open a viewer or an editor inside the terminal. They look scary but are easy to leave.",
+        actions: [
+          { text: "A colon (:) or (END) at the bottom: that's a viewer (1). Press q." },
+          { os: ["mac", "linux"], text: "Lines starting with ~ and a message at the top: that's an editor called Vim. Press Esc, type :wq and press Enter — it saves and closes." },
+          { os: ["linux"], text: "^X Exit and ^O Write Out along the bottom: that's an editor called nano (Ubuntu's usual one). Press Ctrl + O and Enter to save, then Ctrl + X to close." },
+          { os: ["windows"], text: "A COMMIT_EDITMSG tab opens in VS Code and the terminal says it's waiting: that's Git asking for a message. Type it on the first line, save, and close the tab." },
+          { text: "Nothing works? Press Ctrl + C." },
+        ],
+        screen: "oops-pager",
+      },
+    ],
+  },
+]
 
 export const workflowDone = [
   "Start from the latest main",
   "Create a branch named after the task",
   "Commit with a clear message",
   "Push the branch and open a pull request with What / Why / How to test / AI usage",
-  "Ask your mentor for a review and push fixes to the same branch",
+  "Request a review, email your mentor the link, and push fixes to the same branch",
   "Merge when approved, then pull main",
 ]
 
@@ -334,19 +506,19 @@ export const workflowCtx = {
     repo: "my-ml-project",
     readmeExists: false,
     readme: run("My ML Project", "A machine-learning project, built during the Devvy Tech program.", pyRun("Start the notebooks: `jupyter lab`")),
-    needs: needs(["Python 3.12 or newer", "About 1 GB of free space for the libraries", "A .env file (see .env.example)"]),
+    needs: needs(["Python 3.10 or newer", "About 1 GB of free space for the libraries", "A .env file (see .env.example)"]),
   },
   "data-science": {
     repo: "my-analysis",
     readmeExists: false,
     readme: run("My Analysis", "A data analysis project, built during the Devvy Tech program.", pyRun("Start the notebooks: `jupyter lab`")),
-    needs: needs(["Python 3.12 or newer", "The dataset in the data folder", "A .env file (see .env.example)"]),
+    needs: needs(["Python 3.10 or newer", "The dataset in the data folder", "A .env file (see .env.example)"]),
   },
   python: {
     repo: "my-python-tool",
     readmeExists: false,
     readme: run("My Python Tool", "A command-line tool, built during the Devvy Tech program.", pyRun("Run it: `python -m app.main YourName`")),
-    needs: needs(["Python 3.12 or newer", "pip (it comes with Python)", "To run the tests: `python -m pytest`"]),
+    needs: needs(["Python 3.10 or newer", "pip (it comes with Python)", "To run the tests: `python -m pytest`"]),
   },
   java: {
     repo: "my-java-api",
@@ -429,9 +601,10 @@ export const designWorkflow: WalkPart[] = [
         screen: "ux-commit",
       },
       {
-        title: "Send it to your mentor",
+        title: "Email it to your mentor",
         actions: [
-          { text: "Send your mentor the frame link and the case study link, with one line on what you'd like feedback on." },
+          { text: `Email ${mentorEmailText}. Start the subject with [UI/UX] and the week, like [UI/UX] Week 2 ready for review.` },
+          { text: "Paste the frame link and the case study link, with one line on what you'd like feedback on." },
           { text: "Then keep working — reply to comments as they come in." },
         ],
         screen: "ux-message",

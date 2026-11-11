@@ -16,35 +16,53 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-const title = `${site.name} — Don't just learn. Build.`
+/** What people search for, then the brand. Kept under ~60 characters so Google shows it in full. */
+const title = `Virtual Internships with Real Projects & Certificate | ${site.name}`
+/** Under ~160 characters so Google shows it in full. */
+const description =
+  "Apply free for a 4-week virtual internship. Build a real project in web, AI/ML, data, Python, Java or UI/UX, with mentor code reviews and a verifiable certificate."
+const socialTitle = `${site.name} — Don't just learn. Build.`
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: title, template: `%s · ${site.name}` },
-  description: site.description,
+  title: { default: title, template: `%s | ${site.name}` },
+  description,
   applicationName: site.name,
   keywords: [
-    "developer mentorship",
-    "real-world projects",
-    "code review",
-    "full-stack",
-    "backend",
-    "frontend",
-    "verified certificate",
-    "college students",
+    "virtual internship",
+    "online internship for students",
+    "internship with certificate",
+    "project-based internship",
+    "full stack internship",
+    "web development internship",
+    "AI ML internship",
+    "data science internship",
+    "python internship",
+    "java internship",
+    "UI UX internship",
+    "internship for college students India",
   ],
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  publisher: site.name,
+  category: "education",
+  formatDetection: { telephone: false },
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "/",
     siteName: site.name,
-    title,
-    description: site.description,
+    title: socialTitle,
+    description,
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description: site.description,
+    title: socialTitle,
+    description,
+  },
+  // Set these in the hosting environment after adding the site to Google Search Console / Bing Webmaster Tools.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : undefined,
   },
 }
 
@@ -58,7 +76,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="en-IN"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >

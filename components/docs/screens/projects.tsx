@@ -1,5 +1,5 @@
 import { ArrowRight, Camera, FileArchive, QrCode } from "lucide-react"
-import { SiExpo, SiGithub, SiJupyter, SiNextdotjs, SiReact, SiSpring } from "react-icons/si"
+import { SiExpo, SiGithub, SiJupyter, SiNextdotjs, SiSpring } from "react-icons/si"
 
 import { Browser, Checkbox, Finder, MacFolder, Mark, MONO_FONT, Radio, TextField, WinButton, WinWindow } from "@/components/docs/screens/kit"
 import { fileMenu, pickFolder, term, USER } from "@/components/docs/screens/fullstack"
@@ -42,6 +42,7 @@ export const PROJ: Record<string, Proj> = {
       f(".gitignore"),
       f("package-lock.json"),
       f("package.json"),
+      f("prisma.config.ts"),
       f("tsconfig.json"),
     ],
   },
@@ -66,13 +67,12 @@ export const PROJ: Record<string, Proj> = {
     key: "app",
     repo: "my-mobile-app",
     root: [
-      d("app"),
       d("assets"),
-      d("components"),
-      d("constants"),
-      d("hooks"),
       d("node_modules", ignored),
+      d("scripts"),
+      d("src"),
       f(".gitignore"),
+      f("AGENTS.md"),
       f("app.json"),
       f("package.json"),
       f("README.md"),
@@ -697,19 +697,33 @@ function qrLines(): string[] {
   return out
 }
 
-function ExpoWelcome({ title = "Welcome!", api }: { title?: string; api?: string }) {
+/** The starter app from create-expo-app (SDK 58): a centred hero, three hint rows and two tabs. */
+function ExpoWelcome({ title = "Welcome to Expo", api }: { title?: string; api?: string }) {
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex h-36 items-end bg-[#a1cedc] p-3">
-        <SiReact className="size-20 text-[#61dafb] opacity-70" />
+    <div className="flex h-full flex-col bg-white">
+      <div className="flex flex-1 flex-col items-center px-4 pt-10">
+        <SiExpo className="size-14 text-[#1b1b1f]" />
+        <p className="mt-4 text-center text-[22px] leading-tight font-bold">{title}</p>
+        {api && <p className="mt-2 text-center text-[12px]">API: {api}</p>}
+        <p className="mt-3 rounded-md bg-[#f0f0f3] px-2 py-0.5 font-mono text-[11px] text-[#444]">get started</p>
+        <div className="mt-5 w-full space-y-2.5 rounded-xl bg-[#f0f0f3] p-3 text-[11px]">
+          <p className="flex justify-between gap-2">
+            <span className="shrink-0 font-semibold">Try editing</span>
+            <span className="truncate font-mono text-[#555]">src/app/index.tsx</span>
+          </p>
+          <p className="flex justify-between gap-2">
+            <span className="shrink-0 font-semibold">Dev tools</span>
+            <span className="text-[#555]">shake device</span>
+          </p>
+          <p className="flex justify-between gap-2">
+            <span className="shrink-0 font-semibold">Fresh start</span>
+            <span className="truncate font-mono text-[#555]">npm run reset-project</span>
+          </p>
+        </div>
       </div>
-      <div className="space-y-3 p-4">
-        <p className="text-[22px] font-bold">{title} 👋</p>
-        {api && <p className="text-[12px]">API: {api}</p>}
-        <p className="text-[13px] font-semibold">Step 1: Try it</p>
-        <p className="text-[11px] text-[#444]">Edit app/(tabs)/index.tsx to see changes.</p>
-        <p className="text-[13px] font-semibold">Step 2: Explore</p>
-        <p className="text-[11px] text-[#444]">Tap the Explore tab to learn more about what&apos;s included.</p>
+      <div className="flex justify-around border-t border-[#e5e5e5] py-2.5 text-[10px] font-semibold text-[#888]">
+        <span className="text-[#1b1b1f]">Home</span>
+        <span>Explore</span>
       </div>
     </div>
   )
@@ -720,20 +734,22 @@ export { ExpoWelcome }
 const INDEX_LINES = (title: string) => [
   "export default function HomeScreen() {",
   "  return (",
-  "    <ParallaxScrollView",
-  "      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}>",
-  "      <ThemedView style={styles.titleContainer}>",
-  `        <ThemedText type="title">${title}</ThemedText>`,
-  "        <HelloWave />",
-  "      </ThemedView>",
+  "    <ThemedView style={styles.container}>",
+  "      <SafeAreaView style={styles.safeArea}>",
+  "        <ThemedView style={styles.heroSection}>",
+  "          <AnimatedIcon />",
+  '          <ThemedText type="title" style={styles.title}>',
+  `            ${title}`,
+  "          </ThemedText>",
+  "        </ThemedView>",
 ]
 
 const appScreens: Record<string, Screen> = {
   ...shared(APP, {
     status: [],
     github: {
-      entries: ["app/", "assets/", "components/", "constants/", "hooks/", ".gitignore", "README.md", "app.json", "package.json"],
-      message: "Initial Expo app",
+      entries: ["assets/", "scripts/", "src/", ".gitignore", "AGENTS.md", "README.md", "app.json", "package.json", "tsconfig.json"],
+      message: "Say hello on the home screen",
     },
   }),
   "app-create": (os) =>
@@ -811,9 +827,9 @@ const appScreens: Record<string, Screen> = {
       <Phone kind="android">
         <div className="relative h-full">
           <ExpoWelcome />
-          <div className="absolute top-[150px] left-3">
+          <div className="absolute top-[104px] left-1/2 -translate-x-1/2">
             <Mark n={1}>
-              <span className="block h-8 w-40" />
+              <span className="block h-8 w-44" />
             </Mark>
           </div>
         </div>
@@ -828,20 +844,21 @@ const appScreens: Record<string, Screen> = {
           sidebar={null}
           folder={APP.repo}
           tree={[
-            d("app", { open: true }),
-            d("(tabs)", { depth: 1, open: true }),
+            d("assets"),
+            d("scripts"),
+            d("src", { open: true }),
+            d("app", { depth: 1, open: true }),
             f("_layout.tsx", { depth: 2 }),
             f("explore.tsx", { depth: 2 }),
             f("index.tsx", { depth: 2, active: true, status: "M" }),
-            d("assets"),
-            d("components"),
+            d("components", { depth: 1 }),
           ]}
           editor={{
             tabs: ["index.tsx"],
             active: "index.tsx",
-            file: "app/(tabs)/index.tsx",
+            file: "src/app/index.tsx",
             lines: INDEX_LINES("Hello, Devvy!"),
-            mark: { from: 6, to: 6, n: 1 },
+            mark: { from: 8, to: 8, n: 1 },
           }}
         />
       </div>
@@ -849,7 +866,7 @@ const appScreens: Record<string, Screen> = {
         <Phone kind="android">
           <div className="relative h-full">
             <ExpoWelcome title="Hello, Devvy!" />
-            <div className="absolute top-[150px] left-3">
+            <div className="absolute top-[104px] left-1/2 -translate-x-1/2">
               <Mark n={2}>
                 <span className="block h-8 w-44" />
               </Mark>
@@ -864,9 +881,10 @@ const appScreens: Record<string, Screen> = {
       os,
       path(APP),
       [
-        { cmd: "npm install -g eas-cli" },
-        { out: "added 447 packages in 24s" },
-        { cmd: "eas login" },
+        { cmd: "npx eas-cli@latest login" },
+        { out: "Need to install the following packages:" },
+        { out: "eas-cli@16.28.0" },
+        { out: "Ok to proceed? (y) y" },
         { out: "Log in to EAS with email or username (exit and run eas login --help to see other login options)" },
         { out: "✔ Email or username … asha-rao" },
         { out: "✔ Password … ********" },
@@ -880,12 +898,12 @@ const appScreens: Record<string, Screen> = {
       os,
       path(APP),
       [
-        { cmd: "git init" },
-        { out: `Reinitialized existing Git repository in ${homePath(os, "devvy/my-mobile-app/.git/")}` },
+        { cmd: "git log --oneline" },
+        { out: "1c68a43 (HEAD -> main) Initial commit" },
         { cmd: "git add ." },
-        { cmd: 'git commit -m "Initial Expo app"' },
-        { out: "[main (root-commit) 7d3c1a9] Initial Expo app", tone: "ok", mark: 1 },
-        { out: " 41 files changed, 14320 insertions(+)" },
+        { cmd: 'git commit -m "Say hello on the home screen"' },
+        { out: "[main 7d3c1a9] Say hello on the home screen", tone: "ok", mark: 1 },
+        { out: " 1 file changed, 1 insertion(+), 1 deletion(-)" },
         { cmd: "" },
       ],
       { tree: APP.root, panel: 0.62 }

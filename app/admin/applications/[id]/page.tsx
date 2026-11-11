@@ -12,6 +12,7 @@ import { StatusSelect } from "@/components/admin/status-select"
 import { initials, statusTone } from "@/components/admin/status-tone"
 import { getTrack } from "@/data/tracks"
 import { requireAdmin } from "@/lib/admin-session"
+import { summarizeProgress, type ProgressRow } from "@/lib/progress-summary"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { hasPaid, statusLabels, type ApplicationRow } from "@/lib/supabase/types"
 import { trackColorStyle, trackIcons } from "@/lib/track-icons"
@@ -48,6 +49,12 @@ async function ApplicationDetail({ params }: Pick<PageProps<"/admin/applications
   const a = data as ApplicationRow
   const track = getTrack(a.track)
   const TrackIcon = track ? trackIcons[track.slug] : null
+
+  // Getting started ticks (table doc_progress, migration 003). null = table not set up yet.
+  const progressQuery = a.user_id
+    ? await createAdminClient().from("doc_progress").select("step_key, os, done_at").eq("user_id", a.user_id)
+    : null
+  const progress = progressQuery && !progressQuery.error ? summarizeProgress(a.track, (progressQuery.data ?? []) as ProgressRow[]) : null
 
   const fields: { label: string; value: React.ReactNode }[] = [
     { label: "Email", value: <a href={`mailto:${a.email}`} className="hover:underline">{a.email}</a> },
@@ -140,6 +147,42 @@ async function ApplicationDetail({ params }: Pick<PageProps<"/admin/applications
                   ? "Project docs are unlocked in their portal."
                   : "Docs unlock when status is Paid and a project is chosen."}
               </p>
+            </section>
+          )}
+          {a.user_id && (
+            <section className="space-y-3 rounded-xl border bg-card px-4 py-4 shadow-xs">
+              <h2 className="text-xs text-muted-foreground">Getting started progress</h2>
+              {progress ? (
+                <>
+                  {(
+                    [
+                      ["setup", "Setup"],
+                      ["workflow", "How we work"],
+                      ["environment", "Environment & secrets"],
+                    ] as const
+                  ).map(([doc, label]) => {
+                    const { done, total } = progress.docs[doc]
+                    return (
+                      <div key={doc}>
+                        <p className="flex justify-between text-xs">
+                          <span>{label}</span>
+                          <span className={cn("tabular-nums", done === total && total > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground")}>
+                            {done}/{total}
+                          </span>
+                        </p>
+                        <span className="mt-1 block h-1.5 overflow-hidden rounded-full bg-muted">
+                          <span className="block h-full rounded-full bg-emerald-500" style={{ width: `${total ? Math.round((done / total) * 100) : 0}%` }} />
+                        </span>
+                      </div>
+                    )
+                  })}
+                  <p className="text-xs text-muted-foreground">
+                    {progress.lastAt ? `Last ticked ${dateFormat.format(new Date(progress.lastAt))} · on ${progress.os === "mac" ? "macOS" : progress.os === "windows" ? "Windows" : "Linux"}` : "Nothing ticked yet."}
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs text-muted-foreground">Progress tracking isn&apos;t set up yet — run supabase/migrations/003_doc_progress.sql in Supabase.</p>
+              )}
             </section>
           )}
           <section className="space-y-2 rounded-xl border bg-card px-4 py-4 shadow-xs">

@@ -1,4 +1,5 @@
-import { aiPart, githubPart, gitPart, nodePart, postgresPart, vscodePart, workspacePart } from "@/data/docs/setup/common"
+import { collaboratorStep } from "@/data/docs/setup/projects"
+import { aiPart, githubPart, gitPart, nodePart, postgresPart, terminalPart, vscodePart, workspacePart } from "@/data/docs/setup/common"
 import type { WalkPart } from "@/data/docs/types"
 
 /*
@@ -170,7 +171,7 @@ const projectPart: WalkPart = {
       why: "Prisma is how your code talks to PostgreSQL. schema.prisma describes your database; you'll add your tables to it in week 1.",
       actions: [
         { text: "In the terminal (still in server), run:", code: "npx prisma init" },
-        { text: "It creates a prisma folder containing schema.prisma, and a .env file." },
+        { text: "It creates a prisma folder containing schema.prisma, plus server/.env, server/.gitignore and prisma.config.ts (Prisma's own settings — leave that one as it is)." },
         {
           text: "Open prisma › schema.prisma, delete everything in it, paste this, and save:",
           file: "server/prisma/schema.prisma",
@@ -228,9 +229,9 @@ const projectPart: WalkPart = {
       title: "Keep secrets and junk out of Git",
       why: "This file lists what Git must never save: node_modules (huge, and anyone can re-download it), .env (it has your database password) and dist (build output).",
       actions: [
-        { text: "Right-click the server folder → New File…, type .gitignore (with the dot at the start) and press Enter." },
+        { text: "prisma init made a .gitignore inside server. Open server › .gitignore. (Not there? Right-click the server folder → New File… and type .gitignore, with the dot at the start.)" },
         {
-          text: "If the file already has something in it (prisma init sometimes creates it), delete that first. Paste this and save:",
+          text: "Delete what's in it, paste this, and save:",
           file: "server/.gitignore",
           code: "node_modules\n.env\ndist",
         },
@@ -269,6 +270,7 @@ const projectPart: WalkPart = {
       ],
       screen: "github-repo",
     },
+    collaboratorStep("collaborators"),
   ],
 }
 
@@ -306,6 +308,7 @@ export const fullStackSetup: WalkPart[] = [
     rest: "Prettier - Code formatter (by Prettier) and Prisma (by Prisma)",
     screen: "vscode-extensions",
   }),
+  terminalPart,
   gitPart,
   githubPart,
   nodePart("Both halves of your project — the React website and the Express API — run on it."),

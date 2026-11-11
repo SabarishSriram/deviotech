@@ -8,7 +8,7 @@ import { Suspense } from "react"
 import { AdminShell } from "@/components/admin/admin-shell"
 import { DocBody } from "@/components/docs/doc-views"
 import { DocsLayout, type DocNavItem } from "@/components/docs/docs-layout"
-import { DOC_PAGES, isDocId, isTrackProject, pagesFor } from "@/data/docs"
+import { DOC_PAGES, docTitle, isDocId, isTrackProject, pagesFor } from "@/data/docs"
 import { getTrack } from "@/data/tracks"
 import { requireAdmin } from "@/lib/admin-session"
 import { trackColorStyle, trackIcons } from "@/lib/track-icons"
@@ -44,7 +44,7 @@ async function TrackDocs({ params, searchParams }: Pick<PageProps<"/admin/tracks
   const nav: DocNavItem[] = [
     ...shared.map((p) => ({
       href: `${base}?doc=${p.id}`,
-      title: p.title,
+      title: docTitle(p, track.slug),
       group: p.group,
       active: !project && doc === p.id,
       locked: false,

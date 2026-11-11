@@ -24,7 +24,7 @@ export function Hero() {
       <div className="mx-auto max-w-6xl px-4 pt-14 pb-20 sm:px-6 sm:pt-20 sm:pb-24">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
           {/* ---- Primary headline widget ---- */}
-          <Widget delay={0} interactive={false} className="flex flex-col justify-between p-7 sm:p-10 lg:w-[57%]">
+          <Widget eager delay={0} interactive={false} className="flex flex-col justify-between p-7 sm:p-10 lg:w-[57%]">
             <div className="widget-dots animate-grid-pan pointer-events-none absolute inset-0 opacity-50 mask-[radial-gradient(circle_at_80%_-10%,#000,transparent_60%)]" />
             <div className="relative">
               <h1
@@ -33,7 +33,8 @@ export function Hero() {
               >
                 {hero.headline.lead}{" "}
                 <span className="text-brand-text">
-                  {hero.headline.accent}
+                  {/* The full stop is drawn in the brand colour, so drop the one in the copy. */}
+                  {hero.headline.accent.replace(/\.$/, "")}
                   <span className="text-brand">.</span>
                 </span>
               </h1>
@@ -60,7 +61,7 @@ export function Hero() {
           {/* ---- Right column of stacked widgets ---- */}
           <div className="flex flex-col gap-4 lg:w-[43%]">
             {/* PR review terminal */}
-            <Widget delay={0.08} className="flex flex-1 flex-col p-6">
+            <Widget eager delay={0.08} className="flex flex-1 flex-col p-6">
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 label-mono text-muted-foreground">
                   <GitPullRequest className="size-3.5" aria-hidden="true" />
@@ -76,7 +77,7 @@ export function Hero() {
             </Widget>
 
             {/* Stat trio */}
-            <Widget delay={0.16} className="grid grid-cols-4 divide-x divide-border p-0">
+            <Widget eager delay={0.16} className="grid grid-cols-4 divide-x divide-border p-0">
               {hero.stats.map((s) => (
                 <div key={s.label} className="flex flex-col gap-1 px-2 py-5 text-center sm:px-4">
                   <Counter
@@ -90,7 +91,7 @@ export function Hero() {
             </Widget>
 
             {/* Certificate chip */}
-            <Widget delay={0.24} className="group flex items-center gap-4 p-4 pr-5">
+            <Widget eager delay={0.24} className="group flex items-center gap-4 p-4 pr-5">
               <span className="relative size-11 shrink-0 overflow-hidden text-foreground">
                 <QrMark />
                 {/* scan line sweeps the code on hover */}

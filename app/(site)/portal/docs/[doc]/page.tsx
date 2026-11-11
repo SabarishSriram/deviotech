@@ -5,9 +5,9 @@ import { notFound, redirect } from "next/navigation"
 import { connection } from "next/server"
 import { Suspense } from "react"
 
-import { DocBody, LockedDoc } from "@/components/docs/doc-views"
+import { DocBody, LockedDoc, type DocProgress } from "@/components/docs/doc-views"
 import { DocsLayout } from "@/components/docs/docs-layout"
-import { DOC_PAGES, isDocId, pagesFor } from "@/data/docs"
+import { DOC_PAGES, docTitle, isDocId, pagesFor } from "@/data/docs"
 import { getTrack } from "@/data/tracks"
 import { isSupabaseConfigured } from "@/lib/supabase/env"
 import { createClient } from "@/lib/supabase/server"
@@ -55,6 +55,13 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
   const track = application ? getTrack(application.track) : undefined
   if (!application || !track) redirect("/portal")
 
+  // Getting started ticks. If the doc_progress table isn't set up yet, ticks are kept in the browser instead.
+  let progress: DocProgress | undefined
+  if (doc === "setup" || doc === "workflow" || doc === "environment") {
+    const { data: rows, error } = await supabase.from("doc_progress").select("step_key").like("step_key", `${track.slug}/${doc}/%`)
+    progress = error ? { mode: "local", done: [] } : { mode: "account", done: (rows ?? []).map((r) => r.step_key as string) }
+  }
+
   const paid = hasPaid(application.status)
   const projectName = track.projects.find((p) => p.slug === application.project)?.name
   const unlocked = paid && Boolean(projectName)
@@ -63,7 +70,7 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
 
   const nav = pagesFor(unlocked ? application.project : null).map((p) => ({
     href: `/portal/docs/${p.id}`,
-    title: p.title,
+    title: docTitle(p, track.slug),
     group: p.group === "Your project" && projectName ? projectName : p.group,
     active: p.id === doc,
     locked: p.locked && !unlocked,
@@ -93,7 +100,7 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
       {page.locked && !paid ? (
         <LockedDoc reason="unpaid" />
       ) : (
-        <DocBody doc={doc} track={track} projectSlug={paid ? application.project : null} />
+        <DocBody doc={doc} track={track} projectSlug={paid ? application.project : null} progress={progress} />
       )}
     </DocsLayout>
   )

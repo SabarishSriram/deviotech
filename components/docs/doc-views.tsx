@@ -392,7 +392,10 @@ export function LockedDoc({ reason }: { reason: "unpaid" | "no-project" }) {
 }
 
 /** Renders one doc page for a track (and project, for project docs). */
-export function DocBody({ doc, track, projectSlug }: { doc: DocId; track: Track; projectSlug: string | null }) {
+/** Getting started progress for the signed-in student; omitted in admin previews. */
+export type DocProgress = { mode: "account" | "local"; done: string[] }
+
+export function DocBody({ doc, track, projectSlug, progress }: { doc: DocId; track: Track; projectSlug: string | null; progress?: DocProgress }) {
   if (doc === "welcome") {
     return (
       <>
@@ -435,6 +438,7 @@ export function DocBody({ doc, track, projectSlug }: { doc: DocId; track: Track;
           doneIntro={walk.doneIntro}
           next={walk.next}
           pickOs={walk.pickOs}
+          progress={progress ? { scope: `${track.slug}/${doc}`, mode: progress.mode, initial: progress.done } : undefined}
         />
       </>
     )

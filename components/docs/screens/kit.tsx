@@ -760,3 +760,53 @@ export function Board({ children, className }: { children: React.ReactNode; clas
     </div>
   )
 }
+
+/* ------------------------------------------------------------------ */
+/* Email                                                               */
+/* ------------------------------------------------------------------ */
+
+/** A generic "new message" email window (any mail app looks roughly like this). */
+export function EmailCompose({
+  to,
+  subject,
+  children,
+  toMark,
+  subjectMark,
+  className,
+}: {
+  to: string
+  subject: string
+  children: React.ReactNode
+  toMark?: number
+  subjectMark?: number
+  className?: string
+}) {
+  const row = (label: string, value: string, n?: number) => {
+    const r = (
+      <p className="flex gap-3 border-b border-[#e8eaed] px-4 py-2 text-[12.5px]">
+        <span className="w-14 shrink-0 text-[#5f6368]">{label}</span>
+        <span className="truncate">{value}</span>
+      </p>
+    )
+    return n !== undefined ? (
+      <Mark n={n} badge="r" className="mr-8 rounded-none">
+        {r}
+      </Mark>
+    ) : (
+      r
+    )
+  }
+  return (
+    <div className={cn("mx-auto w-[600px] overflow-hidden rounded-xl bg-white text-[#202124]", shadow, className)} style={{ fontFamily: MAC_FONT }}>
+      <p className="flex items-center justify-between bg-[#404040] px-4 py-2 text-[12.5px] font-semibold text-white">
+        New message <X className="size-3.5" />
+      </p>
+      {row("To", to, toMark)}
+      {row("Subject", subject, subjectMark)}
+      <div className="min-h-[150px] space-y-2 px-4 py-3 text-[13px] leading-relaxed">{children}</div>
+      <div className="flex items-center gap-3 px-4 pb-4">
+        <span className="rounded-full bg-[#0b57d0] px-5 py-1.5 text-[12.5px] font-semibold text-white">Send</span>
+      </div>
+    </div>
+  )
+}

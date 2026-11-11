@@ -1,3 +1,4 @@
+import { mentorEmailText } from "@/data/site"
 import type { WalkPart } from "@/data/docs/types"
 
 /*
@@ -69,12 +70,15 @@ export const welcomeWalk: WalkPart[] = [
         screen: "welcome-day-setup",
       },
       {
-        title: "How we work — about 30 minutes",
-        actions: [{ text: "You open your first pull request and get it reviewed: the loop you'll repeat for every task in the program." }],
+        title: "How we work — about 1 hour",
+        actions: [
+          { text: "You open your first pull request and get it reviewed: the loop you'll repeat for every task in the program." },
+          { text: "Then every Git command explained, and how to fix the usual mistakes." },
+        ],
         screen: "welcome-day-workflow",
       },
       {
-        title: "Environment & secrets — about 20 minutes",
+        title: "Environment & secrets — about 25 minutes",
         actions: [{ text: "Where passwords and keys go so they never end up public, and the one rule you must never break." }],
         screen: "welcome-day-environment",
       },
@@ -112,15 +116,16 @@ export const welcomeWalk: WalkPart[] = [
         actions: [{ text: "Most errors you'll hit are already on the Troubleshooting page, with the fix. Search it for a word from your error message." }],
       },
       {
-        title: "Stuck for 30 minutes? Ask",
+        title: "Stuck for 30 minutes? Email your mentor",
         why: "Struggling a bit is how you learn. Struggling for hours isn't. After 30 minutes, ask your mentor.",
         actions: [
-          { text: "Say what you're trying to do (1)." },
+          { text: `Email ${mentorEmailText}. Start the subject with your track in brackets, like [Full-Stack], so your mentor knows straight away which project it is.` },
+          { text: "In the email, say what you're trying to do (1)." },
           { text: "Say what you tried (2)." },
-          { text: "Paste the exact error and attach a screenshot (3)." },
+          { text: "Paste the exact error and attach a screenshot (3). (Setup shows you how to take one.)" },
         ],
         screen: "welcome-help",
-        note: "A message like this gets you a useful answer on the first reply, instead of three rounds of questions.",
+        note: "An email like this gets you a useful answer on the first reply, instead of three rounds of questions.",
       },
     ],
   },

@@ -150,7 +150,7 @@ export function standardsGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Folder structure",
           code: {
-            code: "my-app/\n├── app/                  Screens (each file = a screen, Expo Router)\n│   ├── (tabs)/           Tab screens: index.tsx, habits.tsx, settings.tsx\n│   └── _layout.tsx       Navigation layout\n├── components/           Reusable pieces: HabitRow.tsx\n├── lib/\n│   ├── storage.ts        All AsyncStorage reads/writes\n│   └── streaks.ts        Pure logic (easy to test)\n└── constants/            Colours, spacing",
+            code: "my-app/\n└── src/\n    ├── app/              Screens (each file = a screen, Expo Router)\n    │   ├── _layout.tsx   Navigation layout (the tabs)\n    │   ├── index.tsx     Today\n    │   ├── habits.tsx\n    │   └── settings.tsx\n    ├── components/       Reusable pieces: HabitRow.tsx\n    ├── lib/\n    │   ├── storage.ts    All AsyncStorage reads/writes\n    │   └── streaks.ts    Pure logic (easy to test)\n    └── constants/        Colours, spacing",
           },
         },
         {
@@ -285,7 +285,7 @@ export function standardsGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Figma file structure",
           bullets: [
-            "Pages: Cover, Research, Flows, Wireframes, Design system, UI, Prototype.",
+            "Pages: Research, Wireframes (starting with your user flows) and UI (design system, final screens and prototype). The free plan allows 3 pages per file.",
             "Frames named “01 Login / Default”, “01 Login / Error” — number, screen, state.",
             "Every repeated element is a component with variants (Button / Primary / Hover).",
             "Use Auto Layout for anything that should resize.",
@@ -595,9 +595,9 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "Build an installable APK with EAS",
           steps: [
-            { text: "Log in and configure builds (choose Android when asked):", code: "eas login\neas build:configure" },
+            { text: "Log in and configure builds (choose Android when asked):", code: "npx eas-cli@latest login\nnpx eas-cli@latest build:configure" },
             { text: "Edit eas.json so the preview profile builds an APK you can install directly:", file: "eas.json", code: '{\n  "build": {\n    "preview": {\n      "android": { "buildType": "apk" }\n    }\n  }\n}' },
-            { text: "Start the build. It runs in Expo's cloud and takes 10–20 minutes:", code: "eas build -p android --profile preview", icon: "Expo" },
+            { text: "Start the build. It runs in Expo's cloud and takes 10–20 minutes:", code: "npx eas-cli@latest build -p android --profile preview", icon: "Expo" },
             { text: "When it finishes you get a link. Open it on an Android phone, download the APK and allow “install unknown apps” when asked." },
             { text: "Put the link and a QR code in your README." },
           ],

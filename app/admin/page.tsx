@@ -10,6 +10,7 @@ import { initials } from "@/components/admin/status-tone"
 import { Button } from "@/components/ui/button"
 import { getTrack, trackShortName, tracks } from "@/data/tracks"
 import { requireAdmin } from "@/lib/admin-session"
+import { summarizeProgress, type ProgressRow } from "@/lib/progress-summary"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { isSupabaseAdminConfigured } from "@/lib/supabase/env"
 import { APPLICATION_STATUSES, isApplicationStatus, statusLabels, type ApplicationRow } from "@/lib/supabase/types"
@@ -62,6 +63,20 @@ async function Dashboard({ searchParams }: Pick<PageProps<"/admin">, "searchPara
     .select("*")
     .order("created_at", { ascending: false })
   const all = (data ?? []) as ApplicationRow[]
+
+  // Setup progress for students with a portal login (table doc_progress; skipped if not set up).
+  const userIds = all.flatMap((a) => (a.user_id ? [a.user_id] : []))
+  const progressRows = userIds.length
+    ? await createAdminClient().from("doc_progress").select("user_id, step_key, os, done_at").in("user_id", userIds).like("step_key", "%/setup/%")
+    : null
+  const setupPct = new Map<string, number>()
+  if (progressRows && !progressRows.error) {
+    for (const a of all) {
+      if (!a.user_id) continue
+      const summary = summarizeProgress(a.track, ((progressRows.data ?? []) as ProgressRow[]).filter((r) => r.user_id === a.user_id))
+      if (summary) setupPct.set(a.id, summary.docs.setup.total ? Math.round((summary.docs.setup.done / summary.docs.setup.total) * 100) : 0)
+    }
+  }
 
   const rows = all.filter(
     (a) =>
@@ -170,13 +185,14 @@ async function Dashboard({ searchParams }: Pick<PageProps<"/admin">, "searchPara
                 <th className="px-4 py-2.5 font-medium">College</th>
                 <th className="px-4 py-2.5 font-medium">Level</th>
                 <th className="px-4 py-2.5 font-medium">Applied</th>
+                <th className="px-4 py-2.5 font-medium">Setup</th>
                 <th className="px-4 py-2.5 font-medium">Status</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-4 py-16 text-center text-muted-foreground">
                     <Inbox className="mx-auto mb-2 size-6" aria-hidden="true" />
                     No applications found.
                   </td>
@@ -232,6 +248,15 @@ async function Dashboard({ searchParams }: Pick<PageProps<"/admin">, "searchPara
                     <td className="px-4 py-3 capitalize">{a.skill_level}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-muted-foreground tabular-nums">
                       {dateFormat.format(new Date(a.created_at))}
+                    </td>
+                    <td className="px-4 py-3 text-xs whitespace-nowrap tabular-nums">
+                      {setupPct.has(a.id) ? (
+                        <span className={setupPct.get(a.id) === 100 ? "font-medium text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}>
+                          {setupPct.get(a.id) === 100 ? "✓ Done" : `${setupPct.get(a.id)}%`}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <StatusSelect id={a.id} status={a.status} />

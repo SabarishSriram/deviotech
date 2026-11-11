@@ -158,7 +158,7 @@ const leaksPart: WalkPart = {
       why: "GitHub scans pushes for things that look like real keys and stops them before they go public.",
       actions: [
         { text: "If git push fails with GH013 … Push cannot contain secrets (1), nothing was uploaded. Good." },
-        { text: "Don't open the link that allows the secret. Send your mentor a screenshot — they'll help you take it out of the commit." },
+        { text: "Don't open the link that allows the secret. Email your mentor a screenshot — they'll help you take it out of the commit." },
       ],
       screen: "env-push-blocked",
     },
@@ -336,6 +336,7 @@ const appCtx: EnvCtx = {
       why: "On your phone, “localhost” means the phone itself. To reach an API on your laptop, the app needs your laptop's address on the Wi-Fi.",
       actions: [
         { os: MAC, text: "Run:", code: "ipconfig getifaddr en0" },
+        { os: MAC, text: "If it prints nothing, your Wi-Fi has a different name. Try this instead:", code: "ipconfig getifaddr en1" },
         { os: WIN, text: "Run this and find the IPv4 Address line under Wireless LAN adapter Wi-Fi:", code: "ipconfig" },
         { os: ["linux"], text: "Run this — the first address is the one you want:", code: "hostname -I" },
       ],
@@ -354,7 +355,8 @@ const appCtx: EnvCtx = {
     {
       title: "Use it in your app",
       actions: [
-        { text: "Open app › (tabs) › index.tsx. Just below the line with Hello, Devvy!, add this line (1) and save:", code: "<ThemedText>API: {process.env.EXPO_PUBLIC_API_URL}</ThemedText>" },
+        { text: "Open src › app › index.tsx and find Hello, Devvy! — the title you changed in Setup." },
+        { text: "Just below it is a line with </ThemedText>. Add this new line straight after that one (1), and save:", code: "<ThemedText>API: {process.env.EXPO_PUBLIC_API_URL}</ThemedText>" },
       ],
       screen: "env-expo-code",
       note: "In Expo, only settings that start with EXPO_PUBLIC_ reach your app's code.",
@@ -379,8 +381,8 @@ const appCtx: EnvCtx = {
 function pythonCtx(opts: { repo: string; configPath: string; example: string; check: string; checkOut: string; deploy: WalkStep; extra?: WalkStep[] }): EnvCtx {
   const configCode =
     opts.configPath === "config.py"
-      ? 'import os\n\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\nDATA_DIR = os.getenv("DATA_DIR", "data")\nLLM_API_KEY = os.getenv("LLM_API_KEY")'
-      : 'import os\n\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\nDATABASE_PATH = os.getenv("DATABASE_PATH", "data.db")\nTELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")\nTELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")'
+      ? 'import os\n\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\nDATA_DIR = os.getenv("DATA_DIR")\nLLM_API_KEY = os.getenv("LLM_API_KEY")'
+      : 'import os\n\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\nDATABASE_PATH = os.getenv("DATABASE_PATH")\nTELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")\nTELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")'
   return {
     repo: opts.repo,
     envFile: ".env",
@@ -421,7 +423,7 @@ function pythonCtx(opts: { repo: string; configPath: string; example: string; ch
         title: "Check it works",
         actions: [{ text: "Run:", code: opts.check }],
         screen: "env-py-check",
-        check: [{ text: `It prints ${opts.checkOut} (1) — the value from your .env.` }],
+        check: [{ text: `It prints ${opts.checkOut} (1) — the value from your .env. If it prints None, .env wasn't read: check it sits in the project folder itself, next to .env.example.` }],
       },
       ...(opts.extra ?? []),
     ],
@@ -592,9 +594,9 @@ export const designEnvironment: WalkPart[] = [
     intro: "Figma's share settings decide who can see — and who can change — your work.",
     steps: [
       {
-        title: "Your mentor: can comment",
+        title: "Your mentor: can view",
         actions: [
-          { text: "Click Share in your design file. Your mentor should have can comment (1) — they can leave feedback but can't change your designs." },
+          { text: "Click Share in your design file. Your mentor should have can view (1) — they can see everything and leave comments, but can't change your designs." },
           { text: "Never give anyone can edit unless you're working on the file together." },
         ],
         screen: "ux-share",
@@ -615,6 +617,6 @@ export const designEnvironmentDone = [
   "Consent before every interview",
   "Participants are P1, P2, P3 — no names or contact details anywhere public",
   "Recordings stay in a private folder, never in Figma or GitHub",
-  "Your mentor has can comment, not can edit",
+  "Your mentor has can view, not can edit",
   "Your portfolio links to a view-only prototype",
 ]

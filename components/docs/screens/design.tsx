@@ -1,7 +1,8 @@
 import { Check, ChevronDown, Clock, FileText, Frame, Hand, Link2, MessageCircle, MousePointer2, Pencil, Plus, Shapes, Square, Type, Users } from "lucide-react"
 import { SiFigma, SiGithub } from "react-icons/si"
 
-import { Board, Browser, Mark, MONO_FONT } from "@/components/docs/screens/kit"
+import { Board, Browser, EmailCompose, Mark, MONO_FONT } from "@/components/docs/screens/kit"
+import { MENTOR_EMAIL } from "@/components/docs/screens/welcome"
 import { USER } from "@/components/docs/screens/fullstack"
 import { GoodBad } from "@/components/docs/screens/workflow"
 import type { OS } from "@/data/docs/types"
@@ -15,7 +16,7 @@ import { cn } from "@/lib/utils"
 type Screen = (os: OS) => React.ReactNode
 
 const FILE = "Habit tracker — Design"
-const PAGES = ["Cover", "Research", "Flows", "Wireframes", "Design system", "UI", "Prototype"]
+const PAGES = ["Research", "Wireframes", "UI"]
 const figIcon = <SiFigma className="size-3.5" />
 
 /* ------------------------------------------------------------------ */
@@ -85,7 +86,7 @@ function FigmaHome({ os, menu }: { os: OS; menu?: "design" | "figjam" }) {
 /** The Figma editor (UI3, light). */
 function FigmaEditor({
   os,
-  page = "Cover",
+  page = "Research",
   pagesMark,
   plusMark,
   shareMark,
@@ -178,7 +179,7 @@ function PhoneFrame({ label, children, className }: { label: string; children?: 
   )
 }
 
-function ShareDialog({ os, access = "can comment" }: { os: OS; access?: string }) {
+function ShareDialog({ os, access = "can view" }: { os: OS; access?: string }) {
   return (
     <FigmaEditor
       os={os}
@@ -286,10 +287,10 @@ const uxPages: Screen = (os) => (
     pagesMark={2}
     canvas={
       <div className="absolute top-8 left-10">
-        <p className="mb-1 text-[10px] text-[#999]">Cover</p>
+        <p className="mb-1 text-[10px] text-[#999]">Research</p>
         <div className="flex h-[180px] w-[300px] flex-col justify-end rounded-md bg-[#1e1e1e] p-4 text-white shadow">
-          <p className="text-[18px] font-bold">Habit tracker</p>
-          <p className="text-[11px] opacity-70">Asha Rao · Devvy Tech UI/UX</p>
+          <p className="text-[18px] font-bold">Habit tracker — Research</p>
+          <p className="text-[11px] opacity-70">Interviews, insights and screenshots</p>
         </div>
       </div>
     }
@@ -514,21 +515,16 @@ const uxCommit: Screen = (os) => (
 )
 
 const uxMessage: Screen = () => (
-  <Board className="mx-auto w-[540px]">
-    <p className="mb-3 flex items-center gap-2 text-[12px] text-[#59636e]">
-      <MessageCircle className="size-4" /> Message to your mentor
+  <EmailCompose to={MENTOR_EMAIL} subject="[UI/UX] Week 2 ready for review">
+    <p>Hi! Week 2 is ready for review 🎨</p>
+    <p className="flex items-center gap-1.5 text-[#0b57d0]">
+      <Frame className="size-3.5" /> figma.com/design/k3Xh9/habit-tracker?node-id=42-118
     </p>
-    <div className="space-y-2 rounded-2xl rounded-tl-sm bg-[#f0f4f8] p-4 text-[13px] leading-relaxed">
-      <p>Week 2 is ready for review 🎨</p>
-      <p className="flex items-center gap-1.5 text-[#0969da]">
-        <Frame className="size-3.5" /> figma.com/design/k3Xh9/habit-tracker?node-id=42-118
-      </p>
-      <p className="flex items-center gap-1.5 text-[#0969da]">
-        <FileText className="size-3.5" /> github.com/{USER}/my-case-study
-      </p>
-      <p>I&apos;d especially like feedback on the onboarding flow — I&apos;m not sure 3 screens is too many.</p>
-    </div>
-  </Board>
+    <p className="flex items-center gap-1.5 text-[#0b57d0]">
+      <FileText className="size-3.5" /> github.com/{USER}/my-case-study
+    </p>
+    <p>I&apos;d especially like feedback on the onboarding flow — I&apos;m not sure 3 screens is too many.</p>
+  </EmailCompose>
 )
 
 const uxNaming: Screen = () => (

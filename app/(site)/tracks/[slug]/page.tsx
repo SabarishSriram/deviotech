@@ -10,6 +10,7 @@ import { everyTrackIncludes, getTrack, trackShortName, tracks } from "@/data/tra
 import { aiTools } from "@/lib/ai-tools"
 import { TechIcon } from "@/lib/tech-icons"
 import { trackColorStyle, trackIcons } from "@/lib/track-icons"
+import { JsonLd, trackCourse } from "@/lib/structured-data"
 import { cn } from "@/lib/utils"
 
 export function generateStaticParams() {
@@ -21,10 +22,14 @@ export async function generateMetadata({ params }: PageProps<"/tracks/[slug]">):
   const track = getTrack(slug)
   if (!track) return {}
 
+  const title = `${track.name} Internship with Certificate`
+  const description = `${track.oneLiner} A ${program.durationWeeks}-week online internship with mentor code reviews and a verifiable certificate. Apply free.`
   return {
-    title: `${track.name} Internship — ${site.name}`,
-    description: track.oneLiner,
+    title,
+    description,
     alternates: { canonical: `/tracks/${track.slug}` },
+    openGraph: { title: `${title} | ${site.name}`, description, url: `/tracks/${track.slug}` },
+    twitter: { title: `${title} | ${site.name}`, description },
   }
 }
 
@@ -57,6 +62,7 @@ export default async function TrackPage({ params }: PageProps<"/tracks/[slug]">)
 
   return (
     <div className="relative isolate">
+      <JsonLd data={trackCourse(track)} />
       <div
         aria-hidden="true"
         className="bg-dots absolute inset-x-0 top-0 -z-10 h-80 mask-[linear-gradient(to_bottom,#000,transparent)]"
@@ -73,7 +79,7 @@ export default async function TrackPage({ params }: PageProps<"/tracks/[slug]">)
 
         {/* ---- Overview + skills ---- */}
         <div className="grid gap-4 lg:grid-cols-3">
-          <Widget interactive={false} className="flex flex-col p-6 sm:p-8 lg:col-span-2">
+          <Widget eager interactive={false} className="flex flex-col p-6 sm:p-8 lg:col-span-2">
             <Icon
               aria-hidden="true"
               className="pointer-events-none absolute -right-12 -bottom-12 size-72 text-(--tc) opacity-[0.08]"
@@ -106,7 +112,7 @@ export default async function TrackPage({ params }: PageProps<"/tracks/[slug]">)
             </div>
           </Widget>
 
-          <Widget interactive={false} className="p-6">
+          <Widget eager interactive={false} className="p-6">
             <div className="flex items-center justify-between">
               <h2 className="label-mono text-muted-foreground">Skills you&apos;ll use</h2>
               <span className="font-mono text-xs text-muted-foreground">{track.skills.length}</span>

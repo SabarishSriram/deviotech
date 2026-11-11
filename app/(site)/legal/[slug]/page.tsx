@@ -14,7 +14,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/legal/[slug]">): Promise<Metadata> {
   const { slug } = await params
   const page = getPage(slug)
-  return page ? { title: page.title, alternates: { canonical: `/legal/${slug}` } } : {}
+  if (!page) return {}
+  const description = slug === "privacy" ? "What Devvy Tech collects when you apply, how it's used, and how to access or delete your data." : "The terms of the Devvy Tech project internship program: what it is, your commitment, payments and certificates."
+  return { title: page.title, description, alternates: { canonical: `/legal/${slug}` } }
 }
 
 export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) {

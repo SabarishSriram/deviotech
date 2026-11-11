@@ -2,8 +2,10 @@ import { AlertTriangle, CheckCircle2, Clock, Lightbulb } from "lucide-react"
 
 import { CodeBlock } from "@/components/docs/code-block"
 import { OsPicker, OsScope } from "@/components/docs/os-scope"
+import { OverallProgress, PartProgress, ProgressProvider, StepCheck } from "@/components/docs/progress"
 import { Screenshot } from "@/components/docs/screens/screenshot"
 import type { OS, ScreenRef, WalkPart, WalkStep } from "@/data/docs/types"
+import { stepAnchor, stepRefs } from "@/lib/progress"
 
 const ALL: OS[] = ["windows", "mac", "linux"]
 
@@ -57,9 +59,9 @@ function StepScreens({ step, screens }: { step: WalkStep; screens: Record<string
   )
 }
 
-function Step({ step, screens }: { step: WalkStep; screens: Record<string, (os: OS) => React.ReactNode> }) {
+function Step({ step, screens, stepKey }: { step: WalkStep; screens: Record<string, (os: OS) => React.ReactNode>; stepKey?: string }) {
   return (
-    <li {...only(step.os)} className="walk-step relative pl-11">
+    <li {...only(step.os)} id={stepKey ? stepAnchor(stepKey) : undefined} className="walk-step relative scroll-mt-24 pl-11">
       <span
         aria-hidden="true"
         className="walk-step-num absolute top-0 left-0 flex size-8 items-center justify-center rounded-full border bg-card font-mono text-xs font-semibold"
@@ -111,6 +113,7 @@ function Step({ step, screens }: { step: WalkStep; screens: Record<string, (os: 
           <span>{withMarkers(step.warn)}</span>
         </p>
       )}
+      {stepKey && <StepCheck stepKey={stepKey} />}
     </li>
   )
 }
@@ -127,7 +130,10 @@ export function Walkthrough({
   doneIntro = "If you can tick every line, your computer is ready for the program.",
   next,
   pickOs = true,
+  progress,
 }: {
+  /** Turn on "Mark as done" ticks. scope is "<track>/<doc>"; account mode saves to the student's account. */
+  progress?: { scope: string; mode: "account" | "local"; initial: string[] }
   parts: WalkPart[]
   screens: Record<string, (os: OS) => React.ReactNode>
   done?: string[]
@@ -137,8 +143,11 @@ export function Walkthrough({
   /** Show the "Which computer are you using?" picker (off for pages that are the same on every OS). */
   pickOs?: boolean
 }) {
-  return (
-    <OsScope>
+  const refs = progress ? stepRefs(parts, progress.scope) : []
+  // refs are in step order, so step j of part i is at offsets[i] + j.
+  const offsets = parts.map((_, i) => parts.slice(0, i).reduce((n, p) => n + p.steps.length, 0))
+  const content = (
+    <>
       {pickOs && (
         <section className="mt-8 rounded-2xl border bg-card p-5 sm:p-6">
           <p className="font-sans text-base font-semibold">Which computer are you using?</p>
@@ -150,6 +159,8 @@ export function Walkthrough({
           </div>
         </section>
       )}
+
+      {progress && <OverallProgress />}
 
       <section className="mt-8">
         <h2 className="mb-3 font-sans text-lg font-semibold tracking-tight">What you&apos;ll do</h2>
@@ -185,12 +196,15 @@ export function Walkthrough({
               </p>
               <h2 className="mt-1 font-sans text-xl font-semibold tracking-tight">{part.title}</h2>
             </div>
-            {pickOs && <OsPicker compact />}
+            <span className="flex items-end gap-4">
+              {progress && <PartProgress partId={part.id} />}
+              {pickOs && <OsPicker compact />}
+            </span>
           </div>
           <p className="mt-4 text-pretty text-muted-foreground">{part.intro}</p>
           <ol className="mt-6 space-y-10">
             {part.steps.map((step, j) => (
-              <Step key={j} step={step} screens={screens} />
+              <Step key={j} step={step} screens={screens} stepKey={refs[offsets[i] + j]?.key} />
             ))}
           </ol>
         </section>
@@ -210,6 +224,17 @@ export function Walkthrough({
           </ul>
           {next && <p className="mt-5 border-t border-emerald-600/20 pt-4 font-medium">{next}</p>}
         </section>
+      )}
+    </>
+  )
+  return (
+    <OsScope>
+      {progress ? (
+        <ProgressProvider scope={progress.scope} mode={progress.mode} initial={progress.initial} refs={refs}>
+          {content}
+        </ProgressProvider>
+      ) : (
+        content
       )}
     </OsScope>
   )

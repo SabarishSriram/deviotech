@@ -520,7 +520,8 @@ export function nodePart(usedFor: string): WalkPart {
         os: ["linux"],
         why: "nvm installs the right Node.js version without needing your password, and makes it easy to update later.",
         actions: [
-          { text: "In VS Code's terminal, run:", code: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash" },
+          { text: "In VS Code's terminal, first install curl, a tool that downloads files. A fresh Ubuntu often doesn't have it, and it's safe to run if it does:", code: "sudo apt update\nsudo apt install -y curl" },
+          { text: "Then install nvm:", code: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash" },
           {
             text: "Close the terminal (the bin icon in the terminal panel), open a new one (Terminal → New Terminal), then run:",
             code: "nvm install --lts",
@@ -639,6 +640,7 @@ export const postgresPart: WalkPart = {
           code: "sudo apt install -y postgresql\nsudo -u postgres psql -c \"ALTER USER postgres PASSWORD 'devvy123';\"",
         },
         { text: "The second command gives the database's main user (postgres) the password devvy123. Your project uses it to connect." },
+        { text: "It prints ALTER ROLE. If it also says could not change directory to … Permission denied, ignore that — the postgres user just can't see your folder, and the command still worked." },
       ],
       screen: "pg-linux",
     },
@@ -673,5 +675,108 @@ export const aiPart: WalkPart = {
       ],
       note: "Never paste passwords, API keys or your .env file into an AI tool.",
     },
+  ],
+}
+
+/* ------------------------------------------------------------------ */
+/* Terminal survival kit                                               */
+/* ------------------------------------------------------------------ */
+
+/** Shared with UI/UX Setup, which has no terminal part. */
+export const screenshotStep: WalkStep = {
+  title: "Take a screenshot",
+  why: "When something goes wrong, a screenshot shows your mentor exactly what you see. Attach one to every “I'm stuck” email.",
+  actions: [
+    { os: ["mac"], text: "Press Cmd + Shift + 4 (1), then drag over the part of the screen you want. It's saved on your Desktop." },
+    { os: ["windows"], text: "Press the Windows key + Shift + S (1), then drag over the part of the screen you want. It's copied — paste it straight into your email with Ctrl + V." },
+    { os: ["linux"], text: "Press Print Screen (PrtSc) (1), choose Selection, drag over the part you want, and press Enter. It's saved in Pictures › Screenshots." },
+  ],
+  screen: "term-screenshot",
+}
+
+export const terminalPart: WalkPart = {
+  id: "terminal",
+  title: "Terminal survival kit",
+  time: "10 min",
+  intro:
+    "Ten minutes of practice now saves hours later. You'll make a practice folder, move in and out of it, learn the shortcuts everyone uses, and how to take a screenshot when you need help.",
+  steps: [
+    {
+      title: "Move into a folder: cd",
+      why: "cd means “change directory” — directory is another word for folder. Most commands in these docs only work from inside the right folder, so you'll use cd all the time.",
+      actions: [
+        { text: "In VS Code's terminal (it's in devvy), make a practice folder:", code: "mkdir practice" },
+        { text: "Move into it:", code: "cd practice" },
+        { text: "Check where you are:", code: "pwd" },
+      ],
+      screen: "term-cd",
+      check: [{ text: "pwd now ends in practice (1). The prompt shows the folder you're in too (2)." }],
+    },
+    {
+      title: "Go back up: cd ..",
+      why: "Two dots mean “the folder above this one”. It's how you get out of a folder.",
+      actions: [
+        { text: "Run:", code: "cd .." },
+        { text: "Check where you are again:", code: "pwd" },
+      ],
+      screen: "term-cd-up",
+      check: [{ text: "pwd ends in devvy again (1)." }],
+    },
+    {
+      title: "Let Tab finish names for you",
+      why: "Typos in folder names are the most common terminal mistake. Tab fills in the rest of a name for you, spelled exactly right.",
+      actions: [
+        { text: "Type cd pra — but don't press Enter." },
+        { text: "Press Tab (1). The terminal finishes the name: practice. Now press Enter." },
+        { text: "Go back up again:", code: "cd .." },
+      ],
+      screen: "term-tab",
+      note: "If Tab does nothing, there's no folder here starting with those letters. Run ls to see what is here.",
+    },
+    {
+      title: "Press ↑ to repeat a command",
+      why: "You'll often run the same command again, like starting your project. No need to type it.",
+      actions: [
+        { text: "Press the ↑ (up arrow) key (1). The last command you ran appears again (2)." },
+        { text: "Press ↑ again to go further back, or ↓ to come forward. Press Enter to run it, or Ctrl + C to clear the line." },
+      ],
+      screen: "term-up",
+    },
+    {
+      title: "Stop a running command: Ctrl + C",
+      why: "Some commands keep running until you stop them — like your project's server, later on. Ctrl + C stops whatever is running in that terminal. It's Ctrl on a Mac too, not Cmd.",
+      actions: [
+        { os: ["mac", "linux"], text: "Run this. It checks your connection to Google once a second, forever:", code: "ping google.com" },
+        { os: ["windows"], text: "Run this. -t makes it check your connection to Google forever:", code: "ping -t google.com" },
+        { text: "Watch a few lines appear, then press Ctrl + C (1). It stops, and the prompt comes back (2)." },
+      ],
+      screen: "term-ctrl-c",
+      note: "Whenever the terminal seems stuck, Ctrl + C is the first thing to try.",
+    },
+    {
+      title: "Clear the screen",
+      actions: [
+        { text: "The terminal is getting busy. Clear it:", code: "clear" },
+        { text: "Only the screen is cleared — nothing is deleted, and you're still in the same folder." },
+      ],
+    },
+    {
+      title: "Copy and paste",
+      actions: [
+        { os: ["mac"], text: "Paste into the terminal with Cmd + V. To copy from it, select the text with your mouse, then press Cmd + C (1)." },
+        { os: ["windows"], text: "Paste into the terminal with Ctrl + V, or right-click. To copy from it, select the text with your mouse, then press Ctrl + C (1) — when text is selected, Ctrl + C copies instead of stopping." },
+        { os: ["linux"], text: "Paste into the terminal with Ctrl + Shift + V. To copy from it, select the text with your mouse, then press Ctrl + Shift + C (1). (Plain Ctrl + C stops commands.)" },
+      ],
+      screen: "term-copy",
+    },
+    {
+      title: "Tidy up",
+      actions: [
+        { text: "Delete the practice folder:", code: "rmdir practice" },
+        { text: "rmdir only deletes empty folders, so it's a safe one to practise with." },
+      ],
+      check: [{ text: "Run ls — practice is gone." }],
+    },
+    screenshotStep,
   ],
 }

@@ -5,13 +5,26 @@
 
 export const site = {
   name: "Devvy Tech",
-  url: "https://deviotech.in",
+  /** The live domain. Set NEXT_PUBLIC_SITE_URL where the site is hosted; every canonical URL, the sitemap and social previews use it. */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://deviotech.in").replace(/\/$/, ""),
   tagline: "Real projects. Real reviews. A certificate that means something.",
   description:
     "A project-based virtual internship where you build real-world projects, use AI tools the way real teams do, get mentor reviews, and earn a verifiable certificate.",
   contactEmail: "hello@deviotech.in",
   copyright: "© 2026 Devvy Tech",
 } as const
+
+/**
+ * How students reach their mentor. The docs use these everywhere they say
+ * "email your mentor". Fill in the email when you have it; until then the
+ * docs tell students it's in their welcome email.
+ */
+export const mentorContact = {
+  email: "",
+} as const
+
+/** "mentor@… " if set, otherwise a description students can act on. */
+export const mentorEmailText = mentorContact.email || "your mentor's email address (it's in the welcome email we sent you)"
 
 export const program = {
   name: "Devvy Tech Project Internship Program",
@@ -167,6 +180,38 @@ export const features = {
 } as const
 
 export type FeatureId = (typeof features.items)[number]["id"]
+
+/** Common questions: shown on the home page and given to search engines as FAQ data. */
+export const faq = {
+  eyebrow: "questions",
+  title: "Frequently asked questions",
+  items: [
+    {
+      q: "Is it free to apply?",
+      a: `Yes. Applying is free and takes about five minutes. After a free 1:1 session with a mentor, you pay ${formatPrice(pricing.price)} only if you want to continue.`,
+    },
+    {
+      q: "How long is the internship, and is it online?",
+      a: "It's a 4-week virtual internship, done fully online from your own laptop. You build one real project, with a deliverable every week that your mentor reviews.",
+    },
+    {
+      q: "Which tracks can I choose?",
+      a: "Full-Stack, Backend, Frontend, App Development, AI & Machine Learning, Data Science, Python, Java and UI/UX Design.",
+    },
+    {
+      q: "Do I need experience?",
+      a: "No. The docs start from an empty laptop — installing every tool step by step — and your mentor assigns a project that fits your level after your 1:1.",
+    },
+    {
+      q: "What do I get at the end?",
+      a: "A finished project on your GitHub, code-reviewed by a mentor, and a certificate with a unique ID that anyone — like an employer — can verify on our website.",
+    },
+    {
+      q: "Is there a stipend or a job guarantee?",
+      a: "No. It's a paid, project-based internship focused on real project experience — not a job-placement program.",
+    },
+  ],
+} as const
 
 export const finalCta = {
   eyebrow: "Free to apply",

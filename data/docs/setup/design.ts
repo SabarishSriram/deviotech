@@ -1,3 +1,5 @@
+import { screenshotStep } from "@/data/docs/setup/common"
+import { mentorEmailText } from "@/data/site"
 import type { WalkPart } from "@/data/docs/types"
 
 /*
@@ -69,11 +71,12 @@ export const designSetup: WalkPart[] = [
         title: "Add your pages",
         why: "Pages keep each stage of your work separate, so you — and your mentor — always know where to look.",
         actions: [
-          { text: "In the left sidebar, next to Pages, click + (1)." },
-          { text: "Add these pages, one at a time: Cover, Research, Flows, Wireframes, Design system, UI, Prototype (2)." },
-          { text: "Double-click a page's name to rename it." },
+          { text: "Your file starts with one page. Double-click its name and rename it Research." },
+          { text: "In the left sidebar, next to Pages, click + (1) and add two more: Wireframes and UI (2)." },
+          { text: "Research holds your interview findings and screenshots. Wireframes starts with your user flows. UI holds your design system, final screens and prototype." },
         ],
         screen: "ux-pages",
+        note: "Figma's free plan allows 3 pages per file, so three is the plan. If your Education plan comes through, you can split pages up — for example a separate Design system page.",
       },
       {
         title: "Create a FigJam board",
@@ -86,10 +89,10 @@ export const designSetup: WalkPart[] = [
       },
       {
         title: "Share both with your mentor",
-        why: "“Can comment” lets your mentor leave feedback right on your frames without being able to change your work.",
+        why: "“Can view” lets your mentor see everything and leave comments right on your frames, without being able to change your work.",
         actions: [
           { text: "In the design file, click Share (1) in the top-right corner." },
-          { text: "Type your mentor's email (2) — they share it in your 1:1 — set access to can comment (3), and click Invite (4)." },
+          { text: `Type ${mentorEmailText} (2), leave access on can view (3) — viewers can still comment — and click Invite (4).` },
           { text: "Do the same in your FigJam board." },
         ],
         screen: "ux-share",
@@ -143,6 +146,15 @@ export const designSetup: WalkPart[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "help",
+    title: "When you need help",
+    time: "2 min",
+    intro: "Stuck for 30 minutes? Email your mentor — and show them what you see.",
+    steps: [screenshotStep],
+  },
+
+  /* ---------------------------------------------------------------- */
+  {
     id: "ai",
     title: "Optional: AI tools",
     time: "2 min",
@@ -165,8 +177,8 @@ export const designSetup: WalkPart[] = [
 
 export const designSetupDone = [
   "A Figma account (Education plan if you're verified)",
-  "A design file with pages: Cover, Research, Flows, Wireframes, Design system, UI, Prototype",
+  "A design file with three pages: Research, Wireframes and UI",
   "A FigJam board for research",
-  "Both shared with your mentor as can comment",
+  "Both shared with your mentor as can view (they can still comment)",
   "A GitHub account and a my-case-study repository with your outline",
 ]

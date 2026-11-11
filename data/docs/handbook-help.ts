@@ -89,8 +89,11 @@ const stackProblems: Record<Stack, GuideSection[]> = {
   expo: [
     {
       title: "Expo Go can't connect to my computer",
-      paragraphs: ["Your phone and laptop must be on the same Wi-Fi. College Wi-Fi often blocks this — use a tunnel instead:"],
-      code: { code: "npx expo start --tunnel" },
+      paragraphs: [
+        "Your phone and laptop must be on the same Wi-Fi. College Wi-Fi often blocks this — the easiest fix is to connect your laptop to your phone's hotspot.",
+        "Or use a tunnel. Install its helper into your project first (installing it globally fails with a permission error on many Macs), then start Expo with --tunnel:",
+      ],
+      code: { code: "npm install --save-dev @expo/ngrok\nnpx expo start --tunnel" },
     },
     {
       title: "API calls work on the web but fail on my phone",

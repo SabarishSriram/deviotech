@@ -9,7 +9,7 @@ import { studentLogout } from "@/app/(site)/portal/actions"
 import { PasswordForm } from "@/components/portal/password-form"
 import { Button } from "@/components/ui/button"
 import { Widget } from "@/components/widgets/widget"
-import { pagesFor } from "@/data/docs"
+import { docTitle, pagesFor } from "@/data/docs"
 import { site } from "@/data/site"
 import { getTrack } from "@/data/tracks"
 import { isSupabaseConfigured } from "@/lib/supabase/env"
@@ -285,7 +285,7 @@ function DocsCard({ application }: { application: ApplicationRow }) {
                   locked && "text-muted-foreground"
                 )}
               >
-                {page.title}
+                {docTitle(page, application.track)}
                 {locked ? <Lock className="size-3.5" aria-label="Locked" /> : <ArrowRight className="size-3.5 text-(--tc)" aria-hidden="true" />}
               </Link>
             </li>

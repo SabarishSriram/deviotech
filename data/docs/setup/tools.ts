@@ -68,7 +68,8 @@ export const pythonPart: WalkPart = {
       actions: [
         { text: "Open the .pkg file from your Downloads folder." },
         { text: "Click Continue (1) on each screen, Agree to the licence, then Install. Type your Mac password when asked." },
-        { text: "When it finishes, a Finder window opens — you can close it. Click Close in the installer." },
+        { text: "When it finishes, a Finder window opens. Double-click Install Certificates.command in it. It lets Python download data from https:// links. A terminal window runs for a few seconds — close it when it says [Process completed]." },
+        { text: "Click Close in the installer." },
       ],
       screen: "py-mac-installer",
     },
@@ -118,7 +119,7 @@ export const pythonPart: WalkPart = {
         { os: ["windows"], text: "Run:", code: "python --version" },
       ],
       screen: "py-version",
-      check: [{ text: "It prints Python 3 followed by a version (1). Anything from 3.12 up is fine." }],
+      check: [{ text: "It prints Python 3 followed by a version (1). Anything from 3.10 up works — Ubuntu 22.04 comes with 3.10, and that's fine." }],
       warn: "On Windows, if typing python opens the Microsoft Store instead, “Add python.exe to PATH” wasn't ticked. Run the installer again, choose Modify → Next, tick “Add Python to environment variables”, and click Install.",
     },
   ],

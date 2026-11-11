@@ -1,13 +1,16 @@
+import { createElement } from "react"
+
 import { designScreens } from "@/components/docs/screens/design"
 import { envScreensFor } from "@/components/docs/screens/environment"
 import { fullStackScreens } from "@/components/docs/screens/fullstack"
 import { PROJ, projectScreens } from "@/components/docs/screens/projects"
+import { terminalScreens } from "@/components/docs/screens/terminal"
 import { toolScreens } from "@/components/docs/screens/tools"
-import { workflowScreens, workflowScreensFor } from "@/components/docs/screens/workflow"
+import { CollaboratorsScreen, workflowScreens, workflowScreensFor } from "@/components/docs/screens/workflow"
 import { envDone, envWalks, designEnvironment, designEnvironmentDone } from "@/data/docs/environment"
 import { fullStackSetup, fullStackSetupDone } from "@/data/docs/fullstack-setup"
 import { fullStackEnvironment, fullStackEnvironmentDone, fullStackWorkflow, fullStackWorkflowDone } from "@/data/docs/fullstack-workflow"
-import { aiPart, githubPart, gitPart, nodePart, postgresPart, vscodePart, workspacePart } from "@/data/docs/setup/common"
+import { aiPart, githubPart, gitPart, nodePart, postgresPart, terminalPart, vscodePart, workspacePart } from "@/data/docs/setup/common"
 import { designSetup, designSetupDone } from "@/data/docs/setup/design"
 import {
   appNextTime,
@@ -40,7 +43,7 @@ import {
 } from "@/data/docs/setup/tools"
 import { codeWorkflow, designWorkflow, designWorkflowDone, workflowCtx, workflowDone } from "@/data/docs/workflow"
 import type { OS, WalkPart } from "@/data/docs/types"
-import type { TrackSlug } from "@/data/tracks"
+import { getTrack, trackShortName, type TrackSlug } from "@/data/tracks"
 
 /*
  * Every track's Getting started pages — Setup, How we work, Environment &
@@ -65,12 +68,18 @@ export type Walk = {
   facts?: [string, string][]
 }
 
-const setupScreens: Screens = { ...fullStackScreens, ...toolScreens, ...projectScreens }
+/** "Add your mentor to the repository" for every code track, with that track's repo name. */
+const collaboratorScreens: Screens = Object.fromEntries([
+  ["collaborators", (os: OS) => createElement(CollaboratorsScreen, { repo: "my-fullstack-app", os })],
+  ...Object.values(PROJ).map((p) => [`${p.key}-collaborators`, (os: OS) => createElement(CollaboratorsScreen, { repo: p.repo, os })]),
+])
+
+const setupScreens: Screens = { ...fullStackScreens, ...toolScreens, ...projectScreens, ...terminalScreens, ...collaboratorScreens }
 
 const setupFacts = (time: string): [string, string][] => [
   ["Time", `${time}, with breaks. You can stop after any part and come back.`],
-  ["You need", "A laptop (Windows 10/11, macOS 12+ or Ubuntu), an internet connection, and an email address."],
-  ["Stuck?", "Re-read the step and compare with the picture. Still stuck after 30 minutes? Send your mentor a screenshot."],
+  ["You need", "A laptop (Windows 10/11, macOS 12+ or Ubuntu 22.04+), an internet connection, and an email address."],
+  ["Stuck?", "Re-read the step and compare with the picture. Still stuck after 30 minutes? Email your mentor a screenshot."],
 ]
 
 const codeSetup = (parts: WalkPart[], intro: string, done: string[], time = "About 2 hours"): Walk => ({
@@ -96,40 +105,40 @@ const SETUP: Record<TrackSlug, Walk> = {
     done: fullStackSetupDone,
   },
   backend: codeSetup(
-    [...base, vscodePart(apiExtensions), ...gits, nodePart("Your API runs on it."), postgresPart, dockerPart, mongoPart, backendProject, backendNextTime, aiPart],
+    [...base, vscodePart(apiExtensions), terminalPart, ...gits, nodePart("Your API runs on it."), postgresPart, dockerPart, mongoPart, backendProject, backendNextTime, aiPart],
     "Start from a computer with nothing installed and finish with an Express + TypeScript API, connected to PostgreSQL, with Redis in Docker — running on your machine and saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Node.js and npm", "PostgreSQL, running", "Docker Desktop, with Redis in a container", "my-api answering on localhost:4000/health", "Your first commit, pushed to GitHub"]
   ),
   frontend: codeSetup(
-    [...base, vscodePart(nextExtensions), ...gits, nodePart("Next.js — the framework your website is built with — runs on it."), frontendProject, frontendNextTime, aiPart],
+    [...base, vscodePart(nextExtensions), terminalPart, ...gits, nodePart("Next.js — the framework your website is built with — runs on it."), frontendProject, frontendNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a Next.js website — TypeScript, Tailwind CSS and shadcn/ui — running on your machine and saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Node.js and npm", "my-frontend-app running on localhost:3000, with your own heading and a shadcn/ui button", "Your project on GitHub"],
     "About 1½ hours"
   ),
   "app-development": codeSetup(
-    [...base, vscodePart(webExtensions), ...gits, nodePart("Expo — the tool that builds and runs your app — runs on it."), expoPart, appProject, appNextTime, aiPart],
+    [...base, vscodePart(webExtensions), terminalPart, ...gits, nodePart("Expo — the tool that builds and runs your app — runs on it."), expoPart, appProject, appNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a React Native app running on your own phone through Expo Go, and saved on GitHub. Every click is shown; don't move on until each step's check passes.",
-    ["Node.js and npm", "Expo Go on your phone, and an Expo account", "my-mobile-app running on your phone", "EAS CLI, logged in", "Your project on GitHub"],
+    ["Node.js and npm", "Expo Go on your phone, and an Expo account", "my-mobile-app running on your phone", "Logged in to EAS, Expo's build tool", "Your project on GitHub"],
     "About 1½ hours"
   ),
   "ai-ml": codeSetup(
-    [...base, vscodePart(pythonExtensions(true)), ...gits, pythonPart, mlProject, mlNextTime, aiPart],
+    [...base, vscodePart(pythonExtensions(true)), terminalPart, ...gits, pythonPart, mlProject, mlNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a Python project — its own environment, the core machine-learning libraries and a first notebook — saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Python 3, with pip", "my-ml-project with a .venv and requirements.txt", "JupyterLab running your first notebook", "Your first commit, pushed to GitHub"]
   ),
   "data-science": codeSetup(
-    [...base, vscodePart(pythonExtensions(true)), ...gits, pythonPart, dsProject, powerBiPart, dsNextTime, aiPart],
+    [...base, vscodePart(pythonExtensions(true)), terminalPart, ...gits, pythonPart, dsProject, powerBiPart, dsNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a Python project — its own environment, the data-analysis libraries and a first notebook — saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Python 3, with pip", "my-analysis with a .venv and requirements.txt", "JupyterLab running your first notebook", "Your first commit, pushed to GitHub"]
   ),
   python: codeSetup(
-    [...base, vscodePart(pythonExtensions(false)), ...gits, pythonPart, pyProject, pyNextTime, aiPart],
+    [...base, vscodePart(pythonExtensions(false)), terminalPart, ...gits, pythonPart, pyProject, pyNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a Python project — a command-line program and a passing test — saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Python 3, with pip", "my-python-tool with a .venv and requirements.txt", "A program that runs and a test that passes", "Your first commit, pushed to GitHub"],
     "About 1½ hours"
   ),
   java: codeSetup(
-    [...base, vscodePart(javaExtensions), ...gits, jdkPart, postgresPart, javaProject, javaNextTime, aiPart],
+    [...base, vscodePart(javaExtensions), terminalPart, ...gits, jdkPart, postgresPart, javaProject, javaNextTime, aiPart],
     "Start from a computer with nothing installed and finish with a Spring Boot API connected to PostgreSQL, running on your machine and saved on GitHub. Every click is shown; don't move on until each step's check passes.",
     ["Java 21 (Temurin)", "PostgreSQL, running, with a devvy_java database", "my-java-api answering on localhost:8080/health", "Your project on GitHub"]
   ),
@@ -137,15 +146,15 @@ const SETUP: Record<TrackSlug, Walk> = {
     title: "Setup",
     intro: "Get Figma ready for your project and set up the GitHub case study that becomes your portfolio piece. No coding and no terminal — everything happens in the browser.",
     parts: designSetup,
-    screens: { ...designScreens, ...fullStackScreens },
+    screens: { ...designScreens, ...fullStackScreens, "term-screenshot": terminalScreens["term-screenshot"] },
     done: designSetupDone,
     doneTitle: "You're set up",
     doneIntro: "If you can tick every line, you're ready for the program.",
     next: "Next up: How we work, in the sidebar — how feedback and weekly reviews work for designers.",
     facts: [
-      ["Time", "About 30 minutes."],
+      ["Time", "About 35 minutes."],
       ["You need", "A laptop with Chrome or Firefox, and an email address."],
-      ["Stuck?", "Re-read the step and compare with the picture. Still stuck after 30 minutes? Send your mentor a screenshot."],
+      ["Stuck?", "Re-read the step and compare with the picture. Still stuck after 30 minutes? Email your mentor a screenshot."],
     ],
   },
 }
@@ -165,6 +174,7 @@ const workflowFor = (track: Exclude<TrackSlug, "full-stack" | "ui-ux">): Walk =>
       readme: ctx.readme.split("\n"),
       readmeExists: ctx.readmeExists,
       fixLines: ctx.needs.split("\n").length + 1,
+      tag: trackShortName(getTrack(track)!),
     }),
     done: workflowDone,
     doneTitle: "The loop, in six lines",
@@ -221,7 +231,7 @@ export function walkthroughFor(track: TrackSlug, doc: "setup" | "workflow" | "en
           done: designWorkflowDone,
           doneTitle: "Every week, in five lines",
           doneIntro: "Do these and your reviews will be quick and useful.",
-          next: "Next up: 3. Environment & secrets, in the sidebar — keeping research data private.",
+          next: "Next up: 3. Research data & sharing, in the sidebar — keeping what people tell you private.",
           pickOs: false,
         }
       : {

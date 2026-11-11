@@ -75,7 +75,7 @@ const CFG: Record<EnvTrack, Cfg> = {
     diagramSecret: ["EXPO_PUBLIC_API_URL=http://192.168…"],
     diagramExample: ["EXPO_PUBLIC_API_URL="],
     hosting: { url: "expo.dev/accounts/asha-rao/projects/my-mobile-app/environment-variables", title: "Environment variables · Expo", nav: ["Overview", "Builds", "Updates", "Environment variables", "Settings"], heading: "Environment variables", keys: [["EXPO_PUBLIC_API_URL", "https://api.my-mobile-app.example"]] },
-    status: [".env.example", ".gitignore", "app/(tabs)/index.tsx"],
+    status: [".env.example", ".gitignore", "src/app/index.tsx"],
     commit: "Add env example and API address setting",
   },
   "ai-ml": {
@@ -466,22 +466,28 @@ export function envScreensFor(track: EnvTrack): Record<string, Screen> {
       )
     screens["env-expo-code"] = (os) => {
       const lines = [
-        "export default function HomeScreen() {",
-        "  return (",
-        "    <ParallaxScrollView",
-        "      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}>",
-        "      <ThemedView style={styles.titleContainer}>",
-        '        <ThemedText type="title">Hello, Devvy!</ThemedText>',
-        "        <ThemedText>API: {process.env.EXPO_PUBLIC_API_URL}</ThemedText>",
-        "        <HelloWave />",
-        "      </ThemedView>",
+        "        <ThemedView style={styles.heroSection}>",
+        "          <AnimatedIcon />",
+        '          <ThemedText type="title" style={styles.title}>',
+        "            Hello, Devvy!",
+        "          </ThemedText>",
+        "          <ThemedText>API: {process.env.EXPO_PUBLIC_API_URL}</ThemedText>",
+        "        </ThemedView>",
       ]
       return (
         <VSCode
           os={os}
           folder={p.repo}
-          tree={[{ name: "app", dir: true, open: true }, { name: "(tabs)", dir: true, depth: 1, open: true }, { name: "index.tsx", depth: 2, active: true, status: "M" }, { name: "assets", dir: true }, { name: ".env", ignored: true }, { name: ".env.example", status: "U" }]}
-          editor={{ tabs: ["index.tsx"], active: "index.tsx", file: "app/(tabs)/index.tsx", lines, mark: { from: 7, to: 7, n: 1 } }}
+          tree={[
+            { name: "assets", dir: true },
+            { name: "scripts", dir: true },
+            { name: "src", dir: true, open: true },
+            { name: "app", dir: true, depth: 1, open: true },
+            { name: "index.tsx", depth: 2, active: true, status: "M" },
+            { name: ".env", ignored: true },
+            { name: ".env.example", status: "U" },
+          ]}
+          editor={{ tabs: ["index.tsx"], active: "index.tsx", file: "src/app/index.tsx", lines, mark: { from: 6, to: 6, n: 1 } }}
           branch={branch}
           sidebar={null}
         />
@@ -492,9 +498,9 @@ export function envScreensFor(track: EnvTrack): Record<string, Screen> {
         <Phone kind="android">
           <div className="relative h-full">
             <ExpoWelcome title="Hello, Devvy!" api="http://192.168.1.23:4000" />
-            <div className="absolute top-[192px] left-3">
+            <div className="absolute top-[138px] left-1/2 -translate-x-1/2">
               <Mark n={1}>
-                <span className="block h-5 w-44" />
+                <span className="block h-5 w-40" />
               </Mark>
             </div>
           </div>
@@ -507,8 +513,8 @@ export function envScreensFor(track: EnvTrack): Record<string, Screen> {
     const configPath = track === "python" ? "app/config.py" : "config.py"
     const configLines =
       track === "python"
-        ? ["import os", "", "from dotenv import load_dotenv", "", "load_dotenv()", "", 'DATABASE_PATH = os.getenv("DATABASE_PATH", "data.db")', 'TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")', 'TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")']
-        : ["import os", "", "from dotenv import load_dotenv", "", "load_dotenv()", "", 'DATA_DIR = os.getenv("DATA_DIR", "data")', 'LLM_API_KEY = os.getenv("LLM_API_KEY")']
+        ? ["import os", "", "from dotenv import load_dotenv", "", "load_dotenv()", "", 'DATABASE_PATH = os.getenv("DATABASE_PATH")', 'TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")', 'TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")']
+        : ["import os", "", "from dotenv import load_dotenv", "", "load_dotenv()", "", 'DATA_DIR = os.getenv("DATA_DIR")', 'LLM_API_KEY = os.getenv("LLM_API_KEY")']
     const withConfig: TreeNode[] =
       track === "python"
         ? [{ name: "app", dir: true, open: true }, { name: "__init__.py", depth: 1 }, { name: "config.py", depth: 1, status: "U", active: true }, { name: "main.py", depth: 1 }, { name: "tests", dir: true }, { name: ".env", ignored: true }, { name: ".env.example", status: "U" }, { name: ".gitignore" }, { name: "README.md" }, { name: "requirements.txt", status: "M" }]

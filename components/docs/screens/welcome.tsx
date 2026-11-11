@@ -9,14 +9,14 @@ import {
   KeyRound,
   Laptop,
   Lock,
-  MessageSquare,
   Paperclip,
   Rocket,
   SquareTerminal,
 } from "lucide-react"
 import { SiGithub } from "react-icons/si"
 
-import { Board, Browser, Mark, MONO_FONT } from "@/components/docs/screens/kit"
+import { Board, Browser, EmailCompose, Mark, MONO_FONT } from "@/components/docs/screens/kit"
+import { mentorContact } from "@/data/site"
 import type { OS } from "@/data/docs/types"
 import { cn } from "@/lib/utils"
 
@@ -29,6 +29,8 @@ import { cn } from "@/lib/utils"
 type Screen = (os: OS) => React.ReactNode
 
 const RED = "#ff2a33"
+/** Shown in pictures of emails; the real address is in data/site.ts. */
+export const MENTOR_EMAIL = mentorContact.email || "your-mentor@example.com"
 
 /* ------------------------------------------------------------------ */
 
@@ -221,32 +223,27 @@ const week: Screen = () => {
 /* ------------------------------------------------------------------ */
 
 const help: Screen = () => (
-  <Board className="mx-auto w-[560px]">
-    <p className="mb-3 flex items-center gap-2 text-[12px] text-[#59636e]">
-      <MessageSquare className="size-4" /> Message to your mentor
-    </p>
-    <div className="space-y-3 rounded-2xl rounded-tl-sm bg-[#f0f4f8] p-4 text-[13px] leading-relaxed">
-      <Mark n={1} badge="r">
-        <p className="px-1">
-          Hi! I&apos;m trying to start my API with <code style={{ fontFamily: MONO_FONT }}>npm run dev</code> in the server folder.
+  <EmailCompose to={MENTOR_EMAIL} subject="[Full-Stack] npm run dev fails: authentication failed">
+    <Mark n={1} badge="r" className="mr-8">
+      <p className="px-1">
+        Hi! I&apos;m trying to start my API with <code style={{ fontFamily: MONO_FONT }}>npm run dev</code> in the server folder.
+      </p>
+    </Mark>
+    <Mark n={2} badge="r" className="mr-8">
+      <p className="px-1">I checked PostgreSQL is running and re-read the .env step. Same error after restarting VS Code.</p>
+    </Mark>
+    <Mark n={3} badge="r" className="mr-8">
+      <div className="space-y-2 px-1">
+        <p className="rounded bg-[#fce8e6] px-2 py-1.5 text-[11.5px] text-[#c5221f]" style={{ fontFamily: MONO_FONT }}>
+          <AlertCircle className="mr-1 inline size-3" />
+          Error: P1000: Authentication failed against database server
         </p>
-      </Mark>
-      <Mark n={2} badge="r">
-        <p className="px-1">I checked PostgreSQL is running and re-read the .env step. Same error after restarting VS Code.</p>
-      </Mark>
-      <Mark n={3} badge="r">
-        <div className="space-y-2 px-1">
-          <p className="rounded bg-white px-2 py-1.5 text-[11.5px] text-[#cf222e]" style={{ fontFamily: MONO_FONT }}>
-            <AlertCircle className="mr-1 inline size-3" />
-            Error: P1000: Authentication failed against database server
-          </p>
-          <p className="flex items-center gap-1.5 text-[12px] text-[#0969da]">
-            <Paperclip className="size-3.5" /> screenshot.png
-          </p>
-        </div>
-      </Mark>
-    </div>
-  </Board>
+        <p className="flex items-center gap-1.5 text-[12px] text-[#0b57d0]">
+          <Paperclip className="size-3.5" /> screenshot.png
+        </p>
+      </div>
+    </Mark>
+  </EmailCompose>
 )
 
 /* ------------------------------------------------------------------ */

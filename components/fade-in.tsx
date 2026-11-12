@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { motion } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 
 type FadeInProps = {
   children: React.ReactNode
@@ -17,7 +18,7 @@ type FadeInProps = {
  * Elements carry data-fade so the <noscript> rule in the root layout can reveal them.
  */
 export function FadeIn({ children, className, delay = 0, as = "div" }: FadeInProps) {
-  const reduceMotion = useReducedMotion()
+  const reduceMotion = useSafeReducedMotion()
   const MotionTag = as === "li" ? motion.li : motion.div
 
   return (

@@ -1,7 +1,8 @@
 "use client"
 
 import { AppWindow, ArrowUpRight, Check, Database, FileUser, GitPullRequest, Play, Server } from "lucide-react"
-import { motion, useInView, useReducedMotion } from "framer-motion"
+import { motion, useInView } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 import Link from "next/link"
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -50,7 +51,7 @@ const steps = Object.fromEntries(howItWorks.steps.map((s, i) => [s.id, { ...s, i
 const springy = "ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 
 export function HowItWorks() {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const gridRef = useRef<HTMLDivElement>(null)
   const inView = useInView(gridRef, { margin: "-120px" })
   const [hovered, setHovered] = useState<TileKey | null>(null)
@@ -135,7 +136,7 @@ type StepTileProps = {
 }
 
 function StepTile({ step, grow, lit, onEnter, visual, size = "md", layout = "column", className }: StepTileProps) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const number = String(step.index + 1).padStart(2, "0")
   const titleId = `step-${step.id}-title`
 
@@ -216,7 +217,7 @@ function StepTile({ step, grow, lit, onEnter, visual, size = "md", layout = "col
 }
 
 function CtaTile({ grow, onEnter, className }: { grow: number; onEnter: () => void; className?: string }) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
 
   return (
     <motion.div

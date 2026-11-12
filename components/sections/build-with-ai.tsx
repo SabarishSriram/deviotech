@@ -1,7 +1,8 @@
 "use client"
 
 import { AlertTriangle, Brain, Check, Fingerprint, SearchCheck, Zap, type LucideIcon } from "lucide-react"
-import { useInView, useReducedMotion } from "framer-motion"
+import { useInView } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 import { useEffect, useRef, useState } from "react"
 
 import { FadeIn } from "@/components/fade-in"
@@ -24,7 +25,7 @@ const STAGE_MS = 6000
 const pop = "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-300"
 
 export function BuildWithAi() {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { margin: "-120px" })
   const [active, setActive] = useState(0)

@@ -21,11 +21,12 @@ const featureIcons: Record<FeatureId, LucideIcon> = {
   resume: FileUser,
 }
 
+// In the same order as features.items in data/site.ts: each row adds up to 6.
 const span: Record<FeatureId, string> = {
   prd: "lg:col-span-4",
-  reviews: "lg:col-span-2",
-  architecture: "lg:col-span-3",
-  docs: "lg:col-span-3",
+  architecture: "lg:col-span-2",
+  docs: "lg:col-span-2",
+  reviews: "lg:col-span-4",
   certificate: "lg:col-span-3",
   resume: "lg:col-span-3",
 }

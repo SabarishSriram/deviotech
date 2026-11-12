@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 import { useRef } from "react"
 
 import { cn } from "@/lib/utils"
@@ -18,7 +19,7 @@ export function Tilt({
   className?: string
   max?: number
 }) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const px = useMotionValue(0.5)
   const py = useMotionValue(0.5)

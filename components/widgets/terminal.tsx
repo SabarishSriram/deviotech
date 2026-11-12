@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useInView, useReducedMotion } from "framer-motion"
+import { useInView } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -33,22 +34,26 @@ const starts = lines.map((_, i) => lines.slice(0, i).reduce((n, l) => n + l.text
 
 /** A looping, self-typing PR-review terminal. Shows full text under reduced-motion. */
 export function Terminal({ className }: { className?: string }) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { margin: "-40px" })
-  const [typed, setTyped] = useState(reduce ? total : 0)
+  const [count, setTyped] = useState(0)
+  // Reduced motion shows everything — but only after hydration, so the first
+  // client render matches the server's HTML.
+  const typed = reduce ? total : count
 
   useEffect(() => {
-    if (reduce || !inView) return
-    let count = typed
+    if (reduce) return
+    if (!inView) return
+    let n = typed
     const id = setInterval(() => {
-      count += 1
-      if (count > total) {
+      n += 1
+      if (n > total) {
         setTimeout(() => setTyped(0), 2200)
         clearInterval(id)
         return
       }
-      setTyped(count)
+      setTyped(n)
     }, 38)
     return () => clearInterval(id)
     // re-arm whenever we re-enter view or reset to 0

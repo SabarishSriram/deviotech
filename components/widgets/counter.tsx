@@ -1,7 +1,9 @@
 "use client"
 
-import { animate, useInView, useReducedMotion } from "framer-motion"
+import { animate, useInView } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 import { useEffect, useRef, useState } from "react"
+
 
 /**
  * Counts up to `value` when scrolled into view. Renders the final value
@@ -20,13 +22,17 @@ export function Counter({
   duration?: number
   className?: string
 }) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: "-40px" })
-  const [display, setDisplay] = useState(reduce ? value : 0)
+  const [count, setDisplay] = useState(0)
+  // Reduced motion shows the final value — but only after hydration, so the
+  // first client render matches the server's HTML.
+  const display = reduce ? value : count
 
   useEffect(() => {
-    if (!inView || reduce) return
+    if (reduce) return
+    if (!inView) return
     const controls = animate(0, value, {
       duration,
       ease: [0.16, 1, 0.3, 1],

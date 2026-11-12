@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import { motion } from "framer-motion"
+import { useSafeReducedMotion } from "@/lib/use-reduced-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -25,7 +26,7 @@ type WidgetProps = {
  * and a subtle hover lift. Honors reduced-motion.
  */
 export function Widget({ children, className, delay = 0, as = "div", interactive = true, eager = false }: WidgetProps) {
-  const reduce = useReducedMotion()
+  const reduce = useSafeReducedMotion()
   const MotionTag = as === "li" ? motion.li : motion.div
 
   return (

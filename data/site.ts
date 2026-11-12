@@ -59,7 +59,7 @@ export const hero = {
   stats: [
     { value: 250, suffix: "+", label: "Students enrolled" },
     { value: 9, suffix: "", label: "Specialised tracks" },
-    { value: 40, suffix: "+", label: "Projects to build" },
+    { value: 27, suffix: "", label: "Projects to build" },
     { value: 4, suffix: "", label: "Weeks, fully online" },
   ],
   marquee: [

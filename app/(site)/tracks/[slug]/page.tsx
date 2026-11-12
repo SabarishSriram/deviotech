@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: PageProps<"/tracks/[slug]">):
   const track = getTrack(slug)
   if (!track) return {}
 
-  const title = `${track.name} Internship with Certificate`
-  const description = `${track.oneLiner} A ${program.durationWeeks}-week online internship with mentor code reviews and a verifiable certificate. Apply free.`
+  const title = `${track.name} Course with a Real Project`
+  const description = `${track.oneLiner} Learn it in ${program.durationWeeks} weeks by building a real project, with mentor code reviews and a verifiable certificate.`
   return {
     title,
     description,

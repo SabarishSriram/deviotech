@@ -45,6 +45,7 @@ export const DOC_PAGES = [
   { id: "setup", title: "1. Setup", group: "Getting started", locked: false },
   { id: "workflow", title: "2. How we work", group: "Getting started", locked: false },
   { id: "environment", title: "3. Environment & secrets", group: "Getting started", locked: false },
+  { id: "ai", title: "Build with AI", group: "Building", locked: false },
   { id: "standards", title: "Coding standards", group: "Building", locked: false },
   { id: "testing", title: "Testing", group: "Building", locked: false },
   { id: "deployment", title: "Deployment", group: "Building", locked: false },
@@ -52,15 +53,19 @@ export const DOC_PAGES = [
   { id: "resources", title: "Resources", group: "Building", locked: false },
   { id: "rubric", title: "Review rubric", group: "Reviews", locked: false },
   { id: "submission", title: "Submission checklist", group: "Reviews", locked: false },
-  { id: "prd", title: "PRD", group: "Your project", locked: true },
-  { id: "flows", title: "User flows", group: "Your project", locked: true },
-  { id: "architecture", title: "Architecture", group: "Your project", locked: true },
-  { id: "api", title: "API contract", group: "Your project", locked: true },
-  { id: "data", title: "Sample data", group: "Your project", locked: true },
-  { id: "milestones", title: "Milestones", group: "Your project", locked: true },
+  { id: "overview", title: "Start here", group: "Your project", locked: true },
+  { id: "week-1", title: "Week 1", group: "Your project", locked: true },
+  { id: "week-2", title: "Week 2", group: "Your project", locked: true },
+  { id: "week-3", title: "Week 3", group: "Your project", locked: true },
+  { id: "week-4", title: "Week 4", group: "Your project", locked: true },
+  { id: "api", title: "API contract", group: "Reference", locked: true },
+  { id: "data", title: "Sample data", group: "Reference", locked: true },
 ] as const
 
 export type DocId = (typeof DOC_PAGES)[number]["id"]
+
+/** Pages that were merged into "Start here" or split into weeks — old links still land somewhere useful. */
+export const LEGACY_DOCS: Record<string, DocId> = { prd: "overview", flows: "overview", architecture: "overview", milestones: "week-1" }
 
 export function isDocId(value: unknown): value is DocId {
   return DOC_PAGES.some((page) => page.id === value)

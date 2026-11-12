@@ -129,29 +129,29 @@ export type HowItWorksStepId = (typeof howItWorks.steps)[number]["id"]
 
 export const buildWithAi = {
   eyebrow: "build with ai",
-  title: "Learn to build the way teams build in 2026.",
+  title: "Build with AI. Understand every line.",
   description:
-    "AI writes code fast. Engineers who can plan, review and ship it are the ones who get hired. Every track teaches you to use AI as a tool — not a crutch.",
+    "Every team builds with AI now, and so will you. The difference: you'll understand what it wrote — well enough to debug it when it breaks, and explain it in review.",
   items: [
     {
       id: "plan",
-      title: "Plan with AI",
-      description: "Break down a PRD, draft architecture and schemas with AI, then refine them yourself.",
+      title: "Plan it first",
+      description: "Know what you want before you ask. Break the week's task down, then give AI one small piece at a time.",
     },
     {
       id: "build",
-      title: "Build faster",
-      description: "Use Claude, Cursor and Copilot to scaffold and iterate.",
+      title: "Build with AI",
+      description: "Claude, Cursor and Copilot write the first draft. You read every line as it goes in.",
     },
     {
       id: "review",
-      title: "Review everything",
-      description: "Test, debug and explain every line AI gives you.",
+      title: "Run it, break it, debug it",
+      description: "Check it works, break it on purpose, and find the cause yourself before you ask AI for a fix.",
     },
     {
       id: "own",
-      title: "Own the output",
-      description: "In reviews you defend your decisions, not the AI's.",
+      title: "Explain it in review",
+      description: "Your mentor asks why each line is there. If you can't explain it, it doesn't get merged.",
     },
   ],
 } as const

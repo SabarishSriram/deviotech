@@ -8,7 +8,7 @@ import { Suspense } from "react"
 import { AdminShell } from "@/components/admin/admin-shell"
 import { DocBody } from "@/components/docs/doc-views"
 import { DocsLayout, type DocNavItem } from "@/components/docs/docs-layout"
-import { DOC_PAGES, docTitle, isDocId, isTrackProject, pagesFor } from "@/data/docs"
+import { DOC_PAGES, docTitle, isDocId, isTrackProject, LEGACY_DOCS, pagesFor } from "@/data/docs"
 import { getTrack } from "@/data/tracks"
 import { requireAdmin } from "@/lib/admin-session"
 import { trackColorStyle, trackIcons } from "@/lib/track-icons"
@@ -35,7 +35,8 @@ async function TrackDocs({ params, searchParams }: Pick<PageProps<"/admin/tracks
 
   const query = await searchParams
   const project = typeof query.project === "string" && isTrackProject(track.slug, query.project) ? query.project : null
-  const requested = isDocId(query.doc) ? query.doc : "setup"
+  const asked = typeof query.doc === "string" ? (LEGACY_DOCS[query.doc] ?? query.doc) : "setup"
+  const requested = isDocId(asked) ? asked : "setup"
   // Project docs need a project; fall back to setup when none is picked.
   const doc = !project && DOC_PAGES.find((p) => p.id === requested)?.locked ? "setup" : requested
 
@@ -82,7 +83,7 @@ async function TrackDocs({ params, searchParams }: Pick<PageProps<"/admin/tracks
           </div>
         }
       >
-        <DocBody doc={doc} track={track} projectSlug={project} />
+        <DocBody doc={doc} track={track} projectSlug={project} hrefFor={(d) => `${base}?${project ? `project=${project}&` : ""}doc=${d}`} />
       </DocsLayout>
     </AdminShell>
   )

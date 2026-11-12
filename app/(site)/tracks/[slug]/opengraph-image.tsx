@@ -38,7 +38,7 @@ export default async function TrackImage({ params }: { params: Promise<{ slug: s
           <span style={{ fontSize: 34, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase" }}>{site.name}</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <div style={{ fontSize: 28, color: "#FF6B70", letterSpacing: 3, textTransform: "uppercase" }}>{`${program.durationWeeks}-week internship`}</div>
+          <div style={{ fontSize: 28, color: "#FF6B70", letterSpacing: 3, textTransform: "uppercase" }}>{`${program.durationWeeks}-week course`}</div>
           <div style={{ display: "flex", fontSize: 84, fontWeight: 700, letterSpacing: -2, lineHeight: 1.05 }}>{track?.name ?? site.name}</div>
           <div style={{ fontSize: 30, color: "#a1a1aa", lineHeight: 1.3 }}>{track?.oneLiner ?? ""}</div>
         </div>

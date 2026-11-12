@@ -16,6 +16,9 @@ const palettes = {
     edgeLabelBackground: "#ffffff",
     attributeBackgroundColorOdd: "#ffffff",
     attributeBackgroundColorEven: "#fafafa",
+    // Mermaid 11 reads these for ER diagram rows.
+    rowOdd: "#ffffff",
+    rowEven: "#fafafa",
   },
   dark: {
     background: "transparent",
@@ -29,6 +32,8 @@ const palettes = {
     edgeLabelBackground: "#18181b",
     attributeBackgroundColorOdd: "#1f1f22",
     attributeBackgroundColorEven: "#27272a",
+    rowOdd: "#1f1f22",
+    rowEven: "#27272a",
   },
 }
 

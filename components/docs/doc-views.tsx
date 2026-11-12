@@ -1,18 +1,21 @@
-import { CheckCircle2, ExternalLink, Lightbulb, Lock, Sparkles, Target, XCircle } from "lucide-react"
+import { CheckCircle2, ExternalLink, Lock } from "lucide-react"
 
 import { CodeBlock } from "@/components/docs/code-block"
-import { Mermaid } from "@/components/docs/mermaid"
-import { Mockup } from "@/components/docs/mockup"
 import { welcomeScreens } from "@/components/docs/screens/welcome"
 import { walkthroughFor } from "@/components/docs/track-walkthroughs"
 import { Walkthrough } from "@/components/docs/walkthrough"
 import { welcomeWalk } from "@/data/docs/welcome"
+import { weekWalk } from "@/components/docs/build-walk"
+import { buildWithAiDone, buildWithAiWalk } from "@/data/docs/build-with-ai"
+import { getProjectBuild } from "@/data/docs/build"
+import { ProjectOverview } from "@/components/docs/project-overview"
+import { screenPictures } from "@/components/docs/screen-pictures"
+import { projectScreens } from "@/data/docs/project-screens"
 import { OsBadge, Steps } from "@/components/docs/steps"
 import {
   contracts,
   getProjectDocs,
   sampleData,
-  trackArchitecture,
   type DocId,
 } from "@/data/docs"
 import { deploymentGuide, standardsGuide, testingGuide } from "@/data/docs/handbook-build"
@@ -20,14 +23,10 @@ import {
   resourcesGuide,
   rubricGuide,
   submissionGuide,
-  trackStretchGoals,
   troubleshootingGuide,
 } from "@/data/docs/handbook-help"
-import { mocks } from "@/data/docs/mocks"
 import type { GuideSection, ProjectDocs } from "@/data/docs/types"
 import type { Track } from "@/data/tracks"
-import { dataDiagram, flowDiagram, systemDiagram } from "@/lib/docs-diagrams"
-import { trackColorStyle } from "@/lib/track-icons"
 
 /* ------------------------------------------------------------------ */
 /* Building blocks                                                     */
@@ -35,15 +34,6 @@ import { trackColorStyle } from "@/lib/track-icons"
 
 function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-12 mb-4 border-b pb-2 font-sans text-lg font-semibold tracking-tight">{children}</h2>
-}
-
-function Callout({ icon: Icon = Lightbulb, children }: { icon?: typeof Lightbulb; children: React.ReactNode }) {
-  return (
-    <div className="flex gap-3 rounded-lg border border-brand/25 bg-brand/5 px-4 py-3">
-      <Icon className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden="true" />
-      <div className="min-w-0 text-pretty whitespace-pre-line">{children}</div>
-    </div>
-  )
 }
 
 function Bullets({ items, icon: Icon }: { items: string[]; icon?: typeof CheckCircle2 }) {
@@ -128,147 +118,53 @@ function Checklist({ items }: { items: string[] }) {
 /* ------------------------------------------------------------------ */
 
 
-function PrdDoc({ track, project, name }: { track: Track; project: ProjectDocs; name: string }) {
+/** A week for a project that doesn't have a step-by-step plan yet: its short task list. */
+function WeekFallback({ track, project, name, index }: { track: Track; project: ProjectDocs; name: string; index: number }) {
+  const week = track.weeks[index]
   return (
     <>
-      <DocTitle eyebrow={`${track.name} · PRD`} title={name} intro={project.pitch} />
-      {mocks[project.slug] && (
-        <figure style={trackColorStyle(track.slug)} className="track-color mb-2">
-          <div className="rounded-2xl border bg-muted/30 p-4 sm:p-6">
-            <Mockup mock={mocks[project.slug]} />
-          </div>
-          <figcaption className="mt-2 text-xs text-muted-foreground">
-            Illustrative preview of the finished project. Your own design can look different.
-          </figcaption>
-        </figure>
-      )}
-      <H2>Who it&apos;s for</H2>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {project.users.map((user) => (
-          <div key={user.who} className="rounded-xl border bg-card p-4">
-            <p className="font-medium">{user.who}</p>
-            <p className="mt-1 text-muted-foreground">{user.need}</p>
-          </div>
-        ))}
-      </div>
-      <H2>Must have</H2>
-      <Bullets items={project.mustHave} icon={CheckCircle2} />
-      <H2>Stretch goals</H2>
-      <p className="mb-3 text-muted-foreground">Optional extras once the must-haves are done and reviewed. They make your project stand out.</p>
-      <Bullets items={[...project.niceToHave, ...trackStretchGoals[track.slug]]} icon={Sparkles} />
-      <H2>Out of scope</H2>
-      <Bullets items={project.outOfScope} icon={XCircle} />
-      <H2>Done when</H2>
-      <Bullets items={project.doneWhen} icon={Target} />
+      <DocTitle eyebrow={`${track.name} · Week ${index + 1}`} title={`${week.title} — ${name}`} intro="This week's tasks. Each one ends with the deliverable your mentor reviews." />
+      <section>
+        <ul className="mt-6 space-y-2">
+          {project.weeks[index].map((task) => (
+            <li key={task} className="flex gap-2.5">
+              <span className="mt-0.5 size-4 shrink-0 rounded border" aria-hidden="true" />
+              <span className="text-pretty">{task}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 flex items-start gap-2 rounded-lg border border-dashed px-3 py-2 text-sm">
+          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden="true" />
+          <span>
+            <span className="text-muted-foreground">Deliverable: </span>
+            {week.deliverable}
+          </span>
+        </p>
+      </section>
     </>
   )
 }
 
-function FlowsDoc({ track, project, name }: { track: Track; project: ProjectDocs; name: string }) {
+/** A week of the project as a step-by-step walkthrough, built with AI. */
+function WeekDoc({ track, project, name, index, progress }: { track: Track; project: ProjectDocs; name: string; index: number; progress?: DocProgress }) {
+  const build = getProjectBuild(track.slug, project.slug)
+  if (!build) return <WeekFallback track={track} project={project} name={name} index={index} />
+  const screens = projectScreens[project.slug] ?? []
+  const { parts, done } = weekWalk(track, project, name, build[index], index, screens)
+  const doc = `week-${index + 1}`
   return (
     <>
-      <DocTitle eyebrow={`${track.name} · User flows`} title={name} intro="The main paths a user takes through your product. Build and test each one end to end." />
-      {project.flows.map((flow) => (
-        <section key={flow.name}>
-          <H2>{flow.name}</H2>
-          <Mermaid chart={flowDiagram(flow.steps)} caption={`${flow.name} — step by step`} />
-          <ol className="relative space-y-3 border-l pl-6">
-            {flow.steps.map((step, i) => (
-              <li key={step} className="relative">
-                <span className="absolute top-0.5 -left-[2.0625rem] flex size-5 items-center justify-center rounded-full border bg-background font-mono text-[10px] text-muted-foreground">
-                  {i + 1}
-                </span>
-                {step}
-              </li>
-            ))}
-          </ol>
-        </section>
-      ))}
-    </>
-  )
-}
-
-function ArchitectureDoc({ track, project, name }: { track: Track; project: ProjectDocs; name: string }) {
-  const arch = trackArchitecture[track.slug]
-  return (
-    <>
-      <DocTitle eyebrow={`${track.name} · Architecture`} title={name} intro={arch.summary} />
-      <H2>System design</H2>
-      <Mermaid chart={systemDiagram(track.slug, project)} caption="How the pieces connect. The highlighted box is where most of your logic lives." />
-      <H2>The pieces</H2>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {arch.parts.map((part) => (
-          <div key={part.name} className="rounded-xl border bg-card p-4">
-            <p className="font-medium">{part.name}</p>
-            <p className="mt-1 text-muted-foreground">{part.role}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4">
-        <Callout>{project.overview}</Callout>
-      </div>
-
-      <H2>{arch.dataTitle}</H2>
-      {dataDiagram(track.slug, project) && (
-        <Mermaid chart={dataDiagram(track.slug, project)!} caption="Entity-relationship diagram: tables, their fields and how they link." />
-      )}
-      <div className="grid gap-3 sm:grid-cols-2">
-        {project.data.map((entity) => (
-          <div key={entity.name} className="overflow-hidden rounded-xl border bg-card">
-            <p className="border-b bg-muted/40 px-4 py-2 font-mono text-sm font-medium">{entity.name}</p>
-            <ul className="divide-y">
-              {entity.fields.map((field) => (
-                <li key={field} className="px-4 py-1.5 font-mono text-xs">
-                  {field}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <H2>{arch.interfaceTitle}</H2>
-      <div className="overflow-hidden rounded-xl border bg-card">
-        {project.interface.map((item) => (
-          <div key={item.label} className="grid gap-1 border-b px-4 py-3 last:border-b-0 sm:grid-cols-[minmax(0,18rem)_1fr] sm:gap-4">
-            <code className="font-mono text-[13px] font-medium break-words">{item.label}</code>
-            <p className="text-muted-foreground">{item.detail}</p>
-          </div>
-        ))}
-      </div>
-    </>
-  )
-}
-
-function MilestonesDoc({ track, project, name }: { track: Track; project: ProjectDocs; name: string }) {
-  return (
-    <>
-      <DocTitle eyebrow={`${track.name} · Milestones`} title={name} intro="Your week-by-week plan. Each week ends with the deliverable your mentor reviews." />
-      {project.weeks.map((tasks, i) => {
-        const week = track.weeks[i]
-        return (
-          <section key={i}>
-            <H2>
-              Week {i + 1} — {week.title}
-            </H2>
-            <ul className="space-y-2">
-              {tasks.map((task) => (
-                <li key={task} className="flex gap-2.5">
-                  <span className="mt-0.5 size-4 shrink-0 rounded border" aria-hidden="true" />
-                  <span className="text-pretty">{task}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 flex items-start gap-2 rounded-lg border border-dashed px-3 py-2 text-sm">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden="true" />
-              <span>
-                <span className="text-muted-foreground">Deliverable: </span>
-                {week.deliverable}
-              </span>
-            </p>
-          </section>
-        )
-      })}
+      <DocTitle eyebrow={`${name} · Week ${index + 1}`} title={track.weeks[index].title} intro={build[index].intro} />
+      <Walkthrough
+        parts={parts}
+        screens={screenPictures(track.slug, screens, parts)}
+        pickOs={index === 3}
+        done={done}
+        doneTitle={`Week ${index + 1} is done when`}
+        doneIntro="Your mentor checks these in the weekly review."
+        next={index < 3 ? `Next up: Week ${index + 2}, in the sidebar.` : "That's the project. Well done — your mentor will be in touch about your certificate."}
+        progress={progress ? { scope: `${track.slug}/${doc}`, mode: progress.mode, initial: progress.done } : undefined}
+      />
     </>
   )
 }
@@ -384,7 +280,7 @@ export function LockedDoc({ reason }: { reason: "unpaid" | "no-project" }) {
       </h1>
       <p className="mt-2 max-w-sm text-muted-foreground">
         {reason === "unpaid"
-          ? "Your PRD, user flows, architecture and milestones open once your payment is confirmed after your 1:1 session."
+          ? "Your project's Start here page and week-by-week build plan open once your payment is confirmed after your 1:1 session."
           : "Your mentor assigns your project after your 1:1. These docs appear here as soon as they do."}
       </p>
     </div>
@@ -395,7 +291,20 @@ export function LockedDoc({ reason }: { reason: "unpaid" | "no-project" }) {
 /** Getting started progress for the signed-in student; omitted in admin previews. */
 export type DocProgress = { mode: "account" | "local"; done: string[] }
 
-export function DocBody({ doc, track, projectSlug, progress }: { doc: DocId; track: Track; projectSlug: string | null; progress?: DocProgress }) {
+export function DocBody({
+  doc,
+  track,
+  projectSlug,
+  progress,
+  hrefFor,
+}: {
+  doc: DocId
+  track: Track
+  projectSlug: string | null
+  progress?: DocProgress
+  /** Where a doc page lives (the portal and the admin preview use different URLs). */
+  hrefFor: (doc: string) => string
+}) {
   if (doc === "welcome") {
     return (
       <>
@@ -444,6 +353,26 @@ export function DocBody({ doc, track, projectSlug, progress }: { doc: DocId; tra
     )
   }
 
+  if (doc === "ai") {
+    return (
+      <>
+        <DocTitle
+          eyebrow="Building"
+          title="Build with AI"
+          intro="How you'll use AI in this course: build with it, then understand every line well enough to explain it and debug it. Every task in your week-by-week plan follows the loop on this page."
+        />
+        <Walkthrough
+          parts={buildWithAiWalk}
+          screens={{}}
+          pickOs={false}
+          done={buildWithAiDone}
+          doneTitle="The loop, in six lines"
+          doneIntro="Every task, every week."
+        />
+      </>
+    )
+  }
+
   const handbook = handbookPages[doc as keyof typeof handbookPages]
   if (handbook) {
     return (
@@ -458,10 +387,10 @@ export function DocBody({ doc, track, projectSlug, progress }: { doc: DocId; tra
   const name = track.projects.find((p) => p.slug === projectSlug)?.name
   if (!project || !name) return <LockedDoc reason="no-project" />
 
-  if (doc === "prd") return <PrdDoc track={track} project={project} name={name} />
-  if (doc === "flows") return <FlowsDoc track={track} project={project} name={name} />
-  if (doc === "architecture") return <ArchitectureDoc track={track} project={project} name={name} />
+  if (doc === "overview") return <ProjectOverview track={track} project={project} name={name} hrefFor={hrefFor} />
   if (doc === "api") return <ApiDoc track={track} slug={project.slug} name={name} />
   if (doc === "data") return <SampleDataDoc track={track} slug={project.slug} name={name} />
-  return <MilestonesDoc track={track} project={project} name={name} />
+  const week = /^week-([1-4])$/.exec(doc)
+  if (week) return <WeekDoc track={track} project={project} name={name} index={Number(week[1]) - 1} progress={progress} />
+  return <LockedDoc reason="no-project" />
 }

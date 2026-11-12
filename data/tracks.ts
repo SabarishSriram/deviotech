@@ -47,14 +47,14 @@ export const tracks: Track[] = [
     skills: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Prisma", "REST APIs", "JWT Auth", "Vercel", "Render"],
     weeks: [
       {
-        title: "Spec & system design",
+        title: "Understand & plan",
         points: [
-          "Turn the PRD into user stories and a task board",
-          "Draw the architecture: React client, Express API, PostgreSQL",
-          "Design the database schema and relations",
-          "Write API contracts — routes, payloads and error codes",
+          "Learn the project: screens, user flows, architecture and data",
+          "Put every feature in the order you'll build it",
+          "Write your build plan, error format and key decisions",
+          "Get the plan signed off by your mentor",
         ],
-        deliverable: "Design doc your mentor signs off",
+        deliverable: "A plan your mentor signs off",
       },
       {
         title: "Backend API",
@@ -105,6 +105,7 @@ export const tracks: Track[] = [
       {
         title: "API design",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Model your resources and write the OpenAPI contract",
           "Design the data model in MongoDB or PostgreSQL (with Prisma)",
           "Plan the Express layers: routes, services, data access",
@@ -159,6 +160,7 @@ export const tracks: Track[] = [
       {
         title: "UI plan",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Semantic HTML, modern CSS layout and JavaScript refresher",
           "Break the designs into a component tree",
           "Set up Next.js with TypeScript, Tailwind CSS and shadcn/ui",
@@ -214,6 +216,7 @@ export const tracks: Track[] = [
       {
         title: "App plan",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Map screens and user flows",
           "Set up a React Native project with Expo",
           "Plan navigation, data model and local storage",
@@ -267,6 +270,7 @@ export const tracks: Track[] = [
       {
         title: "Problem & data",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Define the problem and a success metric",
           "Explore and clean the dataset with Pandas and NumPy in Jupyter",
           "Plan the pipeline: features, model, evaluation",
@@ -319,6 +323,7 @@ export const tracks: Track[] = [
       {
         title: "Questions & data",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Turn a business problem into 3–5 questions",
           "Load and profile the dataset",
           "Write the analysis plan",
@@ -374,7 +379,7 @@ export const tracks: Track[] = [
           "Data types, functions and modules",
           "Classes and OOP for your project's core models",
           "Virtual environment and Git repo setup",
-          "Project brief and task breakdown",
+          "Learn the project: its screens, flows and data, then plan it",
         ],
         deliverable: "Project skeleton with core classes",
       },
@@ -428,7 +433,7 @@ export const tracks: Track[] = [
           "OOP: classes, interfaces and inheritance",
           "Collections and generics",
           "Exceptions and clean error handling",
-          "Project brief and domain model",
+          "Learn the project: its screens and data, then model the domain",
         ],
         deliverable: "Domain model in plain Java, signed off",
       },
@@ -478,6 +483,7 @@ export const tracks: Track[] = [
       {
         title: "Research",
         points: [
+          "Learn the project first: its screens, flows and data",
           "Define the problem and target users",
           "Interview 3–5 real users",
           "Build personas and a journey map",

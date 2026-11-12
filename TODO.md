@@ -8,6 +8,11 @@ Things found during the SEO and docs work that still need doing. Tick them off a
 - [ ] **Run the progress migration.** Paste `supabase/migrations/003_doc_progress.sql` into Supabase → SQL Editor and run it. Until then, "Mark as done" ticks are saved only in the student's browser, and admin shows "tracking isn't set up yet".
 - [ ] **Change the admin password.** The current one is weak.
 
+## Decisions to make
+
+- [ ] **"Course" or "internship" wording.** The site is mixed right now. Page titles, search descriptions, track share images, structured data and `public/certificate-template.svg` say "course". The FAQ, the program terms and the program name in `data/site.ts`, plus the certificate picture in `components/docs/screens/welcome.tsx`, still say "internship". Decide which one, then make every place match (the hero headline is separate).
+- [ ] **Review the week-by-week build plans.** All 27 projects now have Start here (with every screen drawn), Week 1–4 step-by-step plans built with AI, and Reference. Plans live in `data/docs/build/<track>.ts`; screens in the same files (Full-Stack's in `data/docs/project-screens.ts`). Skim one project per track in admin → Tracks and note anything to change. Commands and library versions were written from current docs but not run end to end for every project — worth having a mentor do one project per track before students start.
+
 ## SEO
 
 - [ ] **Domain.** Canonical URLs, the sitemap and Open Graph links all use `https://deviotech.in` (the old name). When the Devvy domain is bought, set `NEXT_PUBLIC_SITE_URL` in the host's environment variables and redeploy. The contact email (`@deviotech.in`) in `data/site.ts` needs changing too.

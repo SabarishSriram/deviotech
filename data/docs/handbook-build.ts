@@ -670,17 +670,17 @@ export function deploymentGuide(track: TrackSlug): GuideSection[] {
         {
           title: "1. Package with Docker",
           steps: [
-            { text: "Create this in the project root:", file: "Dockerfile", code: "FROM eclipse-temurin:21-jdk AS build\nWORKDIR /app\nCOPY . .\nRUN ./mvnw -q -DskipTests package\n\nFROM eclipse-temurin:21-jre\nCOPY --from=build /app/target/*.jar app.jar\nEXPOSE 8080\nCMD [\"java\", \"-jar\", \"/app.jar\"]" },
-            { text: "Try it locally:", code: "docker build -t my-java-api .\ndocker run -p 8080:8080 -e DB_PASSWORD=yourpassword my-java-api" },
+            { text: "Create this in the project root:", file: "Dockerfile", code: "FROM eclipse-temurin:21-jdk AS build\nWORKDIR /app\nCOPY . .\nRUN chmod +x mvnw && ./mvnw -q -DskipTests package\n\nFROM eclipse-temurin:21-jre\nCOPY --from=build /app/target/*.jar app.jar\nEXPOSE 8080\nCMD [\"java\", \"-jar\", \"/app.jar\"]" },
+            { text: "You don't need Docker on your laptop — Render builds this file for you. (If you do have Docker, you can try it first with docker build -t my-java-api . and docker run --env-file .env -p 8080:8080 my-java-api, using host.docker.internal instead of localhost in DATABASE_URL.)" },
           ],
         },
         {
           title: "2. Deploy on Render",
           steps: [
             { text: "Create a free PostgreSQL database on Render.", icon: "Render" },
-            { text: "Render shows a URL like postgres://user:pass@host/db. Spring needs it split up: DB_URL = jdbc:postgresql://HOST:5432/DB, plus DB_USER and DB_PASSWORD." },
-            { text: "New → Web Service → your repo (Docker detected). Add DB_URL, DB_USER, DB_PASSWORD, and PORT=8080.", icon: "Render" },
-            { text: "Deploy and check an endpoint:", code: "curl https://YOUR-API.onrender.com/api/books" },
+            { text: "Render shows a URL like postgres://user:pass@host/db. Spring needs it split into the same three settings as your .env: DATABASE_URL = jdbc:postgresql://HOST:5432/DB, plus DATABASE_USER and DATABASE_PASSWORD." },
+            { text: "New → Web Service → your repo (Docker detected). Add DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD, and PORT=8080.", icon: "Render" },
+            { text: "Deploy, then open https://YOUR-API.onrender.com/health in your browser — you should see {\"ok\":true}." },
           ],
         },
       ]

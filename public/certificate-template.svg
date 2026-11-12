@@ -39,7 +39,7 @@
     <path d="M10 11l5 5-5 5M17 21h6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
   </g>
   <text x="240" y="170" class="s" font-size="48" font-weight="600" fill="#0a0a0a" letter-spacing="-1">Devvy Tech</text>
-  <text x="1594" y="168" text-anchor="end" class="lbl">PROJECT INTERNSHIP PROGRAM</text>
+  <text x="1594" y="168" text-anchor="end" class="lbl">PROJECT COURSE CERTIFICATE</text>
 
   <!-- title -->
   <text x="877" y="360" text-anchor="middle" class="lbl" font-size="22">// CERTIFICATE OF COMPLETION</text>
@@ -52,7 +52,7 @@
   <rect x="427" y="710" width="900" height="3" fill="#0a0a0a" />
   <circle cx="1327" cy="711.5" r="9" fill="#FF2A33" />
 
-  <text x="877" y="775" text-anchor="middle" class="s" font-size="28" fill="#525252">has successfully completed the 4-week Devvy Tech project internship in</text>
+  <text x="877" y="775" text-anchor="middle" class="s" font-size="28" fill="#525252">has successfully completed the 4-week Devvy Tech project course in</text>
   <text x="877" y="838" text-anchor="middle" class="m" font-size="40" font-weight="700" fill="#D11A22">{{TRACK}}</text>
   <text x="877" y="890" text-anchor="middle" class="s" font-size="26" fill="#525252">by designing, building and shipping <tspan font-weight="700" fill="#0a0a0a">{{PROJECT}}</tspan>,</text>
   <text x="877" y="928" text-anchor="middle" class="s" font-size="26" fill="#525252">with mentor code reviews and AI-assisted engineering.</text>

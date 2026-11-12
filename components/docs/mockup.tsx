@@ -259,8 +259,8 @@ export function Mockup({ mock }: { mock: Mock }) {
         {mock.nav && (
           <div className="flex justify-around border-t px-2 pt-2 pb-4 text-[9px]">
             {mock.nav.map((tab, i) => (
-              <span key={tab} className={cn("flex flex-col items-center gap-0.5", i === 0 ? "text-(--tc)" : "text-muted-foreground")}>
-                <span className={cn("size-3.5 rounded", i === 0 ? "bg-(--tc)" : "bg-muted-foreground/30")} />
+              <span key={tab} className={cn("flex flex-col items-center gap-0.5", i === (mock.active ?? 0) ? "text-(--tc)" : "text-muted-foreground")}>
+                <span className={cn("size-3.5 rounded", i === (mock.active ?? 0) ? "bg-(--tc)" : "bg-muted-foreground/30")} />
                 {tab}
               </span>
             ))}
@@ -287,7 +287,7 @@ export function Mockup({ mock }: { mock: Mock }) {
             {mock.nav.map((item, i) => (
               <p
                 key={item}
-                className={cn("rounded-md px-2 py-1 text-[10px]", i === 0 ? "bg-(--tc)/15 font-medium text-(--tc)" : "text-muted-foreground")}
+                className={cn("rounded-md px-2 py-1 text-[10px]", i === (mock.active ?? 0) ? "bg-(--tc)/15 font-medium text-(--tc)" : "text-muted-foreground")}
               >
                 {item}
               </p>

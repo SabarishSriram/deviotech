@@ -47,7 +47,7 @@ export const welcomeWalk: WalkPart[] = [
           { text: "Getting started (1) — read these first, in order. They get your computer ready and teach the way you'll work." },
           { text: "Building (2) — keep these open while you build: coding standards, testing, deployment and troubleshooting." },
           { text: "Reviews (3) — exactly what your mentor checks. Read it before every review and there are no surprises." },
-          { text: "Your project (4) — the spec, designs and week-by-week milestones. These unlock once your project is assigned." },
+          { text: "Your project (4) — the spec, the designs, and a step-by-step plan for each of the four weeks. These unlock once your project is assigned." },
         ],
         screen: "welcome-sidebar",
       },

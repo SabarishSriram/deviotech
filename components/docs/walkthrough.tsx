@@ -75,7 +75,7 @@ function Step({ step, screens, stepKey }: { step: WalkStep; screens: Record<stri
             <span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-foreground/50" aria-hidden="true" />
             <div className="min-w-0 flex-1">
               <p className="text-pretty">{withMarkers(action.text)}</p>
-              {action.code && <CodeBlock code={action.code} file={action.file} />}
+              {action.code && <CodeBlock code={action.code} file={action.file} wrap={action.wrap} />}
             </div>
           </li>
         ))}
@@ -180,10 +180,12 @@ export function Walkthrough({
             </li>
           ))}
         </ol>
-        <p className="mt-3 text-xs text-muted-foreground">
-          Red numbered circles in the pictures match the numbers in the steps. Your names, versions and colours may look slightly different —
-          that&apos;s fine.
-        </p>
+        {parts.some((part) => part.steps.some((step) => step.screen)) && (
+          <p className="mt-3 text-xs text-muted-foreground">
+            Red numbered circles in the pictures match the numbers in the steps. Your names, versions and colours may look slightly different —
+            that&apos;s fine.
+          </p>
+        )}
       </section>
 
       {parts.map((part, i) => (

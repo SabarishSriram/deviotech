@@ -91,7 +91,7 @@ const groups: { title: string; mark: number; items: string[]; locked?: boolean; 
   { title: "Getting started", mark: 1, items: ["Welcome", "1. Setup", "2. How we work", "3. Environment & secrets"], active: "Welcome" },
   { title: "Building", mark: 2, items: ["Coding standards", "Testing", "Deployment", "Troubleshooting", "Resources"] },
   { title: "Reviews", mark: 3, items: ["Review rubric", "Submission checklist"] },
-  { title: "Your project", mark: 4, items: ["PRD", "User flows", "Architecture", "Milestones"], locked: true },
+  { title: "Your project", mark: 4, items: ["Start here", "Week 1", "Week 2", "Week 3"], locked: true },
 ]
 
 const sidebar: Screen = (os) => (

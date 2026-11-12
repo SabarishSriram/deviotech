@@ -143,6 +143,8 @@ export type Mock = {
   url?: string
   /** Sidebar (browser) or bottom tabs (phone). */
   nav?: string[]
+  /** Which nav item is highlighted (default: the first). */
+  active?: number
   blocks: MockBlock[]
 }
 
@@ -159,6 +161,8 @@ export type WalkAction = {
   code?: string
   /** File the code belongs in, shown above the block. */
   file?: string
+  /** Wrap long lines — for prose to copy, like AI prompts. */
+  wrap?: boolean
   /** Only show this action on these operating systems. */
   os?: OS[]
 }
@@ -187,4 +191,62 @@ export type WalkPart = {
   /** Rough time, e.g. "5 min". */
   time?: string
   steps: WalkStep[]
+}
+
+/* ------------------------------------------------------------------ */
+/* Build plans — the exact project, week by week, built with AI        */
+/* ------------------------------------------------------------------ */
+
+/**
+ * One task = one branch = one pull request. The student builds it with an
+ * AI tool, then proves they understand it before it's merged.
+ */
+export type BuildTask = {
+  /** Short id, unique within the week (used for progress ticks). */
+  id: string
+  title: string
+  /** Why this task matters, in one or two sentences. */
+  why: string
+  /** Branch name, e.g. "feat/auth". Omit for UI/UX tasks (no Git). */
+  branch?: string
+  /** What to paste into the AI tool after the project brief. */
+  prompt: string
+  /** Things to do yourself before or after prompting (create a file, run a command). */
+  steps?: WalkAction[]
+  /** Questions the student must be able to answer before opening the PR. */
+  understand: string[]
+  /** How to prove it works. */
+  check: { text: string; code?: string; expect?: string }[]
+  /** The usual ways it breaks, and where to look. */
+  debug?: string[]
+  /** Commit message for the PR. */
+  commit?: string
+  /** Ids of the project screens this task builds (data/docs/project-screens.ts). */
+  screens?: string[]
+}
+
+export type BuildWeek = {
+  /** One or two sentences: what this week is for. */
+  intro: string
+  tasks: BuildTask[]
+  /** "Done when" lines for the week, checked in the weekly review. */
+  done: string[]
+}
+
+export type ProjectBuild = [BuildWeek, BuildWeek, BuildWeek, BuildWeek]
+
+/** One screen of a project, shown in Start here, Week 1 and the task that builds it. */
+export type ProjectScreen = {
+  /** Unique within the project, e.g. "board". */
+  id: string
+  name: string
+  /** What the user does here, in one sentence. */
+  purpose: string
+  /** The things on the screen the student must build. */
+  shows: string[]
+  /** API endpoints this screen calls. */
+  calls?: string[]
+  /** The week this screen gets built. */
+  week: 1 | 2 | 3 | 4
+  mock: Mock
 }

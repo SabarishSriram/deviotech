@@ -4,13 +4,14 @@ import { Check, Copy } from "lucide-react"
 import { useState } from "react"
 
 /** A command or snippet with a copy button. */
-export function CodeBlock({ code, file }: { code: string; file?: string }) {
+/** `wrap` is for prose you copy, like AI prompts: it wraps long lines instead of scrolling. */
+export function CodeBlock({ code, file, wrap = false }: { code: string; file?: string; wrap?: boolean }) {
   const [copied, setCopied] = useState(false)
 
   return (
     <div className="group relative mt-2 overflow-hidden rounded-lg border bg-muted/50">
       {file && <p className="border-b bg-muted/60 px-3 py-1.5 font-mono text-[11px] text-muted-foreground">{file}</p>}
-      <pre className="overflow-x-auto p-3 pr-12 font-mono text-[13px] leading-relaxed">
+      <pre className={"p-3 pr-12 font-mono text-[13px] leading-relaxed " + (wrap ? "break-words whitespace-pre-wrap" : "overflow-x-auto")}>
         <code>{code}</code>
       </pre>
       <button

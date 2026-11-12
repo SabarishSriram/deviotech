@@ -17,11 +17,11 @@ const geistMono = Geist_Mono({
 })
 
 /** What people search for, then the brand. Kept under ~60 characters so Google shows it in full. */
-const title = `Virtual Internships with Real Projects & Certificate | ${site.name}`
+const title = `Project-Based Coding Courses with a Mentor | ${site.name}`
 /** Under ~160 characters so Google shows it in full. */
 const description =
-  "Apply free for a 4-week virtual internship. Build a real project in web, AI/ML, data, Python, Java or UI/UX, with mentor code reviews and a verifiable certificate."
-const socialTitle = `${site.name} — Don't just learn. Build.`
+  "Learn web development, AI/ML, data, Python, Java or UI/UX by building a real project in 4 weeks — with mentor code reviews and a verifiable certificate."
+const socialTitle = `${site.name} — Learn by building.`
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -29,18 +29,18 @@ export const metadata: Metadata = {
   description,
   applicationName: site.name,
   keywords: [
-    "virtual internship",
-    "online internship for students",
-    "internship with certificate",
-    "project-based internship",
-    "full stack internship",
-    "web development internship",
-    "AI ML internship",
-    "data science internship",
-    "python internship",
-    "java internship",
-    "UI UX internship",
-    "internship for college students India",
+    "project-based learning",
+    "learn coding by building projects",
+    "online coding course with mentor",
+    "coding course with certificate",
+    "full stack development course",
+    "web development course with projects",
+    "AI ML course for beginners",
+    "data science course with projects",
+    "python course with certificate",
+    "java spring boot course",
+    "UI UX design course",
+    "coding course for college students India",
   ],
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,

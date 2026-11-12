@@ -39,7 +39,7 @@ export const fullStackDocs: TrackDocs = {
         { label: "GET /api/stats", detail: "Counts per stage and upcoming follow-ups." },
       ],
       weeks: [
-        ["Turn this PRD into GitHub issues.", "Draw the architecture and the User/Application schema.", "Write the API contract above in your README."],
+        ["List every feature in the order you'll build it.", "Draw the architecture and the User/Application schema.", "Write the API contract above in your README."],
         ["Prisma schema and migration for User and Application.", "Signup/login with bcrypt and JWT.", "Application CRUD endpoints with validation and auth checks."],
         ["Login and signup pages.", "Board view and list view wired to the API.", "Add/edit form with loading and error states; stats dashboard."],
         ["Deploy the client on Vercel and the API + database on Render.", "README with screenshots and setup steps; record a demo.", "Final review."],
@@ -88,7 +88,7 @@ export const fullStackDocs: TrackDocs = {
         { label: "GET /api/events/:id/attendees", detail: "Organiser only: who's booked." },
       ],
       weeks: [
-        ["Issues from this PRD; architecture diagram.", "Schema for User, Event, Booking — including the unique constraint.", "API contract in the README."],
+        ["Feature list in build order; architecture diagram.", "Schema for User, Event, Booking — including the unique constraint.", "API contract in the README."],
         ["Auth with roles; middleware that checks the role.", "Event CRUD for organisers.", "Booking endpoint inside a transaction; test it by booking the last seat twice."],
         ["Public events page with search and filters.", "Event detail with a Book button and seats left.", "My bookings page; organiser dashboard with attendee lists."],
         ["Deploy on Vercel + Render.", "README and demo video.", "Final review."],
@@ -138,7 +138,7 @@ export const fullStackDocs: TrackDocs = {
         { label: "GET /api/me/tasks", detail: "Everything assigned to the current user." },
       ],
       weeks: [
-        ["Issues; architecture; the five-table schema.", "Write down who can do what (a permission table) in your README.", "API contract."],
+        ["Feature list in build order; the five-table schema.", "Write down who can do what (a permission table) in your README.", "API contract."],
         ["Auth; team and membership endpoints.", "Board and task CRUD.", "A reusable “is member / is admin” check used by every route."],
         ["Team switcher and board view with three columns.", "Task form and My tasks page.", "Loading, empty and error states."],
         ["Deploy on Vercel + Render.", "README with the permission table and a demo.", "Final review."],

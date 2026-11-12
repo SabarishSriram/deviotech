@@ -22,8 +22,8 @@ export default function Home() {
       <Hero />
       <Marquee items={hero.marquee} className="border-y border-border py-4" />
       <HowItWorks />
-      <Tracks />
       <BuildWithAi />
+      <Tracks />
       <Features />
       <Faq />
       <FinalCta />

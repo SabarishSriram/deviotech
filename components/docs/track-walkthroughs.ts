@@ -191,7 +191,7 @@ const envFor = (track: Exclude<TrackSlug, "full-stack" | "ui-ux">): Walk => ({
   done: envDone[track],
   doneTitle: "Your project is set up properly",
   doneIntro: "Tick every line before you start week 1.",
-  next: "You're ready. When your project is assigned, start with its PRD and Milestones in the sidebar.",
+  next: "You're ready. When your project is assigned, open Start here in the sidebar, then Week 1.",
 })
 
 export function walkthroughFor(track: TrackSlug, doc: "setup" | "workflow" | "environment"): Walk {
@@ -218,7 +218,7 @@ export function walkthroughFor(track: TrackSlug, doc: "setup" | "workflow" | "en
           done: fullStackEnvironmentDone,
           doneTitle: "Your project is set up properly",
           doneIntro: "Tick every line before you start week 1.",
-          next: "You're ready. When your project is assigned, start with its PRD and Milestones in the sidebar.",
+          next: "You're ready. When your project is assigned, open Start here in the sidebar, then Week 1.",
         }
   }
   if (track === "ui-ux") {
@@ -242,7 +242,7 @@ export function walkthroughFor(track: TrackSlug, doc: "setup" | "workflow" | "en
           done: designEnvironmentDone,
           doneTitle: "You're handling data properly",
           doneIntro: "Tick every line before your first interview.",
-          next: "You're ready. When your project is assigned, start with its PRD and Milestones in the sidebar.",
+          next: "You're ready. When your project is assigned, open Start here in the sidebar, then Week 1.",
           pickOs: false,
         }
   }

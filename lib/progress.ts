@@ -39,7 +39,7 @@ export function stepsFor(refs: StepRef[], os: OS) {
 }
 
 export function isStepKey(key: string) {
-  return key.length <= 200 && /^[a-z0-9-]+\/(setup|workflow|environment)\/[a-z0-9-]+\/[a-z0-9-]+(@[a-z-]+)?(~\d+)?$/.test(key)
+  return key.length <= 200 && /^[a-z0-9-]+\/(setup|workflow|environment|week-[1-4])\/[a-z0-9-]+\/[a-z0-9-]+(@[a-z-]+)?(~\d+)?$/.test(key)
 }
 
 /** The id a step's element gets, so "Continue where you left off" can jump to it. */

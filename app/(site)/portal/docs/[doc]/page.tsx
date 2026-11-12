@@ -7,7 +7,7 @@ import { Suspense } from "react"
 
 import { DocBody, LockedDoc, type DocProgress } from "@/components/docs/doc-views"
 import { DocsLayout } from "@/components/docs/docs-layout"
-import { DOC_PAGES, docTitle, isDocId, pagesFor } from "@/data/docs"
+import { DOC_PAGES, docTitle, isDocId, LEGACY_DOCS, pagesFor } from "@/data/docs"
 import { getTrack } from "@/data/tracks"
 import { isSupabaseConfigured } from "@/lib/supabase/env"
 import { createClient } from "@/lib/supabase/server"
@@ -35,6 +35,7 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
   if (!isSupabaseConfigured()) redirect("/portal")
 
   const { doc } = await params
+  if (LEGACY_DOCS[doc]) redirect(`/portal/docs/${LEGACY_DOCS[doc]}`)
   if (!isDocId(doc)) notFound()
 
   const supabase = await createClient()
@@ -57,7 +58,7 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
 
   // Getting started ticks. If the doc_progress table isn't set up yet, ticks are kept in the browser instead.
   let progress: DocProgress | undefined
-  if (doc === "setup" || doc === "workflow" || doc === "environment") {
+  if (doc === "setup" || doc === "workflow" || doc === "environment" || doc.startsWith("week-")) {
     const { data: rows, error } = await supabase.from("doc_progress").select("step_key").like("step_key", `${track.slug}/${doc}/%`)
     progress = error ? { mode: "local", done: [] } : { mode: "account", done: (rows ?? []).map((r) => r.step_key as string) }
   }
@@ -100,7 +101,7 @@ async function PortalDoc({ params }: Pick<PageProps<"/portal/docs/[doc]">, "para
       {page.locked && !paid ? (
         <LockedDoc reason="unpaid" />
       ) : (
-        <DocBody doc={doc} track={track} projectSlug={paid ? application.project : null} progress={progress} />
+        <DocBody doc={doc} track={track} projectSlug={paid ? application.project : null} progress={progress} hrefFor={(d) => `/portal/docs/${d}`} />
       )}
     </DocsLayout>
   )

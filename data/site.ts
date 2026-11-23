@@ -6,7 +6,7 @@
 export const site = {
   name: "Devvy Tech",
   /** The live domain. Set NEXT_PUBLIC_SITE_URL where the site is hosted; every canonical URL, the sitemap and social previews use it. */
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://deviotech.in").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://devvytech.in").replace(/\/$/, ""),
   tagline: "Real projects. Real reviews. A certificate that means something.",
   description:
     "A project-based virtual internship where you build real-world projects, use AI tools the way real teams do, get mentor reviews, and earn a verifiable certificate.",

@@ -97,7 +97,7 @@ const groups: { title: string; mark: number; items: string[]; locked?: boolean; 
 const sidebar: Screen = (os) => (
   <Browser
     os={os}
-    url="deviotech.in/portal/docs/welcome"
+    url="devvytech.in/portal/docs/welcome"
     tab="Welcome · Devvy Tech docs"
     tabIcon={<SquareTerminal className="size-3.5" style={{ color: RED }} />}
   >

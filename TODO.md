@@ -5,9 +5,11 @@ Launch checklist, from a full review of the site on 2026-11-13. Do the **Before 
 ## Before you market
 
 ### Get it online
-- [ ] **Hosting.** The site isn't deployed anywhere yet. The Cloudflare Workers test (Nov 2026) needed Workers Paid ($5/month), Next.js 16.4.5+, and `cacheComponents` switched off. Vercel works with no changes. Pick one and deploy.
-- [ ] **Domain.** `deviotech.in` doesn't load, and every canonical URL, the sitemap and share previews point to it. Buy the Devvy domain, set `NEXT_PUBLIC_SITE_URL` on the host, and redeploy.
-- [ ] **Email on the domain.** The contact address is `hello@deviotech.in` (in `data/site.ts`). Set up email on the new domain, and add SPF, DKIM and DMARC records so application and login emails don't land in spam.
+- [x] **Hosting.** Live on Vercel.
+- [x] **Domain.** `devvytech.in` bought and connected. The site's address in the code now defaults to `https://devvytech.in`.
+- [ ] **Make `devvytech.in` the main domain in Vercel.** Today `devvytech.in` redirects to `www.devvytech.in`. In Vercel → Project → Settings → Domains, make `devvytech.in` the primary domain and redirect `www` to it, so it matches the canonical URLs.
+- [ ] **Set `NEXT_PUBLIC_SITE_URL=https://devvytech.in`** in Vercel → Project → Settings → Environment Variables (Production), then redeploy.
+- [ ] **Email on the domain.** The contact address is still `hello@deviotech.in` (in `data/site.ts`), and `devvytech.in` has no MX records yet. Set up email on `devvytech.in` (Zoho Mail free or Google Workspace), change `contactEmail`, and add SPF, DKIM and DMARC records so application and login emails don't land in spam.
 - [ ] **Send yourself a test application** on the live site: check the "We got your application" email arrives, then send yourself the portal login from admin and log in.
 
 ### Be honest in what you claim
